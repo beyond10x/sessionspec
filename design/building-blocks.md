@@ -307,6 +307,21 @@ KPI, the count of its refusals:
 | `invalid_schedule` | a schedule part has no positive `every` |
 | `swarm_needs_agent` | `coordination` or `start_stagger` is on a part that is not an agent; or the coordination is unknown; or the stagger is not a duration |
 | `unreachable_parts` | no link, `per`, `acts_for`, `egress` or `border` names the part, and it has no `per`; a trigger's `schedule`, `channel` and `source` count as names |
+| `empty_architecture` | the document has no part; the refusal names the architecture |
+| `self_reference` | a link goes from a part to itself, or a part's `per` or `acts_for` names the part itself |
+| `not_a_channel` | a link's `over` names a part that is not a channel |
+| `link_exists` | a link has the `from`, `to` and `carries` of an earlier link |
+| `acts_for_not_principal` | an agent's `acts_for` names a part that is not a principal |
+| `gateway_without_model` | a gateway part has no `model_call` link to a model part |
+
+The last six rules are refusals of the architecture block
+(`blocks/9-composition/architecture.yaml`) and carry the names of its errors;
+`question_without_answerer` is its `TargetCannotAnswer`, and its `ActsForNeedsAgent` is
+`setting_unknown` (`blocks/settings.yaml` declares `acts_for` on agents only). Two of its refusals
+the check does not hold, because committed documents write them: `NotReachedByPrincipal` (a border part no principal part links to: the
+nested `console` has no principal, the coding field's `auto-merger` is reached through a grant)
+and `QuestionWithoutAnswerer` (a question to an agent that acts for no principal: the console's
+steward, which the simulator lets answer and forward to a principal).
 
 The trigger, schedule and swarm rules read the `value` of a marked place, so a document with
 markers is checked as built.

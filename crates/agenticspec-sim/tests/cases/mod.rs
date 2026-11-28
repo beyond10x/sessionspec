@@ -1,5 +1,6 @@
 mod best;
 mod check;
+mod check_block_parity;
 mod check_json;
 mod cli;
 mod common;

@@ -210,7 +210,10 @@ fn link_of(r: &ArchRefusal) -> Option<usize> {
         | ArchRefusal::QuestionWithoutAnswerer { link, .. }
         | ArchRefusal::ReviewWithoutReviewer { link, .. }
         | ArchRefusal::TriggerSourceNotTrigger { link, .. }
-        | ArchRefusal::TriggerTargetNotAgent { link, .. } => Some(*link),
+        | ArchRefusal::TriggerTargetNotAgent { link, .. }
+        | ArchRefusal::NotAChannel { link, .. }
+        | ArchRefusal::LinkExists { link, .. } => Some(*link),
+        ArchRefusal::SelfReference { link, .. } => *link,
         _ => None,
     }
 }

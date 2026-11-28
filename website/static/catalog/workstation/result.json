@@ -167,6 +167,10 @@
     "feasible": true,
     "fitness": 232.19475903729233,
     "kpis": {
+      "acts_for_not_principal": {
+        "kind": "Correctness",
+        "value": 0.0
+      },
       "acts_for_without_part": {
         "kind": "Correctness",
         "value": 0.0
@@ -239,6 +243,10 @@
         "kind": "Correctness",
         "value": 0.0
       },
+      "empty_architecture": {
+        "kind": "Correctness",
+        "value": 0.0
+      },
       "false_completions_shipped": {
         "kind": "Correctness",
         "value": 108.5
@@ -275,6 +283,10 @@
         "kind": "Quality",
         "value": 0.0
       },
+      "gateway_without_model": {
+        "kind": "Correctness",
+        "value": 0.0
+      },
       "human_touchpoints": {
         "kind": "Quality",
         "value": 1.0
@@ -295,6 +307,10 @@
         "kind": "Quality",
         "value": 46.0
       },
+      "link_exists": {
+        "kind": "Correctness",
+        "value": 0.0
+      },
       "merge_conflicts": {
         "kind": "Quality",
         "value": 0.0
@@ -302,6 +318,10 @@
       "model_call_paths": {
         "kind": "Completeness",
         "value": 2.0
+      },
+      "not_a_channel": {
+        "kind": "Correctness",
+        "value": 0.0
       },
       "operator_decided_owner_questions": {
         "kind": "Quality",
@@ -378,6 +398,10 @@
       "rework_turns": {
         "kind": "Quality",
         "value": 7016.75
+      },
+      "self_reference": {
+        "kind": "Correctness",
+        "value": 0.0
       },
       "setting_invalid": {
         "kind": "Correctness",
@@ -706,6 +730,10 @@
     "feasible": true,
     "fitness": 235.93681692823895,
     "kpis": {
+      "acts_for_not_principal": {
+        "kind": "Correctness",
+        "value": 0.0
+      },
       "acts_for_without_part": {
         "kind": "Correctness",
         "value": 0.0
@@ -778,6 +806,10 @@
         "kind": "Correctness",
         "value": 0.0
       },
+      "empty_architecture": {
+        "kind": "Correctness",
+        "value": 0.0
+      },
       "false_completions_shipped": {
         "kind": "Correctness",
         "value": 108.625
@@ -814,6 +846,10 @@
         "kind": "Quality",
         "value": 0.0
       },
+      "gateway_without_model": {
+        "kind": "Correctness",
+        "value": 0.0
+      },
       "human_touchpoints": {
         "kind": "Quality",
         "value": 1.0
@@ -834,6 +870,10 @@
         "kind": "Quality",
         "value": 46.125
       },
+      "link_exists": {
+        "kind": "Correctness",
+        "value": 0.0
+      },
       "merge_conflicts": {
         "kind": "Quality",
         "value": 0.0
@@ -841,6 +881,10 @@
       "model_call_paths": {
         "kind": "Completeness",
         "value": 2.0
+      },
+      "not_a_channel": {
+        "kind": "Correctness",
+        "value": 0.0
       },
       "operator_decided_owner_questions": {
         "kind": "Quality",
@@ -917,6 +961,10 @@
       "rework_turns": {
         "kind": "Quality",
         "value": 6876.75
+      },
+      "self_reference": {
+        "kind": "Correctness",
+        "value": 0.0
       },
       "setting_invalid": {
         "kind": "Correctness",
@@ -12264,6 +12312,10 @@
       "fitness": 232.19475903729233,
       "id": 0,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -12336,6 +12388,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.5
@@ -12372,6 +12428,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -12392,6 +12452,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -12399,6 +12463,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -12475,6 +12543,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7016.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -12606,6 +12678,10 @@
       "fitness": 232.19475903729233,
       "id": 1,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -12678,6 +12754,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.5
@@ -12714,6 +12794,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -12734,6 +12818,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -12741,6 +12829,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -12817,6 +12909,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7016.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -12948,6 +13044,10 @@
       "fitness": 232.19475903729233,
       "id": 2,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -13020,6 +13120,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.5
@@ -13056,6 +13160,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -13076,6 +13184,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -13083,6 +13195,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -13159,6 +13275,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7016.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -13290,6 +13410,10 @@
       "fitness": 232.19475903729233,
       "id": 3,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -13362,6 +13486,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.5
@@ -13398,6 +13526,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -13418,6 +13550,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -13425,6 +13561,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -13501,6 +13641,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7016.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -13632,6 +13776,10 @@
       "fitness": 232.19475903729233,
       "id": 4,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -13704,6 +13852,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.5
@@ -13740,6 +13892,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -13760,6 +13916,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -13767,6 +13927,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -13843,6 +14007,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7016.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -13974,6 +14142,10 @@
       "fitness": 230.6441006067305,
       "id": 5,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -14046,6 +14218,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.375
@@ -14082,6 +14258,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -14102,6 +14282,10 @@
           "kind": "Quality",
           "value": 45.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -14109,6 +14293,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -14185,6 +14373,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6917.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -14316,6 +14508,10 @@
       "fitness": 229.38322845199616,
       "id": 6,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -14388,6 +14584,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.75
@@ -14424,6 +14624,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -14444,6 +14648,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -14451,6 +14659,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -14527,6 +14739,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7034.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -14658,6 +14874,10 @@
       "fitness": 212.78314883781536,
       "id": 7,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -14730,6 +14950,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 109.125
@@ -14766,6 +14990,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -14786,6 +15014,10 @@
           "kind": "Quality",
           "value": 45.5
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -14793,6 +15025,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -14869,6 +15105,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6792.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -15000,6 +15240,10 @@
       "fitness": 226.31936511671222,
       "id": 8,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -15072,6 +15316,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.375
@@ -15108,6 +15356,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -15128,6 +15380,10 @@
           "kind": "Quality",
           "value": 45.5
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -15135,6 +15391,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -15211,6 +15471,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7083.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -15342,6 +15606,10 @@
       "fitness": 235.93681692823895,
       "id": 9,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -15414,6 +15682,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.625
@@ -15450,6 +15722,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -15470,6 +15746,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -15477,6 +15757,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -15553,6 +15837,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6876.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -15684,6 +15972,10 @@
       "fitness": 235.93681692823895,
       "id": 10,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -15756,6 +16048,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.625
@@ -15792,6 +16088,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -15812,6 +16112,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -15819,6 +16123,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -15895,6 +16203,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6876.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -16026,6 +16338,10 @@
       "fitness": 235.93681692823895,
       "id": 11,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -16098,6 +16414,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.625
@@ -16134,6 +16454,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -16154,6 +16478,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -16161,6 +16489,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -16237,6 +16569,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6876.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -16368,6 +16704,10 @@
       "fitness": 235.93681692823895,
       "id": 12,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -16440,6 +16780,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.625
@@ -16476,6 +16820,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -16496,6 +16844,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -16503,6 +16855,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -16579,6 +16935,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6876.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -16710,6 +17070,10 @@
       "fitness": 235.93681692823895,
       "id": 13,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -16782,6 +17146,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.625
@@ -16818,6 +17186,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -16838,6 +17210,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -16845,6 +17221,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -16921,6 +17301,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6876.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -17052,6 +17436,10 @@
       "fitness": 226.7637704753588,
       "id": 14,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -17124,6 +17512,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.0
@@ -17160,6 +17552,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -17180,6 +17576,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -17187,6 +17587,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -17263,6 +17667,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6737.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -17394,6 +17802,10 @@
       "fitness": 235.27135343242242,
       "id": 15,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -17466,6 +17878,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.875
@@ -17502,6 +17918,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -17522,6 +17942,10 @@
           "kind": "Quality",
           "value": 46.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -17529,6 +17953,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -17605,6 +18033,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6897.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -17736,6 +18168,10 @@
       "fitness": 212.9206488378154,
       "id": 16,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -17808,6 +18244,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 109.125
@@ -17844,6 +18284,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -17864,6 +18308,10 @@
           "kind": "Quality",
           "value": 45.625
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -17871,6 +18319,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -17947,6 +18399,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6789.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -18078,6 +18534,10 @@
       "fitness": 232.19475903729233,
       "id": 17,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -18150,6 +18610,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.5
@@ -18186,6 +18650,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -18206,6 +18674,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -18213,6 +18685,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -18289,6 +18765,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7016.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -18420,6 +18900,10 @@
       "fitness": 232.19475903729233,
       "id": 18,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -18492,6 +18976,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.5
@@ -18528,6 +19016,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -18548,6 +19040,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -18555,6 +19051,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -18631,6 +19131,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7016.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -18762,6 +19266,10 @@
       "fitness": 232.19475903729233,
       "id": 19,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -18834,6 +19342,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.5
@@ -18870,6 +19382,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -18890,6 +19406,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -18897,6 +19417,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -18973,6 +19497,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7016.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -19104,6 +19632,10 @@
       "fitness": 230.6441006067305,
       "id": 20,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -19176,6 +19708,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.375
@@ -19212,6 +19748,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -19232,6 +19772,10 @@
           "kind": "Quality",
           "value": 45.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -19239,6 +19783,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -19315,6 +19863,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6917.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -19446,6 +19998,10 @@
       "fitness": 229.38322845199616,
       "id": 21,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -19518,6 +20074,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.75
@@ -19554,6 +20114,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -19574,6 +20138,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -19581,6 +20149,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -19657,6 +20229,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7034.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -19788,6 +20364,10 @@
       "fitness": 212.78314883781536,
       "id": 22,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -19860,6 +20440,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 109.125
@@ -19896,6 +20480,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -19916,6 +20504,10 @@
           "kind": "Quality",
           "value": 45.5
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -19923,6 +20515,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -19999,6 +20595,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6792.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -20130,6 +20730,10 @@
       "fitness": 226.31936511671222,
       "id": 23,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -20202,6 +20806,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.375
@@ -20238,6 +20846,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -20258,6 +20870,10 @@
           "kind": "Quality",
           "value": 45.5
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -20265,6 +20881,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -20341,6 +20961,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7083.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -20472,6 +21096,10 @@
       "fitness": 235.93681692823895,
       "id": 24,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -20544,6 +21172,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.625
@@ -20580,6 +21212,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -20600,6 +21236,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -20607,6 +21247,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -20683,6 +21327,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6876.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -20814,6 +21462,10 @@
       "fitness": 235.93681692823895,
       "id": 25,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -20886,6 +21538,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.625
@@ -20922,6 +21578,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -20942,6 +21602,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -20949,6 +21613,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -21025,6 +21693,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6876.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -21156,6 +21828,10 @@
       "fitness": 235.93681692823895,
       "id": 26,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -21228,6 +21904,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.625
@@ -21264,6 +21944,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -21284,6 +21968,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -21291,6 +21979,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -21367,6 +22059,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6876.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -21498,6 +22194,10 @@
       "fitness": 226.7637704753588,
       "id": 27,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -21570,6 +22270,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.0
@@ -21606,6 +22310,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -21626,6 +22334,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -21633,6 +22345,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -21709,6 +22425,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6737.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -21840,6 +22560,10 @@
       "fitness": 235.27135343242242,
       "id": 28,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -21912,6 +22636,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.875
@@ -21948,6 +22676,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -21968,6 +22700,10 @@
           "kind": "Quality",
           "value": 46.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -21975,6 +22711,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -22051,6 +22791,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6897.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -22182,6 +22926,10 @@
       "fitness": 212.9206488378154,
       "id": 29,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -22254,6 +23002,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 109.125
@@ -22290,6 +23042,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -22310,6 +23066,10 @@
           "kind": "Quality",
           "value": 45.625
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -22317,6 +23077,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -22393,6 +23157,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6789.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -22524,6 +23292,10 @@
       "fitness": 197.29104908135207,
       "id": 30,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -22596,6 +23368,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 100.875
@@ -22632,6 +23408,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -22652,6 +23432,10 @@
           "kind": "Quality",
           "value": 42.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -22659,6 +23443,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -22735,6 +23523,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6479.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -22866,6 +23658,10 @@
       "fitness": 197.29104908135207,
       "id": 31,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -22938,6 +23734,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 100.875
@@ -22974,6 +23774,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -22994,6 +23798,10 @@
           "kind": "Quality",
           "value": 42.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -23001,6 +23809,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -23077,6 +23889,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6479.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -23208,6 +24024,10 @@
       "fitness": 197.29104908135207,
       "id": 32,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -23280,6 +24100,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 100.875
@@ -23316,6 +24140,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -23336,6 +24164,10 @@
           "kind": "Quality",
           "value": 42.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -23343,6 +24175,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -23419,6 +24255,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6479.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -23550,6 +24390,10 @@
       "fitness": 197.29104908135207,
       "id": 33,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -23622,6 +24466,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 100.875
@@ -23658,6 +24506,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -23678,6 +24530,10 @@
           "kind": "Quality",
           "value": 42.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -23685,6 +24541,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -23761,6 +24621,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6479.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -23892,6 +24756,10 @@
       "fitness": 126.29483663067833,
       "id": 34,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -23964,6 +24832,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 83.5
@@ -24000,6 +24872,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -24020,6 +24896,10 @@
           "kind": "Quality",
           "value": 31.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -24027,6 +24907,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -24103,6 +24987,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5188.625
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -24234,6 +25122,10 @@
       "fitness": 226.1616685195478,
       "id": 35,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -24306,6 +25198,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.5
@@ -24342,6 +25238,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -24362,6 +25262,10 @@
           "kind": "Quality",
           "value": 45.375
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -24369,6 +25273,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -24445,6 +25353,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7005.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -24576,6 +25488,10 @@
       "fitness": 184.82522385268578,
       "id": 36,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -24648,6 +25564,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 102.875
@@ -24684,6 +25604,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -24704,6 +25628,10 @@
           "kind": "Quality",
           "value": 42.75
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -24711,6 +25639,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -24787,6 +25719,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6276.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -24918,6 +25854,10 @@
       "fitness": 192.1895929307493,
       "id": 37,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -24990,6 +25930,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 100.625
@@ -25026,6 +25970,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -25046,6 +25994,10 @@
           "kind": "Quality",
           "value": 41.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -25053,6 +26005,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -25129,6 +26085,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6345.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -25260,6 +26220,10 @@
       "fitness": 226.1616685195478,
       "id": 38,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -25332,6 +26296,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.5
@@ -25368,6 +26336,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -25388,6 +26360,10 @@
           "kind": "Quality",
           "value": 45.375
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -25395,6 +26371,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -25471,6 +26451,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7005.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -25602,6 +26586,10 @@
       "fitness": 226.1616685195478,
       "id": 39,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -25674,6 +26662,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.5
@@ -25710,6 +26702,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -25730,6 +26726,10 @@
           "kind": "Quality",
           "value": 45.375
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -25737,6 +26737,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -25813,6 +26817,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7005.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -25944,6 +26952,10 @@
       "fitness": 226.1616685195478,
       "id": 40,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -26016,6 +27028,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.5
@@ -26052,6 +27068,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -26072,6 +27092,10 @@
           "kind": "Quality",
           "value": 45.375
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -26079,6 +27103,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -26155,6 +27183,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7005.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -26286,6 +27318,10 @@
       "fitness": 226.31936511671222,
       "id": 41,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -26358,6 +27394,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.375
@@ -26394,6 +27434,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -26414,6 +27458,10 @@
           "kind": "Quality",
           "value": 45.5
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -26421,6 +27469,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -26497,6 +27549,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7083.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -26628,6 +27684,10 @@
       "fitness": 207.5269332194814,
       "id": 42,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -26700,6 +27760,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 109.0
@@ -26736,6 +27800,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -26756,6 +27824,10 @@
           "kind": "Quality",
           "value": 45.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -26763,6 +27835,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -26839,6 +27915,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6741.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -26970,6 +28050,10 @@
       "fitness": 230.6441006067305,
       "id": 43,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -27042,6 +28126,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.375
@@ -27078,6 +28166,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -27098,6 +28190,10 @@
           "kind": "Quality",
           "value": 45.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -27105,6 +28201,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -27181,6 +28281,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6917.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -27312,6 +28416,10 @@
       "fitness": 230.6441006067305,
       "id": 44,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -27384,6 +28492,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.375
@@ -27420,6 +28532,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -27440,6 +28556,10 @@
           "kind": "Quality",
           "value": 45.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -27447,6 +28567,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -27523,6 +28647,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6917.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -27654,6 +28782,10 @@
       "fitness": 230.6441006067305,
       "id": 45,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -27726,6 +28858,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.375
@@ -27762,6 +28898,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -27782,6 +28922,10 @@
           "kind": "Quality",
           "value": 45.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -27789,6 +28933,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -27865,6 +29013,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6917.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -27996,6 +29148,10 @@
       "fitness": 212.80143068933603,
       "id": 46,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -28068,6 +29224,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.75
@@ -28104,6 +29264,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -28124,6 +29288,10 @@
           "kind": "Quality",
           "value": 45.375
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -28131,6 +29299,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -28207,6 +29379,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6735.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -28338,6 +29514,10 @@
       "fitness": 226.7637704753588,
       "id": 47,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -28410,6 +29590,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.0
@@ -28446,6 +29630,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -28466,6 +29654,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -28473,6 +29665,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -28549,6 +29745,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6737.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -28680,6 +29880,10 @@
       "fitness": 67.78332726526463,
       "id": 48,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -28752,6 +29956,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 56.375
@@ -28788,6 +29996,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -28808,6 +30020,10 @@
           "kind": "Quality",
           "value": 22.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -28815,6 +30031,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -28891,6 +30111,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3377.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -29022,6 +30246,10 @@
       "fitness": 67.78332726526463,
       "id": 49,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -29094,6 +30322,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 56.375
@@ -29130,6 +30362,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -29150,6 +30386,10 @@
           "kind": "Quality",
           "value": 22.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -29157,6 +30397,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -29233,6 +30477,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3377.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -29364,6 +30612,10 @@
       "fitness": 67.78332726526463,
       "id": 50,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -29436,6 +30688,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 56.375
@@ -29472,6 +30728,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -29492,6 +30752,10 @@
           "kind": "Quality",
           "value": 22.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -29499,6 +30763,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -29575,6 +30843,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3377.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -29706,6 +30978,10 @@
       "fitness": 67.78332726526463,
       "id": 51,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -29778,6 +31054,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 56.375
@@ -29814,6 +31094,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -29834,6 +31118,10 @@
           "kind": "Quality",
           "value": 22.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -29841,6 +31129,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -29917,6 +31209,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3377.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -30048,6 +31344,10 @@
       "fitness": 67.78332726526463,
       "id": 52,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -30120,6 +31420,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 56.375
@@ -30156,6 +31460,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -30176,6 +31484,10 @@
           "kind": "Quality",
           "value": 22.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -30183,6 +31495,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -30259,6 +31575,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3377.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -30390,6 +31710,10 @@
       "fitness": -17.1167235512641,
       "id": 53,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -30462,6 +31786,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 29.125
@@ -30498,6 +31826,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -30518,6 +31850,10 @@
           "kind": "Quality",
           "value": 11.5
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -30525,6 +31861,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -30601,6 +31941,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 1702.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -30732,6 +32076,10 @@
       "fitness": 125.18480933915203,
       "id": 54,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -30804,6 +32152,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 82.125
@@ -30840,6 +32192,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -30860,6 +32216,10 @@
           "kind": "Quality",
           "value": 31.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -30867,6 +32227,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -30943,6 +32307,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5024.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -31074,6 +32442,10 @@
       "fitness": 69.24503572442092,
       "id": 55,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -31146,6 +32518,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 59.125
@@ -31182,6 +32558,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -31202,6 +32582,10 @@
           "kind": "Quality",
           "value": 22.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -31209,6 +32593,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -31285,6 +32673,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3392.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -31416,6 +32808,10 @@
       "fitness": 72.45937063129844,
       "id": 56,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -31488,6 +32884,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 57.125
@@ -31524,6 +32924,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -31544,6 +32948,10 @@
           "kind": "Quality",
           "value": 22.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -31551,6 +32959,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -31627,6 +33039,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3494.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -31758,6 +33174,10 @@
       "fitness": 49.09778961982562,
       "id": 57,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -31830,6 +33250,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 53.75
@@ -31866,6 +33290,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -31886,6 +33314,10 @@
           "kind": "Quality",
           "value": 21.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -31893,6 +33325,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -31969,6 +33405,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3172.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -32100,6 +33540,10 @@
       "fitness": 125.18480933915203,
       "id": 58,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -32172,6 +33616,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 82.125
@@ -32208,6 +33656,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -32228,6 +33680,10 @@
           "kind": "Quality",
           "value": 31.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -32235,6 +33691,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -32311,6 +33771,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5024.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -32442,6 +33906,10 @@
       "fitness": 125.18480933915203,
       "id": 59,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -32514,6 +33982,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 82.125
@@ -32550,6 +34022,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -32570,6 +34046,10 @@
           "kind": "Quality",
           "value": 31.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -32577,6 +34057,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -32653,6 +34137,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5024.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -32784,6 +34272,10 @@
       "fitness": 125.18480933915203,
       "id": 60,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -32856,6 +34348,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 82.125
@@ -32892,6 +34388,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -32912,6 +34412,10 @@
           "kind": "Quality",
           "value": 31.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -32919,6 +34423,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -32995,6 +34503,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5024.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -33126,6 +34638,10 @@
       "fitness": 125.18480933915203,
       "id": 61,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -33198,6 +34714,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 82.125
@@ -33234,6 +34754,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -33254,6 +34778,10 @@
           "kind": "Quality",
           "value": 31.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -33261,6 +34789,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -33337,6 +34869,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5024.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -33468,6 +35004,10 @@
       "fitness": 192.1895929307493,
       "id": 62,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -33540,6 +35080,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 100.625
@@ -33576,6 +35120,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -33596,6 +35144,10 @@
           "kind": "Quality",
           "value": 41.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -33603,6 +35155,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -33679,6 +35235,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6345.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -33810,6 +35370,10 @@
       "fitness": 118.3126476746852,
       "id": 63,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -33882,6 +35446,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 85.25
@@ -33918,6 +35486,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -33938,6 +35510,10 @@
           "kind": "Quality",
           "value": 31.625
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -33945,6 +35521,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -34021,6 +35601,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5075.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -34152,6 +35736,10 @@
       "fitness": 126.29483663067833,
       "id": 64,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -34224,6 +35812,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 83.5
@@ -34260,6 +35852,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -34280,6 +35876,10 @@
           "kind": "Quality",
           "value": 31.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -34287,6 +35887,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -34363,6 +35967,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5188.625
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -34494,6 +36102,10 @@
       "fitness": 107.43186867770913,
       "id": 65,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -34566,6 +36178,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 79.5
@@ -34602,6 +36218,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -34622,6 +36242,10 @@
           "kind": "Quality",
           "value": 30.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -34629,6 +36253,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -34705,6 +36333,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 4687.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -34836,6 +36468,10 @@
       "fitness": 192.1895929307493,
       "id": 66,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -34908,6 +36544,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 100.625
@@ -34944,6 +36584,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -34964,6 +36608,10 @@
           "kind": "Quality",
           "value": 41.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -34971,6 +36619,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -35047,6 +36699,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6345.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -35178,6 +36834,10 @@
       "fitness": 192.1895929307493,
       "id": 67,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -35250,6 +36910,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 100.625
@@ -35286,6 +36950,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -35306,6 +36974,10 @@
           "kind": "Quality",
           "value": 41.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -35313,6 +36985,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -35389,6 +37065,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6345.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -35520,6 +37200,10 @@
       "fitness": 192.1895929307493,
       "id": 68,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -35592,6 +37276,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 100.625
@@ -35628,6 +37316,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -35648,6 +37340,10 @@
           "kind": "Quality",
           "value": 41.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -35655,6 +37351,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -35731,6 +37431,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6345.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -35862,6 +37566,10 @@
       "fitness": 190.09427035898932,
       "id": 69,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -35934,6 +37642,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 102.625
@@ -35970,6 +37682,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -35990,6 +37706,10 @@
           "kind": "Quality",
           "value": 42.75
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -35997,6 +37717,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -36073,6 +37797,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6271.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -36204,6 +37932,10 @@
       "fitness": 179.4567293404939,
       "id": 70,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -36276,6 +38008,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 97.75
@@ -36312,6 +38048,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -36332,6 +38072,10 @@
           "kind": "Quality",
           "value": 39.625
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -36339,6 +38083,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -36415,6 +38163,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6016.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -36546,6 +38298,10 @@
       "fitness": -10.644931999235723,
       "id": 71,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -36618,6 +38374,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 30.375
@@ -36654,6 +38414,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -36674,6 +38438,10 @@
           "kind": "Quality",
           "value": 11.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -36681,6 +38449,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -36757,6 +38529,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 1719.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -36888,6 +38664,10 @@
       "fitness": -10.644931999235723,
       "id": 72,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -36960,6 +38740,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 30.375
@@ -36996,6 +38780,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -37016,6 +38804,10 @@
           "kind": "Quality",
           "value": 11.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -37023,6 +38815,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -37099,6 +38895,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 1719.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -37230,6 +39030,10 @@
       "fitness": -10.644931999235723,
       "id": 73,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -37302,6 +39106,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 30.375
@@ -37338,6 +39146,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -37358,6 +39170,10 @@
           "kind": "Quality",
           "value": 11.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -37365,6 +39181,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -37441,6 +39261,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 1719.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -37572,6 +39396,10 @@
       "fitness": 66.40325280191581,
       "id": 74,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -37644,6 +39472,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 59.25
@@ -37680,6 +39512,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -37700,6 +39536,10 @@
           "kind": "Quality",
           "value": 22.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -37707,6 +39547,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -37783,6 +39627,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3397.875
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -37914,6 +39762,10 @@
       "fitness": -13.607366109237802,
       "id": 75,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -37986,6 +39838,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 29.25
@@ -38022,6 +39878,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -38042,6 +39902,10 @@
           "kind": "Quality",
           "value": 12.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -38049,6 +39913,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -38125,6 +39993,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 1776.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -38256,6 +40128,10 @@
       "fitness": -10.38743199923573,
       "id": 76,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -38328,6 +40204,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 30.375
@@ -38364,6 +40244,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -38384,6 +40268,10 @@
           "kind": "Quality",
           "value": 11.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -38391,6 +40279,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -38467,6 +40359,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 1717.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -38598,6 +40494,10 @@
       "fitness": 66.40325280191581,
       "id": 77,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -38670,6 +40570,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 59.25
@@ -38706,6 +40610,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -38726,6 +40634,10 @@
           "kind": "Quality",
           "value": 22.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -38733,6 +40645,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -38809,6 +40725,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3397.875
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -38940,6 +40860,10 @@
       "fitness": 66.40325280191581,
       "id": 78,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -39012,6 +40936,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 59.25
@@ -39048,6 +40976,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -39068,6 +41000,10 @@
           "kind": "Quality",
           "value": 22.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -39075,6 +41011,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -39151,6 +41091,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3397.875
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -39282,6 +41226,10 @@
       "fitness": 114.39231520343333,
       "id": 79,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -39354,6 +41302,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 85.5
@@ -39390,6 +41342,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -39410,6 +41366,10 @@
           "kind": "Quality",
           "value": 31.625
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -39417,6 +41377,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -39493,6 +41457,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5083.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -39624,6 +41592,10 @@
       "fitness": 72.45937063129844,
       "id": 80,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -39696,6 +41668,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 57.125
@@ -39732,6 +41708,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -39752,6 +41732,10 @@
           "kind": "Quality",
           "value": 22.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -39759,6 +41743,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -39835,6 +41823,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3494.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -39966,6 +41958,10 @@
       "fitness": 69.24503572442092,
       "id": 81,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -40038,6 +42034,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 59.125
@@ -40074,6 +42074,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -40094,6 +42098,10 @@
           "kind": "Quality",
           "value": 22.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -40101,6 +42109,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -40177,6 +42189,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 3392.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -40308,6 +42324,10 @@
       "fitness": 114.39231520343333,
       "id": 82,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -40380,6 +42400,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 85.5
@@ -40416,6 +42440,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -40436,6 +42464,10 @@
           "kind": "Quality",
           "value": 31.625
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -40443,6 +42475,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -40519,6 +42555,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5083.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -40650,6 +42690,10 @@
       "fitness": 114.39231520343333,
       "id": 83,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -40722,6 +42766,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 85.5
@@ -40758,6 +42806,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -40778,6 +42830,10 @@
           "kind": "Quality",
           "value": 31.625
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -40785,6 +42841,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -40861,6 +42921,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5083.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -40992,6 +43056,10 @@
       "fitness": 184.82522385268578,
       "id": 84,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -41064,6 +43132,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 102.875
@@ -41100,6 +43172,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -41120,6 +43196,10 @@
           "kind": "Quality",
           "value": 42.75
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -41127,6 +43207,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -41203,6 +43287,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6276.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -41334,6 +43422,10 @@
       "fitness": 126.29483663067833,
       "id": 85,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -41406,6 +43498,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 83.5
@@ -41442,6 +43538,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -41462,6 +43562,10 @@
           "kind": "Quality",
           "value": 31.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -41469,6 +43573,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -41545,6 +43653,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5188.625
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -41676,6 +43788,10 @@
       "fitness": 118.3126476746852,
       "id": 86,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -41748,6 +43864,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 85.25
@@ -41784,6 +43904,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -41804,6 +43928,10 @@
           "kind": "Quality",
           "value": 31.625
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -41811,6 +43939,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -41887,6 +44019,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 5075.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -42018,6 +44154,10 @@
       "fitness": 184.82522385268578,
       "id": 87,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -42090,6 +44230,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 102.875
@@ -42126,6 +44270,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -42146,6 +44294,10 @@
           "kind": "Quality",
           "value": 42.75
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -42153,6 +44305,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -42229,6 +44385,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6276.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -42360,6 +44520,10 @@
       "fitness": 184.82522385268578,
       "id": 88,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -42432,6 +44596,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 102.875
@@ -42468,6 +44636,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -42488,6 +44660,10 @@
           "kind": "Quality",
           "value": 42.75
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -42495,6 +44671,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -42571,6 +44751,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6276.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -42702,6 +44886,10 @@
       "fitness": 207.5269332194814,
       "id": 89,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -42774,6 +44962,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 109.0
@@ -42810,6 +45002,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -42830,6 +45026,10 @@
           "kind": "Quality",
           "value": 45.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -42837,6 +45037,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -42913,6 +45117,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6741.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -43044,6 +45252,10 @@
       "fitness": 197.29104908135207,
       "id": 90,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -43116,6 +45328,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 100.875
@@ -43152,6 +45368,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -43172,6 +45392,10 @@
           "kind": "Quality",
           "value": 42.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -43179,6 +45403,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -43255,6 +45483,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6479.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -43386,6 +45618,10 @@
       "fitness": 190.09427035898932,
       "id": 91,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -43458,6 +45694,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 102.625
@@ -43494,6 +45734,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -43514,6 +45758,10 @@
           "kind": "Quality",
           "value": 42.75
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -43521,6 +45769,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -43597,6 +45849,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6271.5
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -43728,6 +45984,10 @@
       "fitness": 207.5269332194814,
       "id": 92,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -43800,6 +46060,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 109.0
@@ -43836,6 +46100,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -43856,6 +46124,10 @@
           "kind": "Quality",
           "value": 45.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -43863,6 +46135,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -43939,6 +46215,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6741.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -44070,6 +46350,10 @@
       "fitness": 207.5269332194814,
       "id": 93,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -44142,6 +46426,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 109.0
@@ -44178,6 +46466,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -44198,6 +46490,10 @@
           "kind": "Quality",
           "value": 45.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -44205,6 +46501,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -44281,6 +46581,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6741.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -44412,6 +46716,10 @@
       "fitness": 207.50864883781537,
       "id": 94,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -44484,6 +46792,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 109.375
@@ -44520,6 +46832,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -44540,6 +46856,10 @@
           "kind": "Quality",
           "value": 45.375
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -44547,6 +46867,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -44623,6 +46947,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6797.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -44754,6 +47082,10 @@
       "fitness": 226.1616685195478,
       "id": 95,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -44826,6 +47158,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.5
@@ -44862,6 +47198,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -44882,6 +47222,10 @@
           "kind": "Quality",
           "value": 45.375
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -44889,6 +47233,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -44965,6 +47313,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7005.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -45096,6 +47448,10 @@
       "fitness": 212.80143068933603,
       "id": 96,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -45168,6 +47524,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.75
@@ -45204,6 +47564,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -45224,6 +47588,10 @@
           "kind": "Quality",
           "value": 45.375
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -45231,6 +47599,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -45307,6 +47679,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6735.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -45438,6 +47814,10 @@
       "fitness": 226.1616685195478,
       "id": 97,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -45510,6 +47890,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.5
@@ -45546,6 +47930,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -45566,6 +47954,10 @@
           "kind": "Quality",
           "value": 45.375
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -45573,6 +47965,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -45649,6 +48045,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7005.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -45780,6 +48180,10 @@
       "fitness": 226.1616685195478,
       "id": 98,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -45852,6 +48256,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.5
@@ -45888,6 +48296,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -45908,6 +48320,10 @@
           "kind": "Quality",
           "value": 45.375
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -45915,6 +48331,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -45991,6 +48411,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7005.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -46122,6 +48546,10 @@
       "fitness": 226.31936511671222,
       "id": 99,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -46194,6 +48622,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.375
@@ -46230,6 +48662,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -46250,6 +48686,10 @@
           "kind": "Quality",
           "value": 45.5
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -46257,6 +48697,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -46333,6 +48777,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7083.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -46464,6 +48912,10 @@
       "fitness": 230.6441006067305,
       "id": 100,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -46536,6 +48988,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.375
@@ -46572,6 +49028,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -46592,6 +49052,10 @@
           "kind": "Quality",
           "value": 45.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -46599,6 +49063,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -46675,6 +49143,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6917.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -46806,6 +49278,10 @@
       "fitness": 230.6441006067305,
       "id": 101,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -46878,6 +49354,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.375
@@ -46914,6 +49394,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -46934,6 +49418,10 @@
           "kind": "Quality",
           "value": 45.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -46941,6 +49429,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -47017,6 +49509,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6917.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -47148,6 +49644,10 @@
       "fitness": 230.6441006067305,
       "id": 102,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -47220,6 +49720,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.375
@@ -47256,6 +49760,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -47276,6 +49784,10 @@
           "kind": "Quality",
           "value": 45.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -47283,6 +49795,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -47359,6 +49875,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6917.375
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -47490,6 +50010,10 @@
       "fitness": 192.1895929307493,
       "id": 103,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -47562,6 +50086,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 100.625
@@ -47598,6 +50126,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -47618,6 +50150,10 @@
           "kind": "Quality",
           "value": 41.875
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -47625,6 +50161,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -47701,6 +50241,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6345.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -47832,6 +50376,10 @@
       "fitness": 232.19475903729233,
       "id": 104,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -47904,6 +50452,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.5
@@ -47940,6 +50492,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -47960,6 +50516,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -47967,6 +50527,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -48043,6 +50607,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7016.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -48174,6 +50742,10 @@
       "fitness": 226.7637704753588,
       "id": 105,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -48246,6 +50818,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 107.0
@@ -48282,6 +50858,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -48302,6 +50882,10 @@
           "kind": "Quality",
           "value": 46.0
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -48309,6 +50893,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -48385,6 +50973,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6737.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -48516,6 +51108,10 @@
       "fitness": 229.38322845199616,
       "id": 106,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -48588,6 +51184,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.75
@@ -48624,6 +51224,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -48644,6 +51248,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -48651,6 +51259,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -48727,6 +51339,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 7034.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -48858,6 +51474,10 @@
       "fitness": 212.78314883781536,
       "id": 107,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -48930,6 +51550,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 109.125
@@ -48966,6 +51590,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -48986,6 +51614,10 @@
           "kind": "Quality",
           "value": 45.5
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -48993,6 +51625,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -49069,6 +51705,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6792.125
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -49200,6 +51840,10 @@
       "fitness": 235.93681692823895,
       "id": 108,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -49272,6 +51916,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.625
@@ -49308,6 +51956,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -49328,6 +51980,10 @@
           "kind": "Quality",
           "value": 46.125
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -49335,6 +51991,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -49411,6 +52071,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6876.75
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -49542,6 +52206,10 @@
       "fitness": 235.27135343242242,
       "id": 109,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -49614,6 +52282,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 108.875
@@ -49650,6 +52322,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -49670,6 +52346,10 @@
           "kind": "Quality",
           "value": 46.25
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -49677,6 +52357,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -49753,6 +52437,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6897.25
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",
@@ -49884,6 +52572,10 @@
       "fitness": 212.9206488378154,
       "id": 110,
       "kpis": {
+        "acts_for_not_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "acts_for_without_part": {
           "kind": "Correctness",
           "value": 0.0
@@ -49956,6 +52648,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "empty_architecture": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "false_completions_shipped": {
           "kind": "Correctness",
           "value": 109.125
@@ -49992,6 +52688,10 @@
           "kind": "Quality",
           "value": 0.0
         },
+        "gateway_without_model": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "human_touchpoints": {
           "kind": "Quality",
           "value": 1.0
@@ -50012,6 +52712,10 @@
           "kind": "Quality",
           "value": 45.625
         },
+        "link_exists": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "merge_conflicts": {
           "kind": "Quality",
           "value": 0.0
@@ -50019,6 +52723,10 @@
         "model_call_paths": {
           "kind": "Completeness",
           "value": 2.0
+        },
+        "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "operator_decided_owner_questions": {
           "kind": "Quality",
@@ -50095,6 +52803,10 @@
         "rework_turns": {
           "kind": "Quality",
           "value": 6789.0
+        },
+        "self_reference": {
+          "kind": "Correctness",
+          "value": 0.0
         },
         "setting_invalid": {
           "kind": "Correctness",

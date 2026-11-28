@@ -28,7 +28,7 @@ A marked place carries `vary`: the value as built and the values a search may tr
 
 ## KPIs that moved
 
-34 of 82 KPIs differ between the architecture as built and its best variant; the others are equal. A weight is what the experiment scores a KPI by: above 0 more is better, below 0 less is better.
+34 of 88 KPIs differ between the architecture as built and its best variant; the others are equal. A weight is what the experiment scores a KPI by: above 0 more is better, below 0 less is better.
 
 | KPI | weight | as built | best variant | change |
 |---|---|---|---|---|
@@ -191,6 +191,7 @@ Every KPI of the architecture as built and of its best variant:
 
 | KPI | kind | as built | best variant |
 |---|---|---|---|
+| `acts_for_not_principal` | correctness | 0 | 0 |
 | `acts_for_without_part` | correctness | 0 | 0 |
 | `agent_time_cost_usd` | quality | 240 | 384 |
 | `agent_without_model_path` | correctness | 0 | 0 |
@@ -209,6 +210,7 @@ Every KPI of the architecture as built and of its best variant:
 | `duplicate_runs` | quality | 0 | 0 |
 | `egress_targets` | quality | 1 | 1 |
 | `egress_without_part` | correctness | 0 | 0 |
+| `empty_architecture` | correctness | 0 | 0 |
 | `false_completions_shipped` | correctness | 88.500 | 82 |
 | `firing_failure_share` | correctness | 0 | 0 |
 | `firing_skip_share` | quality | 0 | 0 |
@@ -218,13 +220,16 @@ Every KPI of the architecture as built and of its best variant:
 | `firings_queued` | quality | 0 | 0 |
 | `firings_skipped` | quality | 0 | 0 |
 | `firings_started` | quality | 0 | 0 |
+| `gateway_without_model` | correctness | 0 | 0 |
 | `human_touchpoints` | quality | 1 | 1 |
 | `invalid_concurrency` | correctness | 0 | 0 |
 | `invalid_schedule` | correctness | 0 | 0 |
 | `jobs` | quality | 657.5 | 768.5 |
 | `jobs_killed` | quality | 39 | 45.500 |
+| `link_exists` | correctness | 0 | 0 |
 | `merge_conflicts` | quality | 0 | 0 |
 | `model_call_paths` | completeness | 3 | 3 |
+| `not_a_channel` | correctness | 0 | 0 |
 | `operator_decided_owner_questions` | quality | 0 | 0 |
 | `operator_wait_share` | quality | 0.008 | 0.005 |
 | `owner_wait_share` | quality | 0.027 | 0.017 |
@@ -244,6 +249,7 @@ Every KPI of the architecture as built and of its best variant:
 | `reviews` | quality | 275.5 | 462.5 |
 | `reviews_rejected` | quality | 107 | 291 |
 | `rework_turns` | quality | 6703.5 | 9200 |
+| `self_reference` | correctness | 0 | 0 |
 | `setting_invalid` | correctness | 0 | 0 |
 | `setting_unknown` | correctness | 0 | 0 |
 | `shared_workspaces` | quality | 0 | 0 |

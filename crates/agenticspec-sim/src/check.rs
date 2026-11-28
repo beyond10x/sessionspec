@@ -123,6 +123,19 @@ pub enum Refusal {
     SwarmNeedsAgent { part: String },
     /// No link, `per`, `acts_for`, `egress` or `border` reaches the part.
     UnreachablePart { part: String },
+    /// The document has no part; `part` is the architecture's name.
+    EmptyArchitecture { part: String },
+    /// A link goes from a part to itself (`link` is its index), or a part's `per` or `acts_for`
+    /// names the part itself (`link` is `None`).
+    SelfReference { link: Option<usize>, part: String },
+    /// A link's `over` names a part that is not a channel; `part` is that part.
+    NotAChannel { link: usize, part: String },
+    /// A link has the `from`, `to` and `carries` of an earlier link; `part` is its `from`.
+    LinkExists { link: usize, part: String },
+    /// An agent's `acts_for` names a part that is not a principal.
+    ActsForNotPrincipal { part: String, names: String },
+    /// A gateway part has no `model_call` link to a model part.
+    GatewayWithoutModel { part: String },
 }
 
 /// The values of `coordination` on an agent part (agentic.architecture.Coordination).
@@ -153,6 +166,12 @@ pub const GATE_KPIS: &[&str] = &[
     "invalid_schedule",
     "swarm_needs_agent",
     "unreachable_parts",
+    "empty_architecture",
+    "self_reference",
+    "not_a_channel",
+    "link_exists",
+    "acts_for_not_principal",
+    "gateway_without_model",
 ];
 
 impl Refusal {
@@ -177,6 +196,12 @@ impl Refusal {
             Refusal::InvalidSchedule { .. } => "invalid_schedule",
             Refusal::SwarmNeedsAgent { .. } => "swarm_needs_agent",
             Refusal::UnreachablePart { .. } => "unreachable_parts",
+            Refusal::EmptyArchitecture { .. } => "empty_architecture",
+            Refusal::SelfReference { .. } => "self_reference",
+            Refusal::NotAChannel { .. } => "not_a_channel",
+            Refusal::LinkExists { .. } => "link_exists",
+            Refusal::ActsForNotPrincipal { .. } => "acts_for_not_principal",
+            Refusal::GatewayWithoutModel { .. } => "gateway_without_model",
         }
     }
 
@@ -200,7 +225,13 @@ impl Refusal {
             | Refusal::InvalidConcurrency { part }
             | Refusal::InvalidSchedule { part }
             | Refusal::SwarmNeedsAgent { part }
-            | Refusal::UnreachablePart { part } => part,
+            | Refusal::UnreachablePart { part }
+            | Refusal::EmptyArchitecture { part }
+            | Refusal::SelfReference { part, .. }
+            | Refusal::NotAChannel { part, .. }
+            | Refusal::LinkExists { part, .. }
+            | Refusal::ActsForNotPrincipal { part, .. }
+            | Refusal::GatewayWithoutModel { part } => part,
         }
     }
 }
@@ -263,6 +294,25 @@ impl fmt::Display for Refusal {
                 COORDINATIONS.join(", ")
             ),
             Refusal::UnreachablePart { .. } => "nothing links to this part".into(),
+            Refusal::EmptyArchitecture { .. } => "an architecture has at least one part".into(),
+            Refusal::SelfReference { link: Some(link), .. } => {
+                format!("link {link} goes from the part to itself")
+            }
+            Refusal::SelfReference { link: None, .. } => {
+                "per or acts_for names the part itself".into()
+            }
+            Refusal::NotAChannel { link, .. } => {
+                format!("link {link} travels over a part that is not a channel")
+            }
+            Refusal::LinkExists { link, .. } => {
+                format!("link {link} repeats the from, to and carries of an earlier link")
+            }
+            Refusal::ActsForNotPrincipal { names, .. } => {
+                format!("acts_for `{names}` names a part that is not a principal")
+            }
+            Refusal::GatewayWithoutModel { .. } => {
+                "a gateway with no model_call link to a model".into()
+            }
         };
         write!(f, "{}: part `{}`: {detail}", self.rule(), self.part())
     }
@@ -633,6 +683,107 @@ pub fn check(architecture: &Value) -> Vec<Refusal> {
     for (name, p) in parts {
         if !referenced.contains(name.as_str()) && p.get("per").is_none() {
             out.push(Refusal::UnreachablePart { part: name.clone() });
+        }
+    }
+    out.extend(block_rules(architecture, parts, &links));
+    out
+}
+
+/// The refusals of the architecture block (blocks/9-composition/architecture.yaml) that a
+/// document can write and the rules above do not name: each carries the name of the block's
+/// error, in the order the block's commands meet them (parts, acts-for, links, commit). A name
+/// that is no part is left to the `*_without_part` and `unknown_link_parts` rules.
+///
+/// Two refusals of the block are not held here, because committed documents the simulator runs
+/// write what they refuse: `NotReachedByPrincipal` (a border part no principal links to:
+/// `architectures/console.yaml`, nested with no principal of its own, and the coding field's
+/// `auto-merger.yaml`, whose owner reaches the merger through a grant) and
+/// `QuestionWithoutAnswerer` (a question to an agent that acts for no principal: the console's
+/// steward, which the simulator lets answer and forward to a principal).
+fn block_rules(
+    architecture: &Value,
+    parts: &serde_json::Map<String, Value>,
+    links: &[Value],
+) -> Vec<Refusal> {
+    let mut out = Vec::new();
+    if parts.is_empty() {
+        out.push(Refusal::EmptyArchitecture {
+            part: s(&architecture["architecture"])
+                .unwrap_or("architecture")
+                .to_string(),
+        });
+    }
+    out.extend(acts_for_rules(architecture, parts));
+    out.extend(link_rules(architecture, links));
+    for (name, p) in parts {
+        let to_model = links.iter().any(|l| {
+            s(&l["from"]) == Some(name.as_str())
+                && s(&l["carries"]) == Some("model_call")
+                && s(&l["to"]).and_then(|t| block(architecture, t)) == Some("model")
+        });
+        if s(&p["block"]) == Some("gateway") && !to_model {
+            out.push(Refusal::GatewayWithoutModel { part: name.clone() });
+        }
+    }
+    out
+}
+
+/// `SetPer` and `SetActsFor` of the block: a `per` or `acts_for` naming the part itself; then an
+/// agent's `acts_for` naming a part that is no principal. `acts_for` on a part that is no agent
+/// (the block's `ActsForNeedsAgent`) is `setting_unknown`: `blocks/settings.yaml` declares it
+/// on agents only.
+fn acts_for_rules(architecture: &Value, parts: &serde_json::Map<String, Value>) -> Vec<Refusal> {
+    let mut out = Vec::new();
+    for (name, p) in parts {
+        let own = |key: &str| names(&p[key]).contains(&name.as_str());
+        if own("per") || own("acts_for") {
+            out.push(Refusal::SelfReference {
+                link: None,
+                part: name.clone(),
+            });
+        }
+        if s(&p["block"]) != Some("agent") {
+            continue;
+        }
+        for n in names(&p["acts_for"]).into_iter().filter(|n| n != name) {
+            if block(architecture, n).is_some_and(|b| b != "principal") {
+                out.push(Refusal::ActsForNotPrincipal {
+                    part: name.clone(),
+                    names: n.to_string(),
+                });
+            }
+        }
+    }
+    out
+}
+
+/// `AddLink` of the block for each link: a link from a part to itself, over a part that is no
+/// channel, or repeating the `from`, `to` and `carries` of an earlier link.
+fn link_rules(architecture: &Value, links: &[Value]) -> Vec<Refusal> {
+    let mut out = Vec::new();
+    let end = |l: &Value, k: &str| s(&l[k]).map(str::to_string);
+    for (i, l) in links.iter().enumerate() {
+        let from = end(l, "from");
+        if from.is_some() && from == end(l, "to") {
+            out.push(Refusal::SelfReference {
+                link: Some(i),
+                part: from.clone().unwrap_or_default(),
+            });
+        }
+        if let Some(over) = s(&l["over"])
+            && block(architecture, over).is_some_and(|b| b != "channel")
+        {
+            out.push(Refusal::NotAChannel {
+                link: i,
+                part: over.to_string(),
+            });
+        }
+        let key = |l: &Value| (end(l, "from"), end(l, "to"), end(l, "carries"));
+        if links[..i].iter().any(|e| key(e) == key(l)) {
+            out.push(Refusal::LinkExists {
+                link: i,
+                part: from.unwrap_or_default(),
+            });
         }
     }
     out
