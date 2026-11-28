@@ -236,7 +236,7 @@ tasks:
       - sh scripts/spec-diff.sh {{.CLI_ARGS}}
 
   check:mutation:
-    desc: Mutation audit of spec/ and studio/ on the interpreter, authored scenarios included; fails on a mutant the suite does not kill that the specification's mutation-known.txt does not list, and on a listed one that is now killed (about 20 s; the lines are in scripts/check-mutation.sh).
+    desc: Mutation audit of spec/ and studio/ on the interpreter, authored scenarios included; fails on a mutant the suite does not kill that the specification's mutation-known.txt does not list, and on a listed one that is now killed (about 35 s; the lines are in scripts/check-mutation.sh).
     cmds:
       - sh scripts/check-mutation.sh spec
       - sh scripts/check-mutation.sh studio

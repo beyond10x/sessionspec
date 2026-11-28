@@ -1,0 +1,72 @@
+# A tool call records who sent it, not what the call says about it: the call's input names no
+# caller, and the same query sent by the user and by the agent is recorded once as the user's and
+# once as the agent's.
+type: ess-scenario/7
+domain: studio.session
+scenario: call-records-its-sender
+summary: The user and the agent send the same query in one session; the first call is recorded with caller User, the second with caller Agent.
+
+arrange:
+  - instance: draft
+    entity: studio.draft.Draft
+  - instance: session
+    entity: studio.session.Session
+  - instance: by-user
+    entity: studio.session.ToolCall
+  - instance: by-agent
+    entity: studio.session.ToolCall
+
+timeline:
+  - at: 2026-11-28T10:00:00Z
+    command: studio.draft.OpenDraft
+    actor: studio.session.User
+    input:
+      name: workstation
+      architecture: 00000000-0000-4000-8000-0000000000a1
+    outcome: opened
+    capture: {instance: draft, event: studio.draft.DraftOpened, field: draft_id}
+
+  - at: 2026-11-28T10:00:01Z
+    command: studio.session.StartSession
+    actor: studio.session.User
+    input: {draft_id: {$instance: draft}}
+    outcome: started
+    capture: {instance: session, event: studio.session.SessionStarted, field: session_id}
+
+  - at: 2026-11-28T10:00:02Z
+    command: studio.session.CallTool
+    actor: studio.session.User
+    caller: {kind: User}
+    input:
+      session_id: {$instance: session}
+      tool: Query
+      arguments: '{"selector": "part{id: P}"}'
+      dry_run: false
+    outcome: called
+    events:
+      - event: studio.session.ToolCalled
+        payload: {session_id: {$instance: session}, tool: Query, caller: User, dry_run: false}
+    capture: {instance: by-user, event: studio.session.ToolCalled, field: call_id}
+
+  - at: 2026-11-28T10:00:03Z
+    command: studio.session.CallTool
+    actor: studio.session.Agent
+    caller: {kind: Agent}
+    input:
+      session_id: {$instance: session}
+      tool: Query
+      arguments: '{"selector": "part{id: P}"}'
+      dry_run: false
+    outcome: called
+    events:
+      - event: studio.session.ToolCalled
+        payload: {session_id: {$instance: session}, tool: Query, caller: Agent, dry_run: false}
+    capture: {instance: by-agent, event: studio.session.ToolCalled, field: call_id}
+
+assert:
+  - view: studio.session.ToolCalls
+    params: {session_id: {$instance: session}}
+    contains: {call_id: {$instance: by-user}, caller: User}
+  - view: studio.session.ToolCalls
+    params: {session_id: {$instance: session}}
+    contains: {call_id: {$instance: by-agent}, caller: Agent}

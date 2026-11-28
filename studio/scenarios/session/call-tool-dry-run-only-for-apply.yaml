@@ -36,9 +36,9 @@ timeline:
     input:
       session_id: {$instance: session}
       tool: Query
-      caller: Agent
       arguments: '{"selector": "part{id: P}"}'
       dry_run: false
+    caller: {kind: Agent}
     outcome: called
     events:
       - event: studio.session.ToolCalled
@@ -50,9 +50,9 @@ timeline:
     input:
       session_id: {$instance: session}
       tool: Apply
-      caller: User
       arguments: '{"patch": "set part{id: worker}.model = \"m\""}'
       dry_run: true
+    caller: {kind: User}
     outcome: called
     events:
       - event: studio.session.ToolCalled
@@ -64,9 +64,9 @@ timeline:
     input:
       session_id: {$instance: session}
       tool: Check
-      caller: User
       arguments: '{}'
       dry_run: true
+    caller: {kind: User}
     outcome: dry-run-outside-apply
     error:
       name: studio.session.DryRunOutsideApply

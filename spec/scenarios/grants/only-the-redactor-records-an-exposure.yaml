@@ -1,0 +1,43 @@
+# Only the redaction pass records an exposure. Every other actor is refused one as not granted
+# where the redactor would be admitted. A synthesized suite sends the command as one actor it does
+# not grant, so a mutation that granted it to the harness survived.
+type: ess-scenario/7
+domain: agenticspec.session
+scenario: only-the-redactor-records-an-exposure
+summary: Every actor but the redactor is refused an exposure as not granted; the redactor then records it.
+
+timeline:
+  - at: 2026-11-28T10:00:00Z
+    command: agenticspec.session.OpenSession
+    actor: agenticspec.session.HarnessRuntime
+    input: {session_id: s-1, harness: ClaudeCode, at: 2026-11-28T10:00:00Z}
+    outcome: opened
+
+  - at: 2026-11-28T10:00:01Z
+    command: agenticspec.session.StartAgent
+    actor: agenticspec.session.HarnessRuntime
+    input: {agent_id: a-1, session_id: s-1, role: Main, at: 2026-11-28T10:00:01Z}
+    outcome: started
+
+  - at: 2026-11-28T10:00:02Z
+    command: agenticspec.session.RecordExposure
+    actor: agenticspec.session.HarnessRuntime
+    input: &exposure
+      exposure_id: e-1
+      agent_id: a-1
+      channel: Prompt
+      class: Secret
+      kind: token
+      alias: secret-1
+      verdict: Gap
+      at: 2026-11-28T10:00:02Z
+    refused: not_granted
+  - {at: 2026-11-28T10:00:03Z, command: agenticspec.session.RecordExposure, actor: agenticspec.session.Human, input: *exposure, refused: not_granted}
+  - {at: 2026-11-28T10:00:04Z, command: agenticspec.session.RecordExposure, actor: agenticspec.session.Delegate, input: *exposure, refused: not_granted}
+  - {at: 2026-11-28T10:00:05Z, command: agenticspec.session.RecordExposure, actor: agenticspec.session.PeerSession, input: *exposure, refused: not_granted}
+  - {at: 2026-11-28T10:00:06Z, command: agenticspec.session.RecordExposure, actor: agenticspec.session.AgentLoop, input: *exposure, refused: not_granted}
+  - {at: 2026-11-28T10:00:07Z, command: agenticspec.session.RecordExposure, actor: agenticspec.session.PermissionAuthority, input: *exposure, refused: not_granted}
+  - {at: 2026-11-28T10:00:08Z, command: agenticspec.session.RecordExposure, actor: agenticspec.session.ToolProvider, input: *exposure, refused: not_granted}
+  - {at: 2026-11-28T10:00:09Z, command: agenticspec.session.RecordExposure, actor: agenticspec.view.Viewer, input: *exposure, refused: not_granted}
+
+  - {at: 2026-11-28T10:00:10Z, command: agenticspec.session.RecordExposure, actor: agenticspec.session.Redactor, input: *exposure, outcome: recorded}

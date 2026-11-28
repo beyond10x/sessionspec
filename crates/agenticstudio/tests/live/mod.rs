@@ -20,12 +20,79 @@ fn start(s: &Mutex<Studio>, draft: &str) -> String {
 }
 
 fn tool(s: &Mutex<Studio>, session: &str, input: Value) -> (u16, Value) {
-    call(
+    tool_as(s, None, session, input)
+}
+
+/// A tool call sent as `caller` (the `X-Studio-Caller` header), or with no such header.
+fn tool_as(s: &Mutex<Studio>, caller: Option<&str>, session: &str, input: Value) -> (u16, Value) {
+    call_as(
         s,
+        caller,
         "POST",
         &format!("/api/sessions/{session}/calls"),
         Some(input),
     )
+}
+
+#[test]
+fn a_call_is_recorded_as_the_caller_its_request_is_sent_as() {
+    let s = studio();
+    let id = open_workstation(&s);
+    let session = start(&s, &id);
+    let check = json!({"tool": "check"});
+    for (caller, status) in [
+        (Some("Agent"), 200),
+        (None, 200),
+        (Some("user"), 200),
+        (Some("Server"), 400),
+    ] {
+        let (got, v) = tool_as(&s, caller, &session, check.clone());
+        assert_eq!(got, status, "{caller:?}: {v}");
+    }
+    let list = calls(&s, &session);
+    let callers: Vec<&Value> = list.iter().map(|c| &c["caller"]).collect();
+    assert_eq!(callers, [&json!("Agent"), &json!("User"), &json!("User")]);
+}
+
+#[test]
+fn a_body_that_names_another_caller_is_refused_and_makes_no_call() {
+    let s = studio();
+    let id = open_workstation(&s);
+    let session = start(&s, &id);
+    for (caller, named) in [(None, "Agent"), (Some("Agent"), "User")] {
+        let (status, v) = tool_as(
+            &s,
+            caller,
+            &session,
+            json!({"tool": "check", "caller": named}),
+        );
+        assert_eq!(
+            (status, v["error"].as_str()),
+            (403, Some("CallerNotSender")),
+            "{caller:?} naming {named}: {v}"
+        );
+    }
+    let (status, v) = call(
+        &s,
+        "POST",
+        "/api/commands/studio.session.CallTool",
+        Some(json!({"session_id": session, "tool": "Check", "caller": "Agent"})),
+    );
+    assert_eq!(
+        (status, v["error"].as_str()),
+        (403, Some("CallerNotSender")),
+        "{v}"
+    );
+    assert!(calls(&s, &session).is_empty());
+
+    let (status, v) = tool_as(
+        &s,
+        Some("Agent"),
+        &session,
+        json!({"tool": "check", "caller": "Agent"}),
+    );
+    assert_eq!(status, 200, "{v}");
+    assert_eq!(calls(&s, &session)[0]["caller"], "Agent");
 }
 
 fn calls(s: &Mutex<Studio>, session: &str) -> Vec<Value> {
@@ -151,10 +218,11 @@ fn a_session_records_each_call_and_refuses_calls_once_closed() {
     let session = start(&s, &id);
     assert!(calls(&s, &session).is_empty());
 
-    let (status, v) = tool(
+    let (status, v) = tool_as(
         &s,
+        Some("Agent"),
         &session,
-        json!({"tool": "query", "caller": "Agent", "arguments": {"selector": "part{id: P, block: \"agent\"}"}}),
+        json!({"tool": "query", "arguments": {"selector": "part{id: P, block: \"agent\"}"}}),
     );
     assert_eq!(status, 200, "{v}");
     let rows_of = |v: &Value| -> Vec<String> {
@@ -483,6 +551,7 @@ fn the_channel_is_asked_for_by_draft_and_streamed_as_server_sent_events() {
         path: path.into(),
         query: query.into(),
         body: Vec::new(),
+        caller: None,
     };
     assert!(events(&s, &get(&format!("/api/drafts/{id}/events"), "")).is_some_and(|r| r.is_ok()));
     let by_channel = get("/api/channels/draft_events", &format!("draft_id={id}"));
