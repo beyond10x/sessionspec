@@ -190,7 +190,7 @@ Each entry of `units`:
 | `checks` | `startup`, `ready`, `alive`, each with its kind and path or command, and `port` (an integer) where the binding gives one (`checks.<unit>.<check>.port`). An agent unit with `expose.a2a` uses Loom's readiness and liveness probes (`loom:README.md:727`); without it, `b10x-loom agent check` is its startup command |
 | `schedule` | for `scheduled`: the cron rule the binding gives (K18) |
 | `clock` | for `scheduled`: the trigger and schedule that wake it, its `policy` and `max_parallel` as the overlap rule |
-| `upstream` | for a UI unit (K17): `{unit, port, path}`, the unit whose adapter the page reads and the `api_base` of its `config.json` |
+| `upstream` | for a UI unit (K17): `{unit, port, path, secret?}`, the unit whose adapter the page reads, the `api_base` of its `config.json` and the name of the credential it presents there |
 | `config` | the non-secret configuration the binding gives the unit (K20): `env`, variable names sorted, each value text or `{secret: <name>}`, `args`, and `secret_files` (K22), `{path, secret, key?}` sorted by `path`; absent when it gives none |
 | `scratch` | the scratch directories the binding gives the unit (K21): `{mount, size}` each, sorted by `mount`; no claim, absent when it gives none |
 | `secrets` | every secret by name; never a value |
@@ -403,7 +403,7 @@ semantics, `on_message` and `on_event` triggers, spawned sub-agents, principal p
 ## K17 A UI is a unit of its own
 
 Settled with the translator, names exact. A binding asks for a UI under `ui:`:
-`ui: {operator: {port, bind, upstream: {unit, port, path}}}`, every key optional. Without `ui:` the
+`ui: {operator: {port, bind, upstream: {unit, port, path, secret}}}`, every key optional. Without `ui:` the
 bundle is the bundle it was (K16's fixtures keep their bytes); with it, the bundle stays `/1`: the
 additions are a unit, the optional member `files` and the unit of one ingress entry.
 
@@ -423,6 +423,14 @@ additions are a unit, the optional member `files` and the unit of one ingress en
   is served by the same unit; `path`, the binding's `upstream.path` (`/api/` when absent), the
   `api_base` of a built-in UI's `config.json` (the archive of a UI of the consumer's own is
   carried as it is). A binding without `path` gives the bundle it gave before.
+- `upstream.secret` (R128) is the name of the credential the UI presents to its upstream, the
+  `bearer` credential of the runtime UI interface, never a value. A part of the upstream unit
+  declares it (`parts.<part>.secrets`), as a secret of any unit is declared; the UI unit carries it
+  in `upstream.secret` and in `secrets`, so the client and its upstream share one declared secret.
+  A name that is none is `secret_value`; one no part of the upstream unit declares, or that the
+  UI unit's `secrets` does not list, is `secret_undeclared`, at bundle and at check. A binding
+  without it gives the bundle it gave before. How a target mounts the secret into the static
+  server is the target's.
 - Its claims and check ports come from the binding as for any other unit, by the unit's name:
   `claims.operator-ui` (500 millicores, 512 MiB and no accelerator when absent) and
   `checks.operator-ui.<ready|alive>.port` (the export's port when absent).

@@ -1,8 +1,10 @@
 //! The UIs of a bundle: one unit per UI the binding asks for under `ui:`, a `service` unit that
 //! serves static files (`code: {kind: static, archive, digest}`) and reads the adapter of an
-//! upstream unit (`upstream: {unit, port, path}`, `path` from `ui.<ui>.upstream.path`, `/api/`
-//! when absent). The archive is carried inline in the bundle's `files` member, base64, by its file
-//! name. The UI unit serves its export of an ingress; the other exports stay where they were.
+//! upstream unit (`upstream: {unit, port, path, secret?}`, `path` from `ui.<ui>.upstream.path`,
+//! `/api/` when absent; `secret` from `ui.<ui>.upstream.secret`, the name of the credential the UI
+//! presents to that unit, which a part of that unit declares). The archive is carried inline in
+//! the bundle's `files` member, base64, by its file name. The UI unit serves its export of an
+//! ingress; the other exports stay where they were.
 //!
 //! A UI is one row ([`Ui`]): its key under `ui:`, its unit's name and role, the ingress and export
 //! it serves, and the source of its files ([`Source`]). Two sources are built in, keyed
@@ -20,6 +22,7 @@
 use super::admit::{Accepts, Finding};
 use super::binding::{BIND, Binding, is_digest, is_port, is_text};
 use super::bundle::CONTROL;
+use super::grants;
 use super::packing::Packing;
 use super::sha256;
 use serde_json::{Map, Value, json};
@@ -106,7 +109,7 @@ const KEYS: &[&str] = &["port", "bind", "upstream"];
 const OWN_KEYS: &[&str] = &["source", "export", "upstream", "port", "bind"];
 
 /// The keys of its `upstream:`.
-const UPSTREAM_KEYS: &[&str] = &["unit", "port", "path"];
+const UPSTREAM_KEYS: &[&str] = &["unit", "port", "path", "secret"];
 
 /// The refusals of a written bundle that a build cannot reach: the archive a UI unit names is not
 /// the archive the bundle carries.
@@ -305,7 +308,9 @@ pub fn problems(binding: &Value, out: &mut Vec<String>) {
 
 fn upstream_problems(key: &str, v: &Value, out: &mut Vec<String>) {
     let Some(m) = v.as_object() else {
-        out.push(format!("ui: {key}: upstream is {{unit, port, path}}"));
+        out.push(format!(
+            "ui: {key}: upstream is {{unit, port, path, secret}}"
+        ));
         return;
     };
     for (k, x) in m {
@@ -319,6 +324,10 @@ fn upstream_problems(key: &str, v: &Value, out: &mut Vec<String>) {
             "path" if x.is_string() => {}
             "path" => out.push(format!(
                 "ui: {key}: upstream: path is text, the base path of the adapter, starting with `/`"
+            )),
+            "secret" if x.is_string() => {}
+            "secret" => out.push(format!(
+                "ui: {key}: upstream: secret is the name of a secret, never its value"
             )),
             other => out.push(format!(
                 "ui: {key}: upstream: unknown key `{other}` (one of {})",
@@ -401,7 +410,8 @@ pub fn serve(entries: &mut [Value], binding: &Value) {
 /// The upstream of a UI: the unit the binding names, else the unit that serves the UI's
 /// ingress's API export (`ingress` the bundle's entries); its port, the binding's, else that
 /// export's when it is served by the same unit; and the base path written into `config.json`, the
-/// binding's ([`path`]).
+/// binding's ([`path`]); the name of the secret the UI presents to it, the binding's
+/// `ui.<ui>.upstream.secret` when it is text.
 pub fn upstream(u: &Ui, binding: &Value, ingress: &[Value]) -> Value {
     let up = &binding["ui"][&u.key]["upstream"];
     let api = ingress
@@ -418,6 +428,9 @@ pub fn upstream(u: &Ui, binding: &Value, ingress: &[Value]) -> Value {
     });
     if let Some(p) = port {
         out["port"] = json!(p);
+    }
+    if let Some(s) = up["secret"].as_str() {
+        out["secret"] = json!(s);
     }
     out
 }
@@ -516,6 +529,22 @@ pub fn findings(
         if let Some(Err(f)) = given_archive(&u, binding) {
             out.push(f);
         }
+        if let Some(s) = up["secret"].as_str().filter(|s| grants::is_name(s))
+            && let Some(upstream_unit) = packing.units.iter().find(|x| x.name == unit)
+            && !upstream_unit.parts.iter().any(|p| {
+                grants::declared_secrets(&binding.doc, p)
+                    .iter()
+                    .any(|d| d == s)
+            })
+        {
+            out.push(Finding {
+                refusal: "secret_undeclared",
+                detail: format!(
+                    "ui: {}: upstream secret {s} is not declared by any part of unit {unit}, the UI's upstream",
+                    u.key
+                ),
+            });
+        }
         out.extend(hosted(&u.name, u.role, accepts));
     }
     out
@@ -606,13 +635,15 @@ pub fn units(
         };
         // The claims `claims.<unit>` gives, as for any other unit.
         let c = &doc["claims"][name];
+        let up = upstream(u, doc, ingress);
+        let secrets: Vec<&str> = up["secret"].as_str().into_iter().collect();
         units.push(json!({
             "name": name,
             "kind": "service",
             "parts": [],
             "replicas": 1,
             "code": { "kind": "static", "archive": archive, "digest": digest },
-            "upstream": upstream(u, doc, ingress),
+            "upstream": up,
             "claims": {
                 "cpu_millis": c["cpu_millis"].as_u64().unwrap_or(super::bundle::DEFAULT_CPU_MILLIS),
                 "memory_mib": c["memory_mib"].as_u64().unwrap_or(super::bundle::DEFAULT_MEMORY_MIB),
@@ -621,7 +652,7 @@ pub fn units(
             },
             "isolation": "none",
             "checks": { "ready": check("ready"), "alive": check("alive") },
-            "secrets": [],
+            "secrets": secrets,
             "egress": [],
             "roles": [u.role],
             "ports": [],

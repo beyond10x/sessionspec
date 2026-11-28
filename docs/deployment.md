@@ -32,7 +32,7 @@ but `format` and `binding` is optional.
 | `claims` | per unit name: `cpu_millis`, `memory_mib`, `accelerators` (500, 512 and 0 when absent; a model unit takes one accelerator). The operator UI's unit is `operator-ui`, the control-plane UI's `control-plane-ui` |
 | `checks` | per unit name, the `port` of its `startup`, `ready` or `alive` check: `{core: {ready: {port: 8080}, alive: {port: 8080}}}`. A unit has only the checks of its kind (below); the UI units, `operator-ui` and `control-plane-ui`, have `ready` and `alive` |
 | `ingress` | per ingress of the contract and per protocol it exports, where it listens: `{operator: {exports: {http: {port: 8080, bind: all}}}}`. `port` (1 to 65535), `bind` (`loopback`, the default, or `all`), `address` (the address it is reached at, text) and `part` (a part of a unit that serves it, when not the control plane of the core) |
-| `ui` | the UIs to deploy as units of their own: `{operator: {port, bind, upstream: {unit, port, path}}, control-plane: {port, bind, upstream: {unit, port, path}}}`, every key optional (`ui: {operator: {}}`). See [the operator UI in a bundle](#the-operator-ui-in-a-bundle) and [the control-plane UI](#the-control-plane-ui) |
+| `ui` | the UIs to deploy as units of their own: `{operator: {port, bind, upstream: {unit, port, path, secret}}, control-plane: {port, bind, upstream: {unit, port, path, secret}}}`, every key optional (`ui: {operator: {}}`). See [the operator UI in a bundle](#the-operator-ui-in-a-bundle) and [the control-plane UI](#the-control-plane-ui) |
 | `packing` | the packing section below |
 
 A binding never changes the architecture: promoting a revision to another target is a new binding
@@ -322,7 +322,7 @@ Each unit:
 | `checks` | how the target sees it start and stay up: an agent, job or scheduled unit has a `startup` check (its agent runtime checks its agent document before it runs); the core and service units answer `/ready` and `/alive` over HTTP; a model unit has a `ready` check. Each check carries the `port` the binding gives it |
 | `schedule` | a scheduled unit's cron rule: the one the binding gives (`packing.parts.<part>.schedule`), else the one that states its schedule's `every` exactly ([Packing](#packing)); absent when it has neither |
 | `clock` | a scheduled unit's clock in the architecture: the trigger and schedule that wake it, `every`, `next_fire_at`, and the trigger's `policy` and `max_parallel` as the rule for overlapping runs |
-| `upstream` | a UI unit only: the unit whose adapter the page reads (`unit`), its `port` when known, and `path`, the `api_base` of the UI's `config.json` (the binding's `ui.<ui>.upstream.path`, else `/api/`) |
+| `upstream` | a UI unit only: the unit whose adapter the page reads (`unit`), its `port` when known, and `path`, the `api_base` of the UI's `config.json` (the binding's `ui.<ui>.upstream.path`, else `/api/`), and `secret`, the name of the credential it presents there (the binding's `ui.<ui>.upstream.secret`, when given; the unit lists it in `secrets` too) |
 | `config` | the configuration the binding gives the unit, when it gives any: `env`, its environment variables with their keys sorted, each value text or `{secret: <name>}`, `args`, a list of strings, and `secret_files`, the secrets it reads as read-only files, `{path, secret, key}` each by the secret's name, sorted by `path`; merged from the unit's entry under `packing.units`, then its parts by name (see [configuration of a unit](#configuration-of-a-unit)) |
 | `scratch` | the scratch directories the binding gives the unit, when it gives any: `{mount, size}` each, `size` when given, sorted by `mount`; writable, empty when an instance starts, and claimed as no volume (see [scratch directories of a unit](#scratch-directories-of-a-unit)) |
 | `secrets` | the secret names its parts declare, never a value |
@@ -429,7 +429,8 @@ that enforces no network policy, and a scheduled unit whose `schedule` is not th
 binding or of its schedule's `every` (`schedule_not_cron`). Of a UI unit it hashes the archive the bundle carries and refuses
 an archive that is missing or whose SHA-256 is not the unit's `digest` (`ui_archive_mismatch`),
 an `upstream` that names no other unit of the bundle (`ui_upstream_unknown`), and an `upstream.path`
-that does not start with `/` (`ui_upstream_path_invalid`). A refusal exits
+that does not start with `/` (`ui_upstream_path_invalid`), and an `upstream.secret` that is no name (`secret_value`), that
+its unit's `secrets` does not list or that no part of its upstream unit declares (`secret_undeclared`). A refusal exits
 1 with `not_admitted` and names every finding.
 
 ```sh
@@ -505,11 +506,12 @@ contract, and the archive is the same bytes as `ui build --archive` writes for t
 | `upstream.unit` | the unit whose adapter (the runtime interface, `ui/runtime.openapi.yaml`) the page reads; the unit that serves the operator ingress's `http` export (the core) when absent |
 | `upstream.port` | its port; the `http` export's port when absent and that export is served by the same unit |
 | `upstream.path` | the path the page reads that adapter at, starting with `/`: the `api_base` of the UI's `config.json` and the unit's `upstream.path` (`/api/` when absent). A UI of your own carries its archive as it is; only its unit's `upstream.path` says the path |
+| `upstream.secret` | the name of the credential the UI presents to its upstream as the `bearer` credential of the runtime interface, never a value: a name (`^[a-z][a-z0-9-]*$`, words of at most 20 characters, else `secret_value`) that a part of the upstream unit declares in `parts.<part>.secrets` (else `secret_undeclared`, naming the UI and the unit). The UI unit carries it in `upstream.secret` and in `secrets`, so the client and its upstream share one declared secret. How a target mounts it into the static server is the target's. Absent, the unit is as before |
 
 The bundle then has:
 
 - a unit `operator-ui`, `kind: service`, `roles: [operator-ui]`, no parts, `code: {kind: static,
-  archive: operator-ui.tar, digest: sha256:<hex>}`, `upstream: {unit, port, path}`, and
+  archive: operator-ui.tar, digest: sha256:<hex>}`, `upstream: {unit, port, path, secret?}`, and
   `ready` and `alive` checks over HTTP at `/` on the export's port, or on the port of
   `checks.operator-ui.<check>.port`, and the claims of `claims.operator-ui` (500 millicores and
   512 MiB when absent);

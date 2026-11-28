@@ -761,3 +761,139 @@ fn the_built_in_sources_are_unchanged_by_a_ui_of_the_consumers_own() {
     }
     assert_eq!(with["ingress"], without["ingress"]);
 }
+
+/// A binding that gives the operator UI the client secret `ui-client-token`, which the part `chat`
+/// of the core unit declares.
+const WITH_SECRET: &str = "ui:\n  operator:\n    upstream: {secret: ui-client-token}\nparts:\n  chat:\n    secrets: [ui-client-token]\n";
+
+/// A written bundle (a bundle `v`) through `deploy check`, its digest recomputed.
+fn check_bundle(dir: &Path, mut v: Value) -> Result<Value, cli::Refusal> {
+    v["binding"]["digest"] = json!(agenticspec_sim::deploy::digest(&v["binding"]["document"]));
+    v["digest"] = json!(bundle::recompute(&v));
+    let file: PathBuf = dir.join("bundle.yaml");
+    std::fs::write(&file, bundle::write(&v)).unwrap();
+    cli::deploy_check(
+        &file,
+        Some(&repo_root().join("bundles/cloudspec-accepts.yaml")),
+    )
+}
+
+/// `ui.<ui>.upstream.secret` names the credential the UI presents to its upstream: the UI unit
+/// carries it in `upstream.secret` and in `secrets`, the upstream unit holds it through a part,
+/// and `deploy check` admits the bundle. A UI that names none keeps its unit.
+#[test]
+fn an_upstream_secret_is_carried_in_the_ui_unit_and_held_by_the_upstream_unit() {
+    let dir = scratch("deploy-ui-upstream-secret");
+    let v = bundle_of(
+        &dir,
+        &refining("bundles/bindings/operator-ui.yaml", WITH_SECRET),
+    )
+    .unwrap_or_else(|r| panic!("{}: {}", r.code, r.detail));
+    let u = unit(&v, "operator-ui");
+    assert_eq!(
+        u["upstream"],
+        json!({ "unit": "core", "port": 8080, "path": "/api/", "secret": "ui-client-token" })
+    );
+    assert_eq!(u["secrets"], json!(["ui-client-token"]));
+    assert_eq!(unit(&v, "core")["secrets"], json!(["ui-client-token"]));
+    assert_eq!(unit(&v, "control-plane-ui")["secrets"], json!([]));
+    assert!(unit(&v, "control-plane-ui")["upstream"]["secret"].is_null());
+    check_bundle(&dir, v).unwrap_or_else(|r| panic!("{}: {}", r.code, r.detail));
+}
+
+/// No part of the upstream unit declares the secret: `secret_undeclared`, naming the UI and the
+/// unit.
+#[test]
+fn an_upstream_secret_no_part_of_the_upstream_unit_declares_is_refused() {
+    let dir = scratch("deploy-ui-upstream-secret-undeclared");
+    let r = bundle_of(
+        &dir,
+        &refining(
+            "bundles/bindings/operator-ui.yaml",
+            "ui:\n  operator:\n    upstream: {secret: ui-client-token}\n",
+        ),
+    )
+    .unwrap_err();
+    assert_eq!(r.code, "not_admitted", "{}", r.detail);
+    assert_eq!(names(&r.detail), ["secret_undeclared"], "{}", r.detail);
+    assert!(r.detail.contains("ui: operator"), "{}", r.detail);
+    assert!(r.detail.contains("unit core"), "{}", r.detail);
+    assert!(r.detail.contains("ui-client-token"), "{}", r.detail);
+    // A part of another unit declaring it is no help.
+    let r = bundle_of(
+        &dir,
+        &refining(
+            "bundles/bindings/operator-ui.yaml",
+            "ui:\n  operator:\n    upstream: {secret: ui-client-token}\nparts:\n  gateway:\n    secrets: [model-api-key, ui-client-token]\n",
+        ),
+    )
+    .unwrap_err();
+    assert_eq!(names(&r.detail), ["secret_undeclared"], "{}", r.detail);
+}
+
+/// A value that is no secret name is refused as `secret_value`, and the finding does not repeat
+/// it.
+#[test]
+fn an_upstream_secret_that_is_no_name_is_refused_without_echoing_it() {
+    let dir = scratch("deploy-ui-upstream-secret-value");
+    let token: &str = &format!("sk{}{}", "0123456789abcdef".repeat(2), "0123456789");
+    for secret in [token, "9871", "Token"] {
+        let r = bundle_of(
+            &dir,
+            &refining(
+                "bundles/bindings/operator-ui.yaml",
+                &format!("ui:\n  operator:\n    upstream: {{secret: {secret}}}\n"),
+            ),
+        )
+        .unwrap_err();
+        assert_eq!(r.code, "not_admitted", "{secret}: {}", r.detail);
+        assert_eq!(names(&r.detail), ["secret_value"], "{secret}: {}", r.detail);
+        assert!(!r.detail.contains(secret), "{}", r.detail);
+        assert!(r.detail.contains("ui: operator"), "{}", r.detail);
+    }
+}
+
+/// A written bundle whose UI unit's `upstream.secret` is not in its `secrets`, or names a secret
+/// its upstream unit does not hold, is refused with `secret_undeclared`; one that is no name,
+/// with `secret_value`.
+#[test]
+fn deploy_check_refuses_an_upstream_secret_the_unit_or_its_upstream_does_not_hold() {
+    let dir = scratch("deploy-ui-upstream-secret-check");
+    let base = bundle_of(
+        &dir,
+        &refining("bundles/bindings/operator-ui.yaml", WITH_SECRET),
+    )
+    .unwrap_or_else(|r| panic!("{}: {}", r.code, r.detail));
+    let at = |v: &Value, name: &str| {
+        v["units"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .position(|u| u["name"] == name)
+            .unwrap()
+    };
+    let mut v = base.clone();
+    let i = at(&v, "operator-ui");
+    v["units"][i]["secrets"] = json!([]);
+    let r = check_bundle(&dir, v).unwrap_err();
+    assert_eq!(r.code, "not_admitted", "{}", r.detail);
+    assert_eq!(names(&r.detail), ["secret_undeclared"], "{}", r.detail);
+    let mut v = base.clone();
+    let i = at(&v, "core");
+    v["units"][i]["secrets"] = json!([]);
+    v["binding"]["document"]["parts"]["chat"]["secrets"] = json!([]);
+    let r = check_bundle(&dir, v).unwrap_err();
+    assert_eq!(names(&r.detail), ["secret_undeclared"], "{}", r.detail);
+    assert!(r.detail.contains("ui-client-token"), "{}", r.detail);
+    let token: &str = &format!("sk{}{}", "0123456789abcdef".repeat(2), "0123456789");
+    let mut v = base.clone();
+    let i = at(&v, "operator-ui");
+    v["units"][i]["upstream"]["secret"] = json!(token);
+    let r = check_bundle(&dir, v).unwrap_err();
+    assert!(
+        names(&r.detail).iter().any(|n| n == "secret_value"),
+        "{}",
+        r.detail
+    );
+    assert!(!r.detail.contains(token), "{}", r.detail);
+}

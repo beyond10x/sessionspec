@@ -134,7 +134,7 @@ fn secret_name(v: &Value, at: &str, out: &mut Vec<Finding>) {
 
 /// The `secret_value` findings of a binding: a secret that is no name, a `secrets:` that is no
 /// list, a key of [`VALUE_KEYS`] where the binding holds fields, an `env:` value `{secret: <s>}` of
-/// a part or a listed unit whose `<s>` is no name.
+/// a part or a listed unit whose `<s>` is no name, a `ui.<ui>.upstream.secret` that is no name.
 pub fn values(binding: &Value) -> Vec<Finding> {
     let mut out = Vec::new();
     let Some(top) = binding.as_object() else {
@@ -189,6 +189,11 @@ pub fn values(binding: &Value) -> Vec<Finding> {
         }
         if let Some(files) = m.get(config::SECRET_FILES) {
             file_secrets(files, &format!("parts: {part}"), &mut out);
+        }
+    }
+    for (ui, entry) in binding["ui"].as_object().into_iter().flatten() {
+        if let Some(s) = entry["upstream"].as_object().and_then(|m| m.get("secret")) {
+            secret_name(s, &format!("ui: {ui}: upstream: secret"), &mut out);
         }
     }
     for u in binding["packing"]["units"].as_array().into_iter().flatten() {
@@ -279,6 +284,17 @@ pub fn without_values(binding: &Value) -> Value {
                 if let Value::Object(m) = v {
                     strip(m);
                 }
+            }
+        }
+    }
+    if let Some(Value::Object(uis)) = top.get_mut("ui") {
+        for entry in uis.values_mut() {
+            if let Some(Value::Object(up)) = entry.get_mut("upstream")
+                && !up
+                    .get("secret")
+                    .is_none_or(|s| s.as_str().is_some_and(is_name))
+            {
+                up.remove("secret");
             }
         }
     }
@@ -399,7 +415,9 @@ pub fn check(arch: &Value, binding: &Value, packing: &Packing) -> Vec<Finding> {
 /// carries: a key of [`VALUE_KEYS`] in a unit or an egress entry, a unit's secret or an egress
 /// entry's secret that is no name (`secret_value`) or that no part of the unit declares
 /// (`secret_undeclared`), the same of a secret its `config.env` or `config.secret_files` refers
-/// to, an egress entry from a part outside the unit or to a destination its part does not declare
+/// to, a UI unit's `upstream.secret` that is no name, that its `secrets` does not list or that no part
+/// of its upstream unit declares (`secret_undeclared`), an egress entry from a part outside the unit
+/// or to a destination its part does not declare
 /// (`egress_undeclared`).
 pub fn check_units(bundle: &Value) -> Vec<Finding> {
     let binding = &bundle["binding"]["document"];
@@ -419,10 +437,14 @@ pub fn check_units(bundle: &Value) -> Vec<Finding> {
         if let Some(m) = u.as_object() {
             value_keys(m, &format!("unit {name}"), &mut out);
         }
+        // The secret a UI unit presents to its upstream unit is held by a part of that unit.
+        let client = u["upstream"]["secret"].as_str().filter(|s| is_name(s));
+        let upstream_unit = text(&u["upstream"]["unit"]);
         let secret = |v: &Value, at: String, out: &mut Vec<Finding>| {
             secret_name(v, &at, out);
             if let Some(s) = v.as_str().filter(|s| is_name(s))
                 && !held.contains(s)
+                && client != Some(s)
             {
                 out.push(finding(
                     "secret_undeclared",
@@ -430,6 +452,42 @@ pub fn check_units(bundle: &Value) -> Vec<Finding> {
                 ));
             }
         };
+        if !u["upstream"]["secret"].is_null() {
+            let at = format!("unit {name}: upstream: secret");
+            secret_name(&u["upstream"]["secret"], &at, &mut out);
+            if let Some(s) = client {
+                let upstream_held = bundle["units"]
+                    .as_array()
+                    .into_iter()
+                    .flatten()
+                    .find(|x| text(&x["name"]) == upstream_unit)
+                    .is_some_and(|x| {
+                        x["parts"]
+                            .as_array()
+                            .into_iter()
+                            .flatten()
+                            .filter_map(Value::as_str)
+                            .any(|p| declared_secrets(binding, p).iter().any(|d| d == s))
+                    });
+                if !upstream_held {
+                    out.push(finding(
+                        "secret_undeclared",
+                        format!(
+                            "{at} is secret {s}, and no part of unit {upstream_unit}, its upstream, declares it"
+                        ),
+                    ));
+                }
+                if !u["secrets"]
+                    .as_array()
+                    .is_some_and(|l| l.iter().any(|x| x == s))
+                {
+                    out.push(finding(
+                        "secret_undeclared",
+                        format!("{at} is secret {s}, and the unit's `secrets` does not list it"),
+                    ));
+                }
+            }
+        }
         match &u["secrets"] {
             Value::Array(list) => {
                 for (i, s) in list.iter().enumerate() {
