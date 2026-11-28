@@ -11,6 +11,14 @@
 //! `unit_config_conflict`, two sources of one unit that give one variable two different values,
 //! or two parts of one unit that both give `args`. A finding names the unit, the source and the
 //! variable, never a value.
+//!
+//! `secret_files` (R120) gives a secret as a read-only file of the unit: a list of
+//! `{secret: <name>, key: <key>, path: <absolute path>}`, `key` the one key of the secret the file
+//! holds (all of them when absent). The bundle carries them in `config` beside `env` and `args`,
+//! from every source of the unit sorted by `path`, by the secret's name, never a value. The name
+//! goes through the secrets of [`super::grants`]; the path is a mount of the unit, which
+//! [`super::scratch`] holds against its other mounts (`unit_mount_collision`). An entry of the
+//! wrong form, a relative path among them, is `unit_config_invalid`.
 
 use super::admit::Finding;
 use super::packing::{Packing, Unit};
@@ -18,7 +26,90 @@ use serde_json::{Map, Value, json};
 use std::collections::BTreeMap;
 
 /// The keys of a unit's `config` in a bundle, and of the configuration on a part or a listed unit.
-pub const KEYS: &[&str] = &["env", "args"];
+pub const KEYS: &[&str] = &["env", "args", SECRET_FILES];
+
+/// The key of the secrets a unit is given as read-only files (R120).
+pub const SECRET_FILES: &str = "secret_files";
+
+/// The keys of one secret file.
+const FILE_KEYS: &[&str] = &["secret", "key", "path"];
+
+/// A key of a secret: `[-._a-zA-Z0-9]+`.
+pub fn is_secret_key(s: &str) -> bool {
+    !s.is_empty()
+        && s.chars()
+            .all(|c| c.is_ascii_alphanumeric() || matches!(c, '-' | '.' | '_'))
+}
+
+/// The problems of one `secret_files` value's form at `at`, a line each; or its entries as the
+/// bundle carries them, `{path, secret, key?}`. Whether a secret is a name and declared is
+/// [`super::grants`]'s.
+fn file_form(at: &str, v: &Value) -> Result<Vec<Value>, Vec<String>> {
+    let Some(list) = v.as_array() else {
+        return Err(vec![format!(
+            "{at}: secret_files is a list of {{secret, key, path}}"
+        )]);
+    };
+    let mut out = Vec::new();
+    let mut problems = Vec::new();
+    for (i, e) in list.iter().enumerate() {
+        let at = format!("{at}: secret_files[{i}]");
+        let Some(m) = e.as_object() else {
+            problems.push(format!("{at} is {{secret, key, path}}"));
+            continue;
+        };
+        for k in m.keys().filter(|k| !FILE_KEYS.contains(&k.as_str())) {
+            problems.push(format!("{at}: unknown key `{k}`"));
+        }
+        if !m.contains_key("secret") {
+            problems.push(format!("{at} needs a `secret:`, the name of the secret"));
+        }
+        match m.get("path") {
+            None => problems.push(format!("{at} needs a `path:`, where the file is read")),
+            Some(p) if p.as_str().is_some_and(super::scratch::is_path) => {}
+            Some(_) => problems.push(format!(
+                "{at}: path is an absolute path (`/` and segments, none empty, `.` or `..`, no `/` at the end)"
+            )),
+        }
+        if let Some(k) = m.get("key")
+            && !k.as_str().is_some_and(is_secret_key)
+        {
+            problems.push(format!(
+                "{at}: key is a key of the secret ([-._a-zA-Z0-9]+)"
+            ));
+        }
+        let mut entry = json!({ "path": m.get("path"), "secret": m.get("secret") });
+        if let Some(k) = m.get("key") {
+            entry["key"] = k.clone();
+        }
+        out.push(entry);
+    }
+    if problems.is_empty() {
+        Ok(out)
+    } else {
+        Err(problems)
+    }
+}
+
+/// The secret files a unit's sources give, each with how a finding names it
+/// (`secret_files[<i>] of <source>`) and its path; an entry whose path is no absolute path is left
+/// out, a source whose `secret_files` is no list gives none (both are [`resolve`]'s findings).
+pub fn file_mounts<'a>(binding: &'a Value, unit: &Unit) -> Vec<(String, &'a str)> {
+    let mut out = Vec::new();
+    for (at, _, entry) in sources(binding, unit) {
+        for (i, e) in entry[SECRET_FILES]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .enumerate()
+        {
+            if let Some(p) = e["path"].as_str().filter(|p| super::scratch::is_path(p)) {
+                out.push((format!("secret_files[{i}] of {at}"), p));
+            }
+        }
+    }
+    out
+}
 
 /// The key of a value that refers to a secret: `{secret: <name>}`.
 pub const SECRET: &str = "secret";
@@ -99,7 +190,14 @@ pub fn resolve(binding: &Value, unit: &Unit) -> Result<Option<Value>, Vec<Findin
     let mut env: BTreeMap<String, (Value, String)> = BTreeMap::new();
     let mut args: Vec<Value> = Vec::new();
     let mut args_part: Option<String> = None;
+    let mut files: Vec<Value> = Vec::new();
     for (at, is_part, entry) in sources(binding, unit) {
+        if let Some(v) = entry.get(SECRET_FILES) {
+            match file_form(&at, v) {
+                Ok(list) => files.extend(list),
+                Err(p) => out.extend(p.into_iter().map(invalid)),
+            }
+        }
         match entry.get("env") {
             None => {}
             Some(Value::Object(m)) => {
@@ -164,6 +262,10 @@ pub fn resolve(binding: &Value, unit: &Unit) -> Result<Option<Value>, Vec<Findin
     if !args.is_empty() {
         config.insert("args".into(), Value::Array(args));
     }
+    if !files.is_empty() {
+        files.sort_by(|a, b| a["path"].as_str().cmp(&b["path"].as_str()));
+        config.insert(SECRET_FILES.into(), Value::Array(files));
+    }
     Ok((!config.is_empty()).then_some(Value::Object(config)))
 }
 
@@ -195,7 +297,7 @@ pub fn findings(binding: &Value, packing: &Packing) -> Vec<Finding> {
 fn form(config: &Value) -> Vec<String> {
     let mut out = Vec::new();
     let Some(m) = config.as_object() else {
-        return vec!["config is a mapping of `env` and `args`".into()];
+        return vec!["config is a mapping of `env`, `args` and `secret_files`".into()];
     };
     if m.is_empty() {
         out.push("config is empty, and an empty config is left out".into());
@@ -228,6 +330,19 @@ fn form(config: &Value) -> Vec<String> {
                     out.push("config: args is a list of strings that is not empty".into());
                 }
             }
+            SECRET_FILES => match file_form("config", v) {
+                Ok(list) if list.is_empty() => {
+                    out.push("config: secret_files is a list that is not empty".into())
+                }
+                Ok(list) => {
+                    for (i, f) in list.iter().enumerate() {
+                        if !f["secret"].is_string() {
+                            out.push(format!("config: secret_files[{i}]: secret is a name"));
+                        }
+                    }
+                }
+                Err(p) => out.extend(p),
+            },
             other => out.push(format!("config: unknown key `{other}`")),
         }
     }

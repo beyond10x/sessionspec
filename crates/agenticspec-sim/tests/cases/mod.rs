@@ -10,6 +10,8 @@ mod deploy;
 mod deploy_access;
 mod deploy_config;
 mod deploy_images;
+mod deploy_scratch;
+mod deploy_secret_files;
 mod deploy_state;
 mod deploy_ui;
 mod determinism;

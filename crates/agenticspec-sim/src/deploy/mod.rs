@@ -3,7 +3,8 @@
 //! named refusals (`admit`), the secrets and egress a unit is granted, by name (`grants`), and
 //! the deployment bundle (`agenticspec-deployment/1`) a translator reads (`bundle`), checked
 //! again when read back (`bundle::check`); the environment and arguments a binding gives a unit
-//! (`config`); the UIs a binding asks for as units of their own (`ui`);
+//! (`config`); the scratch directories a binding gives a unit (`scratch`); the UIs a binding asks
+//! for as units of their own (`ui`);
 //! the fixture bundles of `bundles/` (`fixtures`). The
 //! formats are on `docs/deployment.md`.
 //!
@@ -16,6 +17,7 @@ pub mod config;
 pub mod fixtures;
 pub mod grants;
 pub mod packing;
+pub mod scratch;
 pub mod ui;
 
 use serde_json::Value;

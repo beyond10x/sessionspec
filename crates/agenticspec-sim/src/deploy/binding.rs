@@ -31,11 +31,25 @@ const KEYS: &[&str] = &[
     "packing",
 ];
 
-/// The keys of one part's entry under `parts:`. `env` and `args`, the configuration of its unit,
-/// are checked by admission ([`super::config`], `unit_config_invalid`).
+/// The keys of one part's entry under `parts:`. `env`, `args` and `secret_files`, the
+/// configuration of its unit, are checked by admission ([`super::config`], `unit_config_invalid`),
+/// and so is `scratch`, the scratch directories of its unit ([`super::scratch`],
+/// `unit_scratch_invalid`).
 const PART_KEYS: &[&str] = &[
-    "agent", "digest", "state", "inside", "secrets", "egress", "size", "volumes", "network",
-    "image", "env", "args",
+    "agent",
+    "digest",
+    "state",
+    "inside",
+    "secrets",
+    "egress",
+    "size",
+    "volumes",
+    "network",
+    "image",
+    "env",
+    "args",
+    "scratch",
+    "secret_files",
 ];
 
 /// The keys of a runtime pinned under `runtimes:`, and of an image a part or a listed unit
@@ -219,7 +233,7 @@ pub fn problems(binding: &Value, arch: &Value) -> Vec<String> {
                     image_problems(&format!("parts: {name}: image"), v, local, &mut out);
                     continue;
                 }
-                if super::config::KEYS.contains(&k.as_str()) {
+                if super::config::KEYS.contains(&k.as_str()) || k == super::scratch::KEY {
                     continue;
                 }
                 let ok = match k.as_str() {

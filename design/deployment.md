@@ -135,7 +135,9 @@ the units, their part instances and the links that cross units; a refusal lists 
 | `durable_state_unplaceable` | a runtime part with `durable_state: true` (K7, R88) in a `job`, `scheduled` or `model` unit, which runs until done or serves a model and holds no volume; or whose state volume's name, `<part>-state`, is the name of a part of the document |
 | `volume_mount_missing` | a volume a unit claims (a workspace's, or a runtime part's durable state) that no part of the unit mounts (`parts.<p>.volumes[].mount`, matched by name), or mounts at a relative path; there is no default path |
 | `unit_config_conflict` | two sources of one unit (its `packing.units` entry, its parts) give one environment variable two different values, or two parts of one unit both give `args`; K20 |
-| `unit_config_invalid` | a unit's `env` or `args` of the wrong form (a name that is not `[A-Z_][A-Z0-9_]*`, a value that is neither a scalar nor `{secret: <name>}`, `args` not a list of strings, on a part in no unit); in a written bundle, also a `config` of the wrong form or not the one the carried binding resolves; K20 |
+| `unit_config_invalid` | a unit's `env`, `args` or `secret_files` of the wrong form (a name that is not `[A-Z_][A-Z0-9_]*`, a value that is neither a scalar nor `{secret: <name>}`, `args` not a list of strings, a secret file that is not `{secret, key?, path}` with an absolute `path`, on a part in no unit; K22); in a written bundle, also a `config` of the wrong form or not the one the carried binding resolves; K20 |
+| `unit_scratch_invalid` | a unit's `scratch` of the wrong form (not a list of `{mount, size}`, a `mount` missing or not an absolute path in normal form, a `size` that is not text, another key, on a part in no unit); in a written bundle, also a `scratch` of the wrong form or not the one the carried binding resolves; K21 |
+| `unit_mount_collision` | a mount of a unit's own, a scratch directory (K21) or a secret file (K22), at the mount of another mount of the unit (a volume a part of it mounts under `parts.<p>.volumes[]`, another mount of its own), holding it or inside it, by path segment; in a written bundle, also against the volume mounts the unit carries; K21 |
 | `ui_upstream_unknown` | a UI unit (K17) reads the adapter of a unit (`ui.<ui>.upstream.unit`) the packing does not have; in a written bundle, a UI unit's `upstream.unit` that is no other unit of the bundle |
 | `ui_upstream_path_invalid` | a UI unit's (K17) base path of its upstream's adapter (`ui.<ui>.upstream.path`, text) does not start with `/`; in a written bundle, a UI unit's `upstream.path` that is not text starting with `/`. A `path` that is no text is a binding of the wrong form |
 | `nested_document_missing` | in a written bundle (`deploy check`) only: a part of block `architecture`, at any depth, pins a digest the bundle's `nested` carries no document of |
@@ -189,7 +191,8 @@ Each entry of `units`:
 | `schedule` | for `scheduled`: the cron rule the binding gives (K18) |
 | `clock` | for `scheduled`: the trigger and schedule that wake it, its `policy` and `max_parallel` as the overlap rule |
 | `upstream` | for a UI unit (K17): `{unit, port, path}`, the unit whose adapter the page reads and the `api_base` of its `config.json` |
-| `config` | the non-secret configuration the binding gives the unit (K20): `env`, variable names sorted, each value text or `{secret: <name>}`, and `args`; absent when it gives none |
+| `config` | the non-secret configuration the binding gives the unit (K20): `env`, variable names sorted, each value text or `{secret: <name>}`, `args`, and `secret_files` (K22), `{path, secret, key?}` sorted by `path`; absent when it gives none |
+| `scratch` | the scratch directories the binding gives the unit (K21): `{mount, size}` each, sorted by `mount`; no claim, absent when it gives none |
 | `secrets` | every secret by name; never a value |
 | `egress` | every destination by name: another unit's link with transport and protocol, or an `external` dependency. Each entry carries `name`, the string the target resolves: an external part's reach name (or its address, when the reach is one), the target unit's name for a crossing, the declared name for a named destination; and `address` when the binding resolves one (a named destination's `address`, a CIDR block or `<host>:<port>` or `{namespace, labels}`; an external part's reach address). A named destination the binding does not resolve carries `unresolved: true`. Nothing undeclared is granted (`weft:docs/domain-sketch.md:364-365`) |
 | `roles` | the abstract roles the unit needs (below) |
@@ -529,6 +532,61 @@ without configuration keeps its bytes.
   not what the carried binding resolves for its unit (none for a unit the packing does not have),
   is `unit_config_invalid`; a `{secret}` in it is checked like the unit's other secrets
   (`deploy/config.rs`).
+
+## K21 Scratch directories of a unit
+
+A service's program may write run files under a fixed path while its configuration and secret
+files are mounted read-only (R118). A volume does not fit: a workspace is files at a base revision
+with a claim the target keeps, and `durable_state` keeps what it holds across restarts. What the
+program needs lives as long as one instance and holds nothing after a restart, the target's
+empty directory per pod. The bundle stays `/1`; a unit without one keeps its bytes.
+
+- **Binding.** `scratch: [{mount, size?}]` on a unit `packing.units` lists and on a part under
+  `parts:`, the two places of K19 and K20, so it works under a strategy as under listed units.
+  `mount`, not `path`, as a volume's mount is named (`parts.<p>.volumes[].mount`); `size` is text
+  like a volume's `size` (`64Mi`), so a translator reads both in one form. A list of mappings, so a
+  key can be added (a medium) without a new form.
+- **Bundle.** Per unit `scratch: [{mount, size}]`, every source of the unit (its entry, then its
+  parts by name) sorted by `mount`; not under `claims.volumes`, whose entries a translator turns
+  into claims with an access. Absent when empty.
+- **Refusals.** `unit_scratch_invalid`: the wrong form; `mount` must be `/` and segments, none
+  empty, `.` or `..`, no `/` at the end, so mounts compare as written. `unit_mount_collision`: a
+  scratch directory at the mount of a volume a part of the unit mounts or of another scratch
+  directory, or one holding the other or inside it, by segment. Nesting is refused as well as
+  equality: a target mounts the inner directory over the outer one, so part of a scratch directory
+  would keep its files (a volume inside it) or part of a volume would lose them (a scratch
+  directory inside it), and the target's order of mounts decides which. Two volumes of one unit at
+  one path are not refused by this code: a volume's mount is checked by `volume_mount_missing`
+  only. A finding names the unit, the source and the volume, never a path.
+- **Check.** `deploy check` applies the binding's rules to the carried binding, and reads each
+  unit's `scratch` back: its form, its collisions with the volume mounts the unit carries, and
+  whether it is what the carried binding resolves (`deploy/scratch.rs`).
+
+## K22 A secret as a read-only file of a unit
+
+A program may read a secret from a file at a fixed path rather than from an environment variable
+(R120): a key file, a certificate. K20 gave a secret only as `env: {NAME: {secret: <name>}}`. The
+bundle stays `/1`; a unit without secret files keeps its bytes.
+
+- **Binding.** `secret_files: [{secret: <name>, key?: <key>, path: <absolute path>}]`, on a part
+  and on a unit `packing.units` lists, the two places of `env` and `args`. `secret` is the
+  secret's name, as in `{secret: <name>}`; `key` the one key of the secret the file holds
+  (`[-._a-zA-Z0-9]+`), all of it when absent; `path` in the normal form of a scratch directory's
+  `mount` (K21).
+- **Secrets.** The name goes through the same check as an `env` reference
+  (`deploy/grants.rs`): a secret name (`secret_value`) that a part of the unit declares
+  (`secret_undeclared`). The bundle carries name, key and path, never a value.
+- **Bundle.** In the unit's `config`, beside `env` and `args`, so a translator reads every input a
+  unit's program takes from the binding in one place: `secret_files: [{path, secret, key?}]`,
+  every source's, sorted by `path`; left out when empty.
+- **Refusals.** `unit_config_invalid`: an entry of the wrong form, a relative path among them, or
+  `secret_files` on a part in no unit. Two entries of one path, and a secret file at, around or
+  inside a volume mount or a scratch directory of the unit, are `unit_mount_collision`: a secret
+  file is mounted like a directory, so it is one of the unit's own mounts and held by the rule of
+  K21, not a code of its own.
+- **Check.** `deploy check` reads `config.secret_files` back with the rest of `config` (its form,
+  the binding's resolution), checks each `secret` like the unit's other secrets, and holds each
+  path against the unit's carried volume mounts, scratch directories and other secret files.
 
 ## Risks
 
