@@ -369,7 +369,7 @@ fn trigger_source(architecture: &Value, p: &Value) -> Option<String> {
 /// The settings refusals of the parts: a setting the part's block does not declare, and a value
 /// outside its declared type. A marked place is judged by its `value`. A part of a block that is
 /// no part kind is left to `unknown_blocks`.
-fn settings(parts: &serde_json::Map<String, Value>) -> Vec<Refusal> {
+fn settings(architecture: &Value, parts: &serde_json::Map<String, Value>) -> Vec<Refusal> {
     let table = crate::settings::table();
     let mut out = Vec::new();
     for (name, p) in parts {
@@ -411,10 +411,56 @@ fn settings(parts: &serde_json::Map<String, Value>) -> Vec<Refusal> {
                     value: v.to_string(),
                     expected: expected.to_string(),
                 });
+            } else if let Some(expected) = shares_reach(architecture, name, &setting.ty.kind, v) {
+                out.push(Refusal::SettingInvalid {
+                    part: name.clone(),
+                    setting: key.clone(),
+                    value: v.to_string(),
+                    expected,
+                });
             }
         }
     }
     out
+}
+
+/// Why shares `v` of part `name` do not fit the architecture, as `sim run` would refuse them:
+/// a key that names no model part the part reaches over `model_call`, or shares that give every
+/// model it reaches 0 (an empty map among them).
+fn shares_reach(
+    architecture: &Value,
+    name: &str,
+    kind: &crate::settings::Kind,
+    v: &Value,
+) -> Option<String> {
+    let crate::settings::Kind::Shares = kind else {
+        return None;
+    };
+    let shares = v.as_object()?;
+    let reached: Vec<String> = reach(architecture, name, "model_call")
+        .into_iter()
+        .filter(|r| block(architecture, r) == Some("model"))
+        .collect();
+    let names = || {
+        if reached.is_empty() {
+            "none".to_string()
+        } else {
+            reached.join(", ")
+        }
+    };
+    if let Some(k) = shares.keys().find(|k| !reached.contains(k)) {
+        return Some(format!(
+            "a map from the model parts it reaches over model_call ({}) to shares; `{k}` is none of them",
+            names()
+        ));
+    }
+    let total: f64 = shares.values().filter_map(|x| num(value(x))).sum();
+    (!reached.is_empty() && total <= 0.0).then(|| {
+        format!(
+            "a map from the model parts it reaches over model_call ({}) to shares, one above 0",
+            names()
+        )
+    })
 }
 
 /// What setting `key` of a part of block `b` needs beside it, when the part lacks it: a
@@ -428,6 +474,10 @@ fn beside(b: &str, key: &str, p: &Value) -> Option<&'static str> {
 }
 
 pub fn check(architecture: &Value) -> Vec<Refusal> {
+    // The rules of triggers, channels and coordination read the one spelling of each enum
+    // setting, also for a caller that hands in the document as written (agenticstudio).
+    let canonical = crate::settings::canonical(architecture);
+    let architecture = &canonical;
     let empty = serde_json::Map::new();
     let parts = architecture["parts"].as_object().unwrap_or(&empty);
     let known = |n: &str| parts.contains_key(n);
@@ -481,7 +531,7 @@ pub fn check(architecture: &Value) -> Vec<Refusal> {
             });
         }
     }
-    out.extend(settings(parts));
+    out.extend(settings(architecture, parts));
     for (key, make) in [
         (
             "per",

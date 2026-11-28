@@ -247,7 +247,7 @@ A part `agent`:
 | `false_reject` | number from 0 to 1 | share |  |  | The share of right results a reviewer agent sends back. |
 | `method` | string |  |  |  | The label of the method the agent follows, when an experiment compares methods. |
 | `model_share` | shares |  |  |  | The share of the agent's model calls each model part it reaches gets; without it, equal shares. |
-| `count` | integer of at least 0 |  | `1` |  | How many copies of the part run. |
+| `count` | integer of at least 1 |  | `1` |  | How many copies of the part run. |
 | `per` | part |  |  |  | One copy of the part for each copy of the named part. |
 | `notes` | notes |  |  |  | Free notes on the part, a map with keys and values of any kind: what no setting of its block types. The check takes any map; the simulator, the search and the contract never read it. |
 

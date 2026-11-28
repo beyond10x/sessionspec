@@ -1308,11 +1308,19 @@ impl<'a> Sim<'a> {
         }
         let mut c = now.max(acc.last);
         loop {
-            while acc.starts.front().is_some_and(|s| *s + 60.0 <= c) {
+            // The rate is calls per minute and may be a fraction: `n` calls in each window of
+            // `w` seconds. 120 is 120 calls a minute, 0.5 one call every 120 s, 1.5 one every 40 s.
+            let rate = level_at(gw.rate, &gw.drops, c);
+            let n = rate.floor().max(1.0);
+            let w = if rate.is_finite() && rate > 0.0 {
+                60.0 * n / rate
+            } else {
+                60.0
+            };
+            while acc.starts.front().is_some_and(|s| *s + w.max(60.0) <= c) {
                 acc.starts.pop_front();
             }
-            let rate = level_at(gw.rate, &gw.drops, c).floor();
-            if rate < 1.0 {
+            if rate <= 0.0 {
                 let next = gw
                     .drops
                     .iter()
@@ -1325,10 +1333,14 @@ impl<'a> Sim<'a> {
                 c = next;
                 continue;
             }
-            if rate.is_infinite() || (acc.starts.len() as f64) < rate {
+            if rate.is_infinite() {
                 break;
             }
-            c = acc.starts[acc.starts.len() - rate as usize] + 60.0;
+            let within = acc.starts.iter().rev().take_while(|s| **s + w > c).count();
+            if (within as f64) < n {
+                break;
+            }
+            c = acc.starts[acc.starts.len() - n as usize] + w;
         }
         acc.starts.push_back(c);
         acc.last = c;
