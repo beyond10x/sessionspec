@@ -91,6 +91,21 @@ test('SUF-007 no table or lifecycle of the harness page scrolls sideways at 1024
 
 test('SUF-008 a lifecycle diagram that scrolls on a phone can be reached by keyboard', async ({page}) => {
   await at(page, '/docs/blocks/4-agent/harness', {width: 390, height: 844});
+  // The region attributes are set after hydration, when a ResizeObserver has measured the box. On a
+  // loaded machine that comes after the load event: wait for it (at most 20 s), then let the checks
+  // below report what is still missing.
+  await page
+    .waitForFunction(
+      () =>
+        Array.from(document.querySelectorAll('main *')).every((el) => {
+          const s = getComputedStyle(el);
+          const scrolls = (s.overflowX === 'auto' || s.overflowX === 'scroll') && el.scrollWidth > el.clientWidth + 1;
+          return !scrolls || el.closest('pre') !== null || (el as HTMLElement).tabIndex === 0;
+        }),
+      undefined,
+      {timeout: 20_000},
+    )
+    .catch(() => undefined);
   const r = await new AxeBuilder({page}).withRules(['scrollable-region-focusable']).analyze();
   expect(r.violations.flatMap((v) => v.nodes.map((n) => n.target.join(' ')))).toEqual([]);
   // Each box that scrolls sideways is a region named for what it holds, so the focus says where it is.

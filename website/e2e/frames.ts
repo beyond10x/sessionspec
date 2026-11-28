@@ -23,8 +23,17 @@ export async function frameProblems(page: Page, statuses: Record<string, number>
     const name = src.replace(/^.*\//, '').replace(/\.html$/, '');
     const frame = await (await el.elementHandle())?.contentFrame();
     await frame?.waitForLoadState('load').catch(() => {});
+    // On a loaded machine the frame's document may still be committing after its first load event:
+    // Chromium then titles it "Loading <url>". Read the title until it names the architecture, at
+    // most 15 s; whatever it shows then is the verdict.
+    let title = '';
+    for (const end = Date.now() + 15_000; frame && Date.now() < end; ) {
+      title = await frame.title().catch(() => '');
+      if (title.startsWith(name)) break;
+      await page.waitForTimeout(200);
+    }
+    if (frame) await frame.waitForLoadState('load').catch(() => {});
     const landed = frame ? new URL(frame.url()).pathname : '';
-    const title = frame ? await frame.title().catch(() => '') : '';
     const drawn = frame ? await frame.evaluate(() => document.body?.getBoundingClientRect().height ?? 0).catch(() => 0) : 0;
     const box = await el.boundingBox();
     if (landed.replace(/\.html$/, '') !== src.replace(/\.html$/, '')) problems.push(`frame ${src}: lands on ${landed || 'nothing'}`);
