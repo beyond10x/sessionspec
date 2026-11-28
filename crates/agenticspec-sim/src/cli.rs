@@ -953,6 +953,175 @@ pub fn trace(o: &TraceOptions) -> Result<Value, Refusal> {
     Ok(answer)
 }
 
+/// The fixed arguments of `sim score`.
+#[derive(Debug, Clone)]
+pub struct ScoreOptions<'a> {
+    pub profile: &'a Path,
+    /// The seed, as an experiment's `seed:`; 0 when absent.
+    pub seed: Option<u64>,
+    /// The simulated time, as a duration; one day when absent.
+    pub horizon: Option<&'a str>,
+}
+
+/// The exit code of `sim score` for a refused document; a refusal of its fixed arguments exits 1.
+pub const SCORE_REFUSED_EXIT: i32 = 3;
+
+/// Whether a refusal of `sim score` is about the document (exit [`SCORE_REFUSED_EXIT`]) rather
+/// than about its fixed arguments (`profile_refused`, `horizon_invalid`, exit 1).
+pub fn score_refuses_document(code: &str) -> bool {
+    !matches!(
+        code,
+        "profile_refused" | "horizon_invalid" | "documents_missing"
+    )
+}
+
+/// The answer of `sim score` for a refusal: `{"error": {"code", "message"}}`.
+pub fn score_error(r: &Refusal) -> Value {
+    json!({"error": {"code": r.code, "message": r.detail}})
+}
+
+/// `sim score`: the profile read once, then one simulation per document.
+#[derive(Debug, Clone)]
+pub struct Scorer {
+    profile: crate::profile::Profile,
+    horizon: f64,
+    seed: u64,
+}
+
+impl Scorer {
+    /// Reads the profile (with the corpus it names, relative to it) and the horizon.
+    ///
+    /// # Errors
+    ///
+    /// `profile_refused` for a profile that cannot be read or parsed, `horizon_invalid` for a
+    /// horizon that is no positive duration.
+    pub fn new(o: &ScoreOptions) -> Result<Self, Refusal> {
+        let horizon = match o.horizon {
+            None => 86400.0,
+            Some(h) => crate::doc::parse_duration(h)
+                .filter(|s| *s > 0.0)
+                .ok_or_else(|| {
+                    refused("horizon_invalid", format!("`{h}` is no positive duration"))
+                })?,
+        };
+        let profile_refused = |e: String| refused("profile_refused", e);
+        let doc = load_yaml(o.profile).map_err(profile_refused)?;
+        let mut profile = crate::profile::Profile::parse(&doc)
+            .map_err(|e| profile_refused(format!("{}: {e}", o.profile.display())))?;
+        profile
+            .read_corpus(o.profile.parent().unwrap_or(Path::new(".")))
+            .map_err(profile_refused)?;
+        Ok(Scorer {
+            profile,
+            horizon,
+            seed: o.seed.unwrap_or(0),
+        })
+    }
+
+    /// The KPIs of the architecture at `path`, simulated once as written: `{kpis, per_part}`,
+    /// each KPI a number by its id. The run is the baseline `sim run` evaluates for an experiment
+    /// with this seed and `seeds: 1` (no faults, no bursts): every marked place at its value, the
+    /// run seeded with the experiment's first run seed, and the gate counts and the KPIs of the
+    /// architecture as a whole beside the simulator's.
+    ///
+    /// # Errors
+    ///
+    /// Every refusal of `sim check` with its code, and `simulation_refused` when the simulator
+    /// refuses the document under the profile.
+    pub fn score(&self, path: &Path) -> Result<Value, Refusal> {
+        use crate::marked::{Marked, collect, resolve};
+        let document = load_nested(path)?;
+        let flat = nest::flatten(&document);
+        let refusals = check_architecture(&flat);
+        if !refusals.is_empty() {
+            let names: Vec<String> = refusals.iter().map(ToString::to_string).collect();
+            return Err(refused("architecture_refused", names.join("; ")));
+        }
+        accepted(
+            &document,
+            &flat,
+            &CheckOptions {
+                architecture: path,
+                ports: None,
+                kpis: None,
+            },
+        )?;
+        let not_simulated = |e: String| refused("simulation_refused", e);
+        let params: serde_json::Map<String, Value> = collect(&document, false)
+            .map_err(not_simulated)?
+            .iter()
+            .map(|m: &Marked| (m.path.clone(), m.range[m.baseline_index()].clone()))
+            .collect();
+        let arch = nest::flatten(&resolve(&document, &params).map_err(not_simulated)?);
+        let model = crate::sim::Model::build(&arch, &self.profile, self.horizon, &[], &[])
+            .map_err(not_simulated)?;
+        let seed = crate::rng::Rng::stream(self.seed, 0).next_u64();
+        let run = crate::sim::simulate(&model, seed, false);
+        // As the search's mean over one seed: 0 + v / 1, so a -0.0 reads 0.0 there and here.
+        let mean = |v: &f64| 0.0 + v / 1.0;
+        let mut kpis: std::collections::BTreeMap<String, f64> =
+            run.kpis.iter().map(|(k, v)| (k.clone(), mean(v))).collect();
+        for (g, n) in crate::check::gate_counts(&arch) {
+            kpis.insert(g.to_string(), n);
+        }
+        for (k, n) in crate::whole::measure(&arch) {
+            kpis.insert(k.to_string(), n);
+        }
+        let per_part: serde_json::Map<String, Value> = run
+            .per_part
+            .iter()
+            .map(|(p, row)| {
+                let row: serde_json::Map<String, Value> = row
+                    .iter()
+                    .map(|(k, v)| (k.clone(), json!(mean(v))))
+                    .collect();
+                (p.clone(), Value::Object(row))
+            })
+            .collect();
+        let kpis: serde_json::Map<String, Value> =
+            kpis.into_iter().map(|(k, v)| (k, json!(v))).collect();
+        Ok(json!({"kpis": kpis, "per_part": per_part}))
+    }
+
+    /// [`Scorer::score`], a refusal as its error answer ([`score_error`]).
+    pub fn answer(&self, path: &Path) -> Value {
+        self.score(path).unwrap_or_else(|r| score_error(&r))
+    }
+}
+
+/// What `sim score` answers.
+#[derive(Debug, Clone)]
+pub enum Scored {
+    /// One document without `--batch`: its KPIs, or its refusal.
+    One(Result<Value, Refusal>),
+    /// `{"results": [...]}`, one answer per document in order.
+    Batch(Value),
+}
+
+/// `sim score --profile <profile> [--seed <n>] [--horizon <duration>] [--batch] [--]
+/// <architecture>...`: one document without `--batch` answers its KPIs or its refusal; with
+/// `--batch` or more than one document, `{"results": [...]}`, each entry the answer of its
+/// document alone.
+///
+/// # Errors
+///
+/// A refusal of the fixed arguments ([`Scorer::new`]), or `documents_missing`.
+pub fn score(o: &ScoreOptions, documents: &[&Path], batch: bool) -> Result<Scored, Refusal> {
+    if documents.is_empty() {
+        return Err(refused(
+            "documents_missing",
+            "name an architecture document, or several after `--`",
+        ));
+    }
+    let scorer = Scorer::new(o)?;
+    Ok(match documents {
+        [one] if !batch => Scored::One(scorer.score(one)),
+        _ => Scored::Batch(json!({
+            "results": documents.iter().map(|d| scorer.answer(d)).collect::<Vec<_>>()
+        })),
+    })
+}
+
 /// `packing default <architecture> [--strategy <strategy>]`: the resolved `packing:` section of
 /// a binding under a strategy (`single` when absent), to paste into a binding and change.
 pub fn packing_default(path: &Path, strategy: Option<&str>) -> Result<Value, Refusal> {

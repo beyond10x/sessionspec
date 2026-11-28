@@ -1,5 +1,5 @@
 // generated from agenticspec v1
-// contract digest 6107cda5fc3da4e3cc9ada6dcc08af755bfd9d53f930d1be89b1d7b1f074179f
+// contract digest ccb8808b577e000f62b25eea26b56257870a4af7bcbda0f276d5b2bb26a8a862
 // do not edit: regenerate with `ess synthesize`
 
 //! cli — `agenticspec.cli`.
@@ -1170,6 +1170,36 @@ pub struct SimScenarioResult {
     pub failed: Option<i64>,
     /// `not_checked` — `Optional<Integer>`.
     pub not_checked: Option<i64>,
+}
+
+/// SimScoreInput — `agenticspec.cli.SimScoreInput`.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SimScoreInput {
+    /// `architecture` — `Optional<String>`.
+    pub architecture: Option<String>,
+    /// `profile` — `String`.
+    pub profile: String,
+    /// `seed` — `Optional<Integer>`.
+    pub seed: Option<i64>,
+    /// `horizon` — `Optional<String>`.
+    pub horizon: Option<String>,
+    /// `batch` — `Boolean`.
+    pub batch: bool,
+    /// `documents` — `List<String>`.
+    pub documents: Vec<String>,
+}
+
+/// SimScoreResult — `agenticspec.cli.SimScoreResult`.
+///
+/// The KPIs of one architecture document simulated once, or with `--batch` or more than one document the answer of each document in their order. A refused document answers `{"error": {"code", "message"}}`: alone on standard output with exit 3, in a batch as its entry.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SimScoreResult {
+    /// `kpis` — `Optional<Json>`.
+    pub kpis: Option<crate::json::Value>,
+    /// `per_part` — `Optional<Json>`.
+    pub per_part: Option<crate::json::Value>,
+    /// `results` — `Optional<List<Json>>`.
+    pub results: Option<Vec<crate::json::Value>>,
 }
 
 /// SimTraceInput — `agenticspec.cli.SimTraceInput`.

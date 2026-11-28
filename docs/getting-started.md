@@ -163,3 +163,76 @@ Each violation has:
 | `message` | what is wrong, in words |
 
 Keys are sorted, so the same document gives the same bytes on every run.
+
+## Score an architecture
+
+`agenticspec sim score` simulates an architecture document once, as written, and prints its KPIs
+as one line of JSON on standard output. It is the call a search tool makes for each candidate: the
+fixed arguments first, the document's path last.
+
+```console
+$ agenticspec sim score --profile fields/coding/profiles/coding.yaml --seed 7 -- architectures/solo.yaml
+{"kpis":{"acts_for_without_part":0.0,"agent_time_cost_usd":24.0,…,"tasks_done":18.0,…},"per_part":{"agent":{…},"model":{"calls":2250.0,…},"owner":{"away_seconds":3600.0,…}}}
+```
+
+- `--profile <file>`: the behaviour profile. Required.
+- `--seed <n>`: the seed of the run, 0 when absent.
+- `--horizon <duration>`: the simulated time, one day when absent.
+- `--batch`: answer a list, also for one document.
+- The documents follow `--`. One document may also be given without `--`, as the last argument.
+
+The command runs in the directory of the repository (it reads `blocks/ports.json` and
+`kpis/catalogue.yaml` for a document with `ingress:` or `requirements:`), reads no standard input
+and makes no network call. A marked place `{value, vary}` is simulated at its `value`: there is no
+search over `vary`. The KPIs equal what `sim run` reports as `baseline` for an experiment over the
+same architecture and profile with `seed: <n>` and `seeds: 1`. The same document and arguments give
+the same bytes on every run.
+
+The answer of one document:
+
+| pointer | what |
+|---|---|
+| `/kpis` | `{<id>: <number>}`: every KPI `sim run` reports for a variant, the simulator's, the gate counts of the check and the KPIs of the architecture as a whole, by their ids in `kpis/catalogue.yaml`; a count of the simulator or a gate count of the check that the catalogue does not list (`tasks_arrived`, `tokens_input`, `setting_unknown`, ...) keeps the name `sim run` gives it |
+| `/per_part` | `{<part>: {<id>: <number>}}`: the KPIs the simulator reports per part |
+| `/error` | instead of the two above, for a refused document: `{"code": <code>, "message": <text>}` |
+
+| exit | when | standard output |
+|---|---|---|
+| 0 | scored, or a batch answered | the answer |
+| 3 | the document is refused: `document_unreadable`, `architecture_refused` (every refusal of `sim check`, with the same message), `ports_unreadable`, `kpis_unreadable` or `simulation_refused` | `{"error": …}` |
+| 1 | the fixed arguments are refused: `profile_refused`, `horizon_invalid` | `{"error": …}` |
+| 2 | the arguments do not parse, or no document is given (`documents_missing`) | nothing |
+
+The refusal is also named on standard error, as by every other command.
+
+With `--batch`, or with more than one document, it answers `{"results": [...]}`: one entry per
+path in the order given, each the same bytes as the answer of that path alone, a refused document
+as an entry holding its `error`. A batch exits 0 when every entry is answered, refused or not; a
+refusal of the fixed arguments refuses the whole batch with exit 1. The documents of a batch are
+simulated one after another, the profile read once; keep a batch to 64 documents or fewer, so one
+call stays within a search tool's deadline.
+
+A search tool that reads a pack manifest names the command like this (the profile, seed and limit
+are yours to choose):
+
+```yaml
+tool:
+  run: [agenticspec]
+  verbs:
+    simulate:
+      args: [sim, score, --profile, fields/coding/profiles/coding.yaml, --seed, "7", --]
+      exit: [0, 3]
+      at: ""
+      error: /error/message
+      kpis: { at: /kpis, value: "" }
+      per_part: { at: /per_part, value: "" }
+      batch:
+        args: [sim, score, --profile, fields/coding/profiles/coding.yaml, --seed, "7", --batch, --]
+        at: /results
+        limit: 64
+```
+
+`kpis.at` and `per_part.at` point into the answer of one document; `value` is the pointer into
+each KPI's entry, empty because each entry is the number itself. The batch's `args` replace the
+single `args` and are followed by every path of the batch; each entry under `/results` is read like
+the answer of one document.

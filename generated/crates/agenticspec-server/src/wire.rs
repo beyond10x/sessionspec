@@ -1,5 +1,5 @@
 // generated from agenticspec v1
-// contract digest 6107cda5fc3da4e3cc9ada6dcc08af755bfd9d53f930d1be89b1d7b1f074179f
+// contract digest ccb8808b577e000f62b25eea26b56257870a4af7bcbda0f276d5b2bb26a8a862
 // do not edit: regenerate with `ess synthesize`
 //! Every generated declaration, as JSON, in the renderings the published wire contracts fix.
 //!
@@ -4527,6 +4527,155 @@ pub fn decode_agenticspec_cli_sim_scenario_result(value: &json::Value, at: &str)
             Some(member9) => {
                 let at9 = json::nested(at, "not_checked");
                 Some(json::integer_at(member9, &at9, "an integer")?)
+            }
+        },
+    })
+}
+
+/// Writes `agenticspec.cli.SimScoreInput` as JSON.
+pub fn encode_agenticspec_cli_sim_score_input(value: &agenticspec_types::cli::SimScoreInput, out: &mut String) {
+    out.push('{');
+    if let Some(held0) = &value.architecture {
+        json::member(out, "architecture");
+        json::push_text(out, &*held0);
+    }
+    json::member(out, "profile");
+    json::push_text(out, &value.profile);
+    if let Some(held0) = &value.seed {
+        json::member(out, "seed");
+        json::push_integer(out, *held0);
+    }
+    if let Some(held0) = &value.horizon {
+        json::member(out, "horizon");
+        json::push_text(out, &*held0);
+    }
+    json::member(out, "batch");
+    json::push_bool(out, value.batch);
+    json::member(out, "documents");
+    out.push('[');
+    for (index0, item0) in value.documents.iter().enumerate() {
+        if index0 > 0 {
+            out.push(',');
+        }
+        json::push_text(out, &*item0);
+    }
+    out.push(']');
+    out.push('}');
+}
+
+/// Reads `agenticspec.cli.SimScoreInput` from JSON.
+///
+/// # Errors
+///
+/// [`json::DecodeError`] naming the path and what the declaration says belongs there.
+pub fn decode_agenticspec_cli_sim_score_input(value: &json::Value, at: &str) -> Result<agenticspec_types::cli::SimScoreInput, json::DecodeError> {
+    json::closed_at(value, at, &["architecture", "profile", "seed", "horizon", "batch", "documents"])?;
+    Ok(agenticspec_types::cli::SimScoreInput {
+        architecture: match value.member("architecture") {
+            None | Some(json::Value::Null) => None,
+            Some(member0) => {
+                let at0 = json::nested(at, "architecture");
+                Some(json::text_at(member0, &at0, "a string")?.to_owned())
+            }
+        },
+        profile: {
+            let at1 = json::nested(at, "profile");
+            let member1 = json::member_at(value, at, "profile")?;
+            json::text_at(member1, &at1, "a string")?.to_owned()
+        },
+        seed: match value.member("seed") {
+            None | Some(json::Value::Null) => None,
+            Some(member2) => {
+                let at2 = json::nested(at, "seed");
+                Some(json::integer_at(member2, &at2, "an integer")?)
+            }
+        },
+        horizon: match value.member("horizon") {
+            None | Some(json::Value::Null) => None,
+            Some(member3) => {
+                let at3 = json::nested(at, "horizon");
+                Some(json::text_at(member3, &at3, "a string")?.to_owned())
+            }
+        },
+        batch: {
+            let at4 = json::nested(at, "batch");
+            let member4 = json::member_at(value, at, "batch")?;
+            json::bool_at(member4, &at4, "a boolean")?
+        },
+        documents: {
+            let at5 = json::nested(at, "documents");
+            let member5 = json::member_at(value, at, "documents")?;
+            {
+                let mut items5 = Vec::new();
+                for (index5, element5) in json::items_at(member5, &at5, "an array")?.iter().enumerate() {
+                    let nested5 = json::nested(&at5, &index5.to_string());
+                    items5.push(json::text_at(element5, &nested5, "a string")?.to_owned());
+                }
+                items5
+            }
+        },
+    })
+}
+
+/// Writes `agenticspec.cli.SimScoreResult` as JSON.
+pub fn encode_agenticspec_cli_sim_score_result(value: &agenticspec_types::cli::SimScoreResult, out: &mut String) {
+    out.push('{');
+    if let Some(held0) = &value.kpis {
+        json::member(out, "kpis");
+        json::push_value(out, &*held0);
+    }
+    if let Some(held0) = &value.per_part {
+        json::member(out, "per_part");
+        json::push_value(out, &*held0);
+    }
+    if let Some(held0) = &value.results {
+        json::member(out, "results");
+        out.push('[');
+        for (index1, item1) in (*held0).iter().enumerate() {
+            if index1 > 0 {
+                out.push(',');
+            }
+            json::push_value(out, &*item1);
+        }
+        out.push(']');
+    }
+    out.push('}');
+}
+
+/// Reads `agenticspec.cli.SimScoreResult` from JSON.
+///
+/// # Errors
+///
+/// [`json::DecodeError`] naming the path and what the declaration says belongs there.
+pub fn decode_agenticspec_cli_sim_score_result(value: &json::Value, at: &str) -> Result<agenticspec_types::cli::SimScoreResult, json::DecodeError> {
+    json::closed_at(value, at, &["kpis", "per_part", "results"])?;
+    Ok(agenticspec_types::cli::SimScoreResult {
+        kpis: match value.member("kpis") {
+            None | Some(json::Value::Null) => None,
+            Some(member0) => {
+                let at0 = json::nested(at, "kpis");
+                Some(json::value_at(member0, &at0))
+            }
+        },
+        per_part: match value.member("per_part") {
+            None | Some(json::Value::Null) => None,
+            Some(member1) => {
+                let at1 = json::nested(at, "per_part");
+                Some(json::value_at(member1, &at1))
+            }
+        },
+        results: match value.member("results") {
+            None | Some(json::Value::Null) => None,
+            Some(member2) => {
+                let at2 = json::nested(at, "results");
+                Some({
+                let mut items2 = Vec::new();
+                for (index2, element2) in json::items_at(member2, &at2, "an array")?.iter().enumerate() {
+                    let nested2 = json::nested(&at2, &index2.to_string());
+                    items2.push(json::value_at(element2, &nested2));
+                }
+                items2
+            })
             }
         },
     })
