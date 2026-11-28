@@ -1,0 +1,113 @@
+# In an architecture that has a principal part, a part goes on the border only when a principal
+# part reaches it: a principal part links to it, or a link carrying Grant ends at it (an authority
+# part holds the principal's grant). The merger is refused on the border while nothing reaches it,
+# and admitted once the owner's grant reaches it through an authority part. Synthesis arranges no
+# link rows for this guard (ESS-SYNTH-003), so this scenario walks it by hand.
+type: ess-scenario/7
+domain: agentic.architecture
+scenario: border-through-grant
+summary: A merger no principal part reaches is refused on the border; once the owner's grant reaches it through an authority part, it is put on the border and the architecture commits.
+
+arrange:
+  - instance: merging
+    entity: agentic.architecture.Architecture
+
+timeline:
+  - at: 2026-11-28T15:10:00Z
+    command: agentic.architecture.CreateArchitecture
+    input: {name: merging}
+    outcome: created
+    capture: {instance: merging, event: agentic.architecture.ArchitectureCreated, field: architecture_id}
+  - at: 2026-11-28T15:10:01Z
+    command: agentic.architecture.AddPart
+    input:
+      part_id: 00000000-0000-4000-8000-000000000d01
+      architecture_id: {$instance: merging}
+      name: owner
+      kind: Principal
+      count: 1
+      settings: [{name: principal_kind, value: human}]
+    outcome: added
+  - at: 2026-11-28T15:10:02Z
+    command: agentic.architecture.AddPart
+    input:
+      part_id: 00000000-0000-4000-8000-000000000d02
+      architecture_id: {$instance: merging}
+      name: merger
+      kind: Agent
+      count: 1
+      settings: [{name: harness, value: coding}]
+    outcome: added
+  - at: 2026-11-28T15:10:03Z
+    command: agentic.architecture.AddPart
+    input:
+      part_id: 00000000-0000-4000-8000-000000000d03
+      architecture_id: {$instance: merging}
+      name: merge_grant
+      kind: Authority
+      count: 1
+      settings: [{name: kind, value: grant}]
+    outcome: added
+  - at: 2026-11-28T15:10:04Z
+    command: agentic.architecture.AddPart
+    input:
+      part_id: 00000000-0000-4000-8000-000000000d04
+      architecture_id: {$instance: merging}
+      name: model
+      kind: Model
+      count: 1
+      settings: [{name: route, value: small}]
+    outcome: added
+  - at: 2026-11-28T15:10:05Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: merging}
+      from_part_id: 00000000-0000-4000-8000-000000000d02
+      to_part_id: 00000000-0000-4000-8000-000000000d04
+      carries: ModelCall
+    outcome: added
+  - at: 2026-11-28T15:10:06Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: merging}
+      from_part_id: 00000000-0000-4000-8000-000000000d01
+      to_part_id: 00000000-0000-4000-8000-000000000d03
+      carries: Grant
+    outcome: added
+
+  # nothing reaches the merger yet
+  - at: 2026-11-28T15:10:07Z
+    command: agentic.architecture.SetBorder
+    input:
+      architecture_id: {$instance: merging}
+      part_id: 00000000-0000-4000-8000-000000000d02
+    outcome: not-reached
+    error:
+      name: agentic.architecture.NotReachedByPrincipal
+    no_events: [agentic.architecture.PartBordered]
+
+  # the owner's grant reaches the merger through the authority part
+  - at: 2026-11-28T15:10:08Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: merging}
+      from_part_id: 00000000-0000-4000-8000-000000000d03
+      to_part_id: 00000000-0000-4000-8000-000000000d02
+      carries: Grant
+    outcome: added
+  - at: 2026-11-28T15:10:09Z
+    command: agentic.architecture.SetBorder
+    input:
+      architecture_id: {$instance: merging}
+      part_id: 00000000-0000-4000-8000-000000000d02
+    outcome: bordered
+
+  - at: 2026-11-28T15:10:10Z
+    command: agentic.architecture.CommitRevision
+    input: {architecture_id: {$instance: merging}}
+    outcome: committed
+
+assert:
+  - view: agentic.architecture.Revisions
+    contains:
+      architecture_id: {$instance: merging}

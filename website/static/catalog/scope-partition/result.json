@@ -247,6 +247,10 @@
         "kind": "Correctness",
         "value": 0.0
       },
+      "not_reached_by_principal": {
+        "kind": "Correctness",
+        "value": 0.0
+      },
       "operator_decided_owner_questions": {
         "kind": "Quality",
         "value": 0.0
@@ -792,6 +796,10 @@
         "value": 1.0
       },
       "not_a_channel": {
+        "kind": "Correctness",
+        "value": 0.0
+      },
+      "not_reached_by_principal": {
         "kind": "Correctness",
         "value": 0.0
       },
@@ -11805,6 +11813,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -12166,6 +12178,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },
@@ -12533,6 +12549,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -12894,6 +12914,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },
@@ -13261,6 +13285,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -13622,6 +13650,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },
@@ -13989,6 +14021,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -14350,6 +14386,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },
@@ -14717,6 +14757,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -15078,6 +15122,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },
@@ -15445,6 +15493,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -15806,6 +15858,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },
@@ -16173,6 +16229,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -16534,6 +16594,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },
@@ -16901,6 +16965,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -17262,6 +17330,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },
@@ -17629,6 +17701,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -17990,6 +18066,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },
@@ -18357,6 +18437,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -18718,6 +18802,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },
@@ -19085,6 +19173,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -19446,6 +19538,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },
@@ -19813,6 +19909,10 @@
           "kind": "Correctness",
           "value": 0.0
         },
+        "not_reached_by_principal": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
         "operator_decided_owner_questions": {
           "kind": "Quality",
           "value": 0.0
@@ -20174,6 +20274,10 @@
           "value": 1.0
         },
         "not_a_channel": {
+          "kind": "Correctness",
+          "value": 0.0
+        },
+        "not_reached_by_principal": {
           "kind": "Correctness",
           "value": 0.0
         },

@@ -1,6 +1,6 @@
 format: agenticspec-contract/1
 architecture: scope-partition
-ports_digest: cb3e90e933bd20046426247f4a060751e6f8774bd043c5eaf1c24ac82ba6a0e9
+ports_digest: 7afd895ae08fab3e4cbdc67c51a37318624217025039ec8153c704923213feba
 ports:
   - port: resource.claim
     part: builds

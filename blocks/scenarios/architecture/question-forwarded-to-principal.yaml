@@ -1,0 +1,130 @@
+# A question may go to an agent part that acts for no principal when that agent forwards
+# questions to a principal part: it answers what it can and passes on the rest. The worker asks
+# the steward, which acts for nobody; the commit is refused while the steward forwards to no one,
+# and admitted once a link of the steward carries questions to the owner. Synthesis arranges no
+# link rows for the guards of a commit (ESS-SYNTH-003), so this scenario walks them by hand.
+type: ess-scenario/7
+domain: agentic.architecture
+scenario: question-forwarded-to-principal
+summary: A worker's questions to a steward that acts for no principal are refused at commit; once the steward forwards questions to the owner, the architecture commits.
+
+arrange:
+  - instance: team
+    entity: agentic.architecture.Architecture
+
+timeline:
+  - at: 2026-11-28T15:20:00Z
+    command: agentic.architecture.CreateArchitecture
+    input: {name: team}
+    outcome: created
+    capture: {instance: team, event: agentic.architecture.ArchitectureCreated, field: architecture_id}
+  - at: 2026-11-28T15:20:01Z
+    command: agentic.architecture.AddPart
+    input:
+      part_id: 00000000-0000-4000-8000-000000000e01
+      architecture_id: {$instance: team}
+      name: owner
+      kind: Principal
+      count: 1
+      settings: [{name: principal_kind, value: human}]
+    outcome: added
+  - at: 2026-11-28T15:20:02Z
+    command: agentic.architecture.AddPart
+    input:
+      part_id: 00000000-0000-4000-8000-000000000e02
+      architecture_id: {$instance: team}
+      name: steward
+      kind: Agent
+      count: 1
+      settings: [{name: harness, value: coding}]
+    outcome: added
+  - at: 2026-11-28T15:20:03Z
+    command: agentic.architecture.AddPart
+    input:
+      part_id: 00000000-0000-4000-8000-000000000e03
+      architecture_id: {$instance: team}
+      name: worker
+      kind: Agent
+      count: 3
+      settings: [{name: harness, value: coding}]
+    outcome: added
+  - at: 2026-11-28T15:20:04Z
+    command: agentic.architecture.AddPart
+    input:
+      part_id: 00000000-0000-4000-8000-000000000e04
+      architecture_id: {$instance: team}
+      name: model
+      kind: Model
+      count: 1
+      settings: [{name: route, value: frontier}]
+    outcome: added
+
+  # links
+  - at: 2026-11-28T15:20:05Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: team}
+      from_part_id: 00000000-0000-4000-8000-000000000e01
+      to_part_id: 00000000-0000-4000-8000-000000000e02
+      carries: Prompt
+    outcome: added
+  - at: 2026-11-28T15:20:06Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: team}
+      from_part_id: 00000000-0000-4000-8000-000000000e02
+      to_part_id: 00000000-0000-4000-8000-000000000e03
+      carries: Order
+    outcome: added
+  - at: 2026-11-28T15:20:07Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: team}
+      from_part_id: 00000000-0000-4000-8000-000000000e03
+      to_part_id: 00000000-0000-4000-8000-000000000e02
+      carries: Question
+    outcome: added
+  - at: 2026-11-28T15:20:08Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: team}
+      from_part_id: 00000000-0000-4000-8000-000000000e02
+      to_part_id: 00000000-0000-4000-8000-000000000e04
+      carries: ModelCall
+    outcome: added
+  - at: 2026-11-28T15:20:09Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: team}
+      from_part_id: 00000000-0000-4000-8000-000000000e03
+      to_part_id: 00000000-0000-4000-8000-000000000e04
+      carries: ModelCall
+    outcome: added
+
+  # the steward acts for nobody and forwards to no one
+  - at: 2026-11-28T15:20:10Z
+    command: agentic.architecture.CommitRevision
+    input: {architecture_id: {$instance: team}}
+    outcome: question-without-answerer
+    error:
+      name: agentic.architecture.QuestionWithoutAnswerer
+    no_events: [agentic.architecture.RevisionCommitted]
+
+  # the steward forwards questions to the owner
+  - at: 2026-11-28T15:20:11Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: team}
+      from_part_id: 00000000-0000-4000-8000-000000000e02
+      to_part_id: 00000000-0000-4000-8000-000000000e01
+      carries: Question
+    outcome: added
+  - at: 2026-11-28T15:20:12Z
+    command: agentic.architecture.CommitRevision
+    input: {architecture_id: {$instance: team}}
+    outcome: committed
+
+assert:
+  - view: agentic.architecture.Revisions
+    contains:
+      architecture_id: {$instance: team}

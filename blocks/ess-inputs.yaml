@@ -42,6 +42,9 @@ scenarios:
   - scenarios/architecture/workstation-ingress.yaml
   - scenarios/architecture/message-over-missing-channel.yaml
   - scenarios/architecture/gateway-without-model.yaml
+  - scenarios/architecture/nested-console-committed.yaml
+  - scenarios/architecture/border-through-grant.yaml
+  - scenarios/architecture/question-forwarded-to-principal.yaml
   - scenarios/channel/queue-post-taken-once.yaml
   - scenarios/deployment/install-drain-roll-back.yaml
   - scenarios/deployment/install-refusals.yaml

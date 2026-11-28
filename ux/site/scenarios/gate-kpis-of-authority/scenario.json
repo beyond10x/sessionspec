@@ -14,7 +14,7 @@
   "truth": {
     "path": "/docs/kpis-catalogue",
     "kpis": ["approvals_by_session", "spend_after_exhaustion", "actions_without_grant"],
-    "count": "3 of 141 KPIs"
+    "count": "3 of 142 KPIs"
   },
-  "expectations": ["the table shows exactly the three gates of authority, all in view", "the count says 3 of 141 KPIs"]
+  "expectations": ["the table shows exactly the three gates of authority, all in view", "the count says 3 of 142 KPIs"]
 }

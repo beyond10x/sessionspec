@@ -100,7 +100,7 @@ architecture:
   sha256: sha256:0dca5833649c67fdb20b5e172b0884c955dbe5ed142cf0a508328b2d1f74b4e9
 nested: {}
 contract:
-  digest: sha256:0789e6d5a4e2d38259ece4bad55e2923a26257f4e1d0330b45bf05dfa7c82dbf
+  digest: sha256:ad0c6875cdf502d8fe2afca0472d0be7897803ba1564b39a20c4ea2b7b51040d
   document:
     architecture: author-reviewer
     border:
@@ -510,7 +510,7 @@ contract:
       port: resource.claim
       protocol: RequestClaim (GrantClaim (ExpireClaim | KillClaim | ReleaseClaim) | WithdrawClaim)
       settings: {}
-    ports_digest: cb3e90e933bd20046426247f4a060751e6f8774bd043c5eaf1c24ac82ba6a0e9
+    ports_digest: 7afd895ae08fab3e4cbdc67c51a37318624217025039ec8153c704923213feba
 binding:
   digest: sha256:e9e04895dbdf2456965da5ba32e434b57a6ee596c5a947f2d8a453b984fdca7d
   document:
@@ -736,4 +736,4 @@ ingress:
 requirements: []
 agents: {}
 runtimes: {}
-digest: sha256:f013fe0b113f1a906ecda8225e2dd6c3528196a53aa6c59428c65c879645f948
+digest: sha256:1c1a9e595f754eb572cdee5e61fd0f1f954a7bd30e27c1bf97dd526f89369081

@@ -1,0 +1,102 @@
+# An architecture with no principal part is made to be nested: its border is its interface, which
+# the architecture that nests it links to. The console has a steward on its border that no
+# principal part links to, and a helper asks the steward, which acts for nobody; both are admitted
+# and the console commits. Synthesis arranges no part and link rows for these guards
+# (ESS-SYNTH-003), so this scenario walks them by hand.
+type: ess-scenario/7
+domain: agentic.architecture
+scenario: nested-console-committed
+summary: A console with no principal part puts its steward on the border and lets its helper ask the steward, and commits.
+
+arrange:
+  - instance: console
+    entity: agentic.architecture.Architecture
+
+timeline:
+  - at: 2026-11-28T15:00:00Z
+    command: agentic.architecture.CreateArchitecture
+    input: {name: console}
+    outcome: created
+    capture: {instance: console, event: agentic.architecture.ArchitectureCreated, field: architecture_id}
+  - at: 2026-11-28T15:00:01Z
+    command: agentic.architecture.AddPart
+    input:
+      part_id: 00000000-0000-4000-8000-000000000c01
+      architecture_id: {$instance: console}
+      name: steward
+      kind: Agent
+      count: 1
+      settings: [{name: harness, value: coding}]
+    outcome: added
+  - at: 2026-11-28T15:00:02Z
+    command: agentic.architecture.AddPart
+    input:
+      part_id: 00000000-0000-4000-8000-000000000c02
+      architecture_id: {$instance: console}
+      name: helper
+      kind: Agent
+      count: 1
+      settings: [{name: harness, value: coding}]
+    outcome: added
+  - at: 2026-11-28T15:00:03Z
+    command: agentic.architecture.AddPart
+    input:
+      part_id: 00000000-0000-4000-8000-000000000c03
+      architecture_id: {$instance: console}
+      name: model
+      kind: Model
+      count: 1
+      settings: [{name: route, value: frontier}]
+    outcome: added
+
+  # links
+  - at: 2026-11-28T15:00:04Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: console}
+      from_part_id: 00000000-0000-4000-8000-000000000c01
+      to_part_id: 00000000-0000-4000-8000-000000000c02
+      carries: Order
+    outcome: added
+  - at: 2026-11-28T15:00:05Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: console}
+      from_part_id: 00000000-0000-4000-8000-000000000c02
+      to_part_id: 00000000-0000-4000-8000-000000000c01
+      carries: Question
+    outcome: added
+  - at: 2026-11-28T15:00:06Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: console}
+      from_part_id: 00000000-0000-4000-8000-000000000c01
+      to_part_id: 00000000-0000-4000-8000-000000000c03
+      carries: ModelCall
+    outcome: added
+  - at: 2026-11-28T15:00:07Z
+    command: agentic.architecture.AddLink
+    input:
+      architecture_id: {$instance: console}
+      from_part_id: 00000000-0000-4000-8000-000000000c02
+      to_part_id: 00000000-0000-4000-8000-000000000c03
+      carries: ModelCall
+    outcome: added
+
+  # border: [steward], reached by no principal part: the console has none
+  - at: 2026-11-28T15:00:08Z
+    command: agentic.architecture.SetBorder
+    input:
+      architecture_id: {$instance: console}
+      part_id: 00000000-0000-4000-8000-000000000c01
+    outcome: bordered
+
+  - at: 2026-11-28T15:00:09Z
+    command: agentic.architecture.CommitRevision
+    input: {architecture_id: {$instance: console}}
+    outcome: committed
+
+assert:
+  - view: agentic.architecture.Revisions
+    contains:
+      architecture_id: {$instance: console}

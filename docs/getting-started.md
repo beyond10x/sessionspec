@@ -106,9 +106,18 @@ blocks. It exits 0 and prints the architecture with its counts of parts and link
 architecture as a whole, the parts it cannot lose (`single_points`), the architectures it nests and
 the count of its ingresses, or exits 1 and names each refusal on standard error.
 
-The rules are the refusals of the architecture block that a document can write, with two left out
-for now: a border part that no principal part links to, and a question to an agent that acts for
-no principal (`design/building-blocks.md`, "An architecture document", lists the rules and why).
+The rules are the refusals of the architecture block that a document can write
+(`design/building-blocks.md`, "An architecture document", lists them). Two of them hold only in an
+architecture that has a principal part; one with none is made to be nested, and the architecture
+that nests it links to its border:
+
+- `not_reached_by_principal`: a part on the border that no principal part links to and no link
+  carrying `grant` reaches (an authority part that holds a principal's grant reaches the part it
+  permits);
+- `question_without_answerer`: a `question` link to an agent that acts for no principal and has no
+  `question` link of its own to a principal part, to which it would forward what it cannot answer.
+  The same rule refuses a `question` link to a part that is neither a principal nor an agent, in
+  any architecture.
 
 Every key of a part other than `block` is a setting, and the part's block declares which settings
 it takes and of what type: the "Settings" section of each block page lists them with type, unit and

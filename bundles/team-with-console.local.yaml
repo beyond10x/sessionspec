@@ -93,7 +93,7 @@ nested:
     - console
     sha256: sha256:330bd69675b94a9461baed62f67557b88ecf6c349f975fbea5fff5f0daa59623
 contract:
-  digest: sha256:ad9c9e7abcf5e25ab5debde8c5532b8269a15850911ca96b562e579b45afe282
+  digest: sha256:dc9d94a818c1e1034c1815d7bb6254db8d5e27dd24802aab67b1b6194649d405
   document:
     architecture: team-with-console
     border:
@@ -373,7 +373,7 @@ contract:
       port: question.question
       protocol: Ask (Answer | RecordUnreadableAnswer | TakeDefault | Withdraw)
       settings: {}
-    ports_digest: cb3e90e933bd20046426247f4a060751e6f8774bd043c5eaf1c24ac82ba6a0e9
+    ports_digest: 7afd895ae08fab3e4cbdc67c51a37318624217025039ec8153c704923213feba
 binding:
   digest: sha256:a65be2f086046338aa5009f363582c2ccf730350224595c398240e4eef53097c
   document:
@@ -565,4 +565,4 @@ ingress:
 requirements: []
 agents: {}
 runtimes: {}
-digest: sha256:667e4731a82c6515e9a10c28311d0c27976e1fefebb1caea8e93ff0f353e55e9
+digest: sha256:0966aceb2671fe081d7d45febeaf10c6ed974202a50c875bf980c7cc4a145811

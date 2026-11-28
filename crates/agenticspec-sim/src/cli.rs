@@ -208,6 +208,7 @@ fn link_of(r: &ArchRefusal) -> Option<usize> {
         ArchRefusal::UnknownLinkPart { link, .. }
         | ArchRefusal::UnknownCarries { link, .. }
         | ArchRefusal::QuestionWithoutAnswerer { link, .. }
+        | ArchRefusal::QuestionNotForwarded { link, .. }
         | ArchRefusal::ReviewWithoutReviewer { link, .. }
         | ArchRefusal::TriggerSourceNotTrigger { link, .. }
         | ArchRefusal::TriggerTargetNotAgent { link, .. }
