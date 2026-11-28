@@ -495,7 +495,7 @@ A part `channel`:
 |---|---|---|---|---|---|
 | `kind` | enum `ChannelKind`: `prompt`, `operator`, `agent_message`, `agent_to_agent`, `chat`, `notification`, `control`, `screen` |  |  | every port | What the channel carries. |
 | `distribution` | enum `Distribution`: `direct`, `topic`, `queue`, `board` |  | `direct` | every port | Who receives a message; on a topic, queue or board a trigger can listen. |
-| `count` | integer of at least 0 |  | `1` |  | How many copies of the part run. |
+| `count` | integer of at least 1 |  | `1` |  | How many copies of the part run. |
 | `per` | part |  |  |  | One copy of the part for each copy of the named part. |
 | `notes` | notes |  |  |  | Free notes on the part, a map with keys and values of any kind: what no setting of its block types. The check takes any map; the simulator, the search and the contract never read it. |
 

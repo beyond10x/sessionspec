@@ -205,11 +205,29 @@ fn fold(page: &Page, decor: &Decor, tree: &Tree, open: &[&str]) -> (Page, Decor)
         .cloned()
         .collect();
 
-    // Marks on what is drawn keep their chip; a refusal inside a card rings the card.
+    // The card a mark's target is hidden in: for a node, the outermost collapsed region it lies
+    // in; for a region that is no node, the outermost collapsed region around it, itself left
+    // out when it is a card (a mark on a card is drawn on it).
+    let hidden_in = |m: &Mark| -> Option<String> {
+        let id = m.target.node.as_str();
+        match page.nodes.iter().position(|n| n.id == id) {
+            Some(i) => hidden[i].clone(),
+            None if is_card(id) => None,
+            None => tree
+                .chain(Some(id))
+                .into_iter()
+                .rfind(|r| closed(r))
+                .map(str::to_string),
+        }
+    };
+    // Marks on what is drawn keep their chip, a mark on a region drawn as a card included; a
+    // refusal inside a card rings the card.
     let mut marks: Vec<Mark> = Vec::new();
     let mut chips = Vec::new();
     for (i, m) in page.marks.iter().enumerate() {
-        if shows(&m.target.node) {
+        let region = !page.nodes.iter().any(|n| n.id == m.target.node)
+            && tree.info(&m.target.node).is_some();
+        if shows(&m.target.node) || (region && hidden_in(m).is_none()) {
             marks.push(m.clone());
             chips.push(decor.chips.get(i).cloned().flatten());
         }
@@ -219,12 +237,7 @@ fn fold(page: &Page, decor: &Decor, tree: &Tree, open: &[&str]) -> (Page, Decor)
             .marks
             .iter()
             .filter(|m| m.level == Level::Refusal)
-            .filter(|m| {
-                page.nodes
-                    .iter()
-                    .zip(&hidden)
-                    .any(|(n, h)| n.id == m.target.node && h.as_deref() == Some(c.id.as_str()))
-            })
+            .filter(|m| hidden_in(m).as_deref() == Some(c.id.as_str()))
             .count();
         if refusals > 0 {
             marks.push(Mark {

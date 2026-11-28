@@ -1,0 +1,38 @@
+# A prompt comes from the harness, the human, a delegate, a peer session or the agent loop. The
+# permission authority, a tool provider, the redactor and a viewer are refused one as not granted
+# while the agent is idle, when a granted actor would be admitted. A synthesized suite sends the
+# command as one actor it does not grant, so a mutation that granted it to any of these survived.
+type: ess-scenario/7
+domain: agenticspec.session
+scenario: who-submits-a-prompt
+summary: The permission authority, a tool provider, the redactor and a viewer are refused a prompt as not granted; the human then submits one.
+
+timeline:
+  - at: 2026-11-28T10:00:00Z
+    command: agenticspec.session.OpenSession
+    actor: agenticspec.session.HarnessRuntime
+    input: {session_id: s-1, harness: ClaudeCode, at: 2026-11-28T10:00:00Z}
+    outcome: opened
+
+  - at: 2026-11-28T10:00:01Z
+    command: agenticspec.session.StartAgent
+    actor: agenticspec.session.HarnessRuntime
+    input: {agent_id: a-1, session_id: s-1, role: Main, at: 2026-11-28T10:00:01Z}
+    outcome: started
+
+  - at: 2026-11-28T10:00:02Z
+    command: agenticspec.session.SubmitPrompt
+    actor: agenticspec.session.PermissionAuthority
+    input: &prompt
+      agent_id: a-1
+      author: Human
+      attribution: Known
+      class: Task
+      content: {digest: '0000000000000000000000000000000000000000000000000000000000000000', bytes: 0}
+      at: 2026-11-28T10:00:02Z
+    refused: not_granted
+  - {at: 2026-11-28T10:00:03Z, command: agenticspec.session.SubmitPrompt, actor: agenticspec.session.ToolProvider, input: *prompt, refused: not_granted}
+  - {at: 2026-11-28T10:00:04Z, command: agenticspec.session.SubmitPrompt, actor: agenticspec.session.Redactor, input: *prompt, refused: not_granted}
+  - {at: 2026-11-28T10:00:05Z, command: agenticspec.session.SubmitPrompt, actor: agenticspec.view.Viewer, input: *prompt, refused: not_granted}
+
+  - {at: 2026-11-28T10:00:06Z, command: agenticspec.session.SubmitPrompt, actor: agenticspec.session.Human, input: *prompt, outcome: submitted}

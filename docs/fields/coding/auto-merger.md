@@ -84,7 +84,7 @@ Ingresses: who reaches the architecture from outside, what each audience may use
 | `gateway` | [gateway](../../blocks/2-intelligence/gateway.md) | rate_limit_per_minute 30 |
 | `model` | [model](../../blocks/2-intelligence/model.md) | route small |
 | `merger` | [agent](../../blocks/4-agent/agent.md) | acts_for owner; harness coding; role merger |
-| `merge_grant` | [authority](../../blocks/6-governance/authority.md) | action_class Execute; expires_after 24h; kind grant; scope merge |
+| `merge_grant` | [authority](../../blocks/6-governance/authority.md) | action_class execute; expires_after 24h; kind grant; scope merge |
 | `on_checks` | [trigger](../../blocks/7-collaboration/trigger.md) | event_name agentic.scm.change.ChecksRecorded; kind on_event; max_parallel 1; policy queue |
 | `changes` | [scm.change](../../packs/source-control/change.md) | – |
 | `checks` | [scm.check](../../packs/source-control/check.md) | – |

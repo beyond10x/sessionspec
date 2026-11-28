@@ -1,0 +1,7 @@
+format: agenticspec-binding/1
+binding: unit-scratch-invalid
+architecture: workstation
+refines: egress/workstation.yaml
+summary: The coding agent asks for a scratch directory at a relative path, which names no place in its unit.
+parts:
+  worker: {scratch: [{mount: tmp/worker}]}

@@ -139,14 +139,50 @@ pub fn enum_variants(name: &str) -> Option<Vec<String>> {
     None
 }
 
-fn strs(v: &Value) -> Vec<String> {
-    v.as_array()
-        .into_iter()
-        .flatten()
-        .filter_map(Value::as_str)
-        .map(str::to_string)
-        .collect()
+/// The ports of the contract a setting may narrow: those of `blocks/ports.json`, built in.
+fn ports() -> &'static [String] {
+    static PORTS: OnceLock<Vec<String>> = OnceLock::new();
+    PORTS.get_or_init(|| {
+        let doc: Value =
+            serde_json::from_str(include_str!("../../../blocks/ports.json")).unwrap_or_default();
+        doc["ports"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter_map(|p| p["name"].as_str().map(str::to_string))
+            .collect()
+    })
 }
+
+/// The non-empty list of distinct words under `key`, or why it is not one.
+fn words(at: &str, key: &str, v: &Value) -> Result<Vec<String>, String> {
+    let list = v
+        .as_array()
+        .filter(|l| !l.is_empty())
+        .ok_or_else(|| format!("{at}: `{key}` is {v}, expected a non-empty list of words"))?;
+    let mut out: Vec<String> = Vec::new();
+    for x in list {
+        let w = x
+            .as_str()
+            .filter(|w| !w.is_empty())
+            .ok_or_else(|| format!("{at}: `{key}` holds {x}, which is no word"))?;
+        if out.iter().any(|o| o == w) {
+            return Err(format!("{at}: `{key}` holds `{w}` twice"));
+        }
+        out.push(w.to_string());
+    }
+    Ok(out)
+}
+
+/// The keys only some types take, and the types that take each.
+const TYPED_KEYS: &[(&str, &[&str])] = &[
+    ("min", &["number", "integer", "duration"]),
+    ("max", &["number", "integer", "duration"]),
+    ("unit", &["number", "integer"]),
+    ("list", &["string", "part"]),
+    ("enum", &["enum"]),
+    ("values", &["enum"]),
+];
 
 fn setting(at: &str, v: &Value) -> Result<Setting, String> {
     let name = v["name"]
@@ -175,6 +211,24 @@ fn setting(at: &str, v: &Value) -> Result<Setting, String> {
                 .ok_or_else(|| format!("{at}: `{key}` is not a number or duration")),
         }
     };
+    let ty = v["type"].as_str().unwrap_or("");
+    for (key, types) in TYPED_KEYS {
+        if !v[*key].is_null() && !types.contains(&ty) {
+            return Err(format!(
+                "{at}: `{key}` belongs to a setting of type {}, not {ty}",
+                types.join(" or ")
+            ));
+        }
+    }
+    if !v["list"].is_null() && !v["list"].is_boolean() {
+        return Err(format!(
+            "{at}: `list` is {}, expected true or false",
+            v["list"]
+        ));
+    }
+    if !v["unit"].is_null() && !v["unit"].is_string() {
+        return Err(format!("{at}: `unit` is {}, expected a text", v["unit"]));
+    }
     let kind = match v["type"].as_str() {
         Some("number") => Kind::Number,
         Some("integer") => Kind::Integer,
@@ -188,14 +242,20 @@ fn setting(at: &str, v: &Value) -> Result<Setting, String> {
         Some("part") => Kind::Part {
             list: v["list"] == true,
         },
-        Some("enum") => match (v["enum"].as_str(), v["values"].is_array()) {
-            (Some(e), false) => Kind::Enum {
-                values: enum_variants(e)
-                    .ok_or_else(|| format!("{at}: no block declares the enum `{e}`"))?,
-                from: Some(e.to_string()),
-            },
-            (None, true) => Kind::Enum {
-                values: strs(&v["values"]),
+        Some("enum") => match (v["enum"].as_str(), v["values"].is_null()) {
+            (Some(e), true) => {
+                let values = enum_variants(e)
+                    .ok_or_else(|| format!("{at}: no block declares the enum `{e}`"))?;
+                if values.is_empty() {
+                    return Err(format!("{at}: the enum `{e}` has no values"));
+                }
+                Kind::Enum {
+                    values,
+                    from: Some(e.to_string()),
+                }
+            }
+            (None, false) if v["enum"].is_null() => Kind::Enum {
+                values: words(&at, "values", &v["values"])?,
                 from: None,
             },
             _ => {
@@ -209,7 +269,16 @@ fn setting(at: &str, v: &Value) -> Result<Setting, String> {
     let narrows = match &v["narrows"] {
         Value::Null => Narrows::None,
         Value::String(s) if s == "all" => Narrows::All,
-        Value::Array(_) => Narrows::Ports(strs(&v["narrows"])),
+        Value::Array(_) => {
+            let named = words(&at, "narrows", &v["narrows"])?;
+            if let Some(p) = named.iter().find(|p| !ports().contains(p)) {
+                return Err(format!(
+                    "{at}: narrows `{p}`, which is no port of the contract ({})",
+                    ports().join(", ")
+                ));
+            }
+            Narrows::Ports(named)
+        }
         other => {
             return Err(format!(
                 "{at}: narrows {other}, expected `all` or a list of ports"
@@ -228,6 +297,15 @@ fn setting(at: &str, v: &Value) -> Result<Setting, String> {
         narrows,
         summary: v["summary"].as_str().unwrap_or("").to_string(),
     };
+    if let (Some(a), Some(b)) = (s.ty.min, s.ty.max)
+        && a > b
+    {
+        return Err(format!(
+            "{at}: min {} is above max {}: no value is in range",
+            plain(a),
+            plain(b)
+        ));
+    }
     if let Some(d) = &s.default {
         s.ty.accepts(d)
             .map_err(|e| format!("{at}: default {d}: {e}"))?;
@@ -403,6 +481,71 @@ impl Type {
 /// Whether `w` is written as an enum variant is: `Execute`, `AgentMessage`.
 fn is_variant(w: &str) -> bool {
     w.starts_with(|c: char| c.is_ascii_uppercase()) && w.chars().all(|c| c.is_ascii_alphanumeric())
+}
+
+/// The word of a block's enum that `v` writes as the block writes the variant, if it does.
+fn word_of(values: &[String], v: &Value) -> Option<String> {
+    let w = v.as_str().filter(|w| is_variant(w))?;
+    let word = snake(w);
+    values.contains(&word).then_some(word)
+}
+
+/// `doc` with every setting of a block's enum in its one spelling, the word: a variant as the
+/// block writes it (`SharedReadOnly`, `Execute`) becomes `shared_read_only`, `execute`, as the
+/// value of a part, of a marked place and among its candidates, in a resolved nested document
+/// too. The check takes both spellings; every reader after it reads this one. A word of
+/// `values`, a value outside the type and a part of a block the table does not list stay as
+/// written.
+pub fn canonical(doc: &Value) -> Value {
+    let mut out = doc.clone();
+    canonicalize(&mut out);
+    out
+}
+
+fn canonicalize(doc: &mut Value) {
+    let table = table();
+    let Some(parts) = doc.get_mut("parts").and_then(Value::as_object_mut) else {
+        return;
+    };
+    for p in parts.values_mut() {
+        let Some(part) = p.as_object_mut() else {
+            continue;
+        };
+        if let Some(inner) = part.get_mut(crate::nest::INNER) {
+            canonicalize(inner);
+        }
+        let Some(block) = part
+            .get("block")
+            .and_then(Value::as_str)
+            .map(str::to_string)
+        else {
+            continue;
+        };
+        for (key, v) in part.iter_mut() {
+            let Some(Kind::Enum {
+                values,
+                from: Some(_),
+            }) = table.setting(&block, key).map(|s| &s.ty.kind)
+            else {
+                continue;
+            };
+            let fix = |x: &mut Value| {
+                if let Some(w) = word_of(values, x) {
+                    *x = Value::String(w);
+                }
+            };
+            if v.get("vary").is_some() {
+                if let Some(x) = v.get_mut("value") {
+                    fix(x);
+                }
+                if let Some(Value::Array(xs)) = v.get_mut("vary") {
+                    xs.iter_mut().for_each(fix);
+                }
+            } else {
+                fix(v);
+            }
+        }
+    }
 }
 
 impl Table {

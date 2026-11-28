@@ -1,0 +1,9 @@
+format: agenticspec-binding/1
+binding: unit-mount-collision
+architecture: workstation
+refines: egress/workstation.yaml
+summary: >-
+  The coding agent asks for a scratch directory inside the mount of the tree, a volume of the same
+  unit, so part of the directory would outlive an instance or part of the tree would not.
+parts:
+  worker: {scratch: [{mount: /workspace/tmp}]}

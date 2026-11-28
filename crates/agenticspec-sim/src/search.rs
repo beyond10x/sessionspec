@@ -47,8 +47,9 @@ pub struct Search {
 pub struct Experiment {
     /// The experiment document as written.
     pub doc: Value,
-    /// The architecture document as written, markers included; a nested architecture resolved
-    /// beside its part (`crate::nest::load`).
+    /// The architecture document as written, markers included, each setting of a block's enum as
+    /// its word (`crate::settings::canonical`); a nested architecture resolved beside its part
+    /// (`crate::nest::load`).
     pub architecture: Value,
     pub profile: Value,
     pub horizon: f64,
@@ -101,6 +102,7 @@ impl Experiment {
         profile: Value,
         profile_dir: Option<&Path>,
     ) -> Result<Self, String> {
+        let architecture = crate::settings::canonical(&architecture);
         for (d, want) in [
             (&doc, "agenticspec-experiment/1"),
             (&architecture, "agenticspec-architecture/1"),

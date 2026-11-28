@@ -3218,6 +3218,170 @@
         }
       }
     },
+    "sim_score": {
+      "target": {
+        "kind": "local",
+        "owner": "agenticspec.cli",
+        "action": "sim_score"
+      },
+      "input": {
+        "type_ref": "agenticspec.cli.SimScoreInput",
+        "shape": {
+          "kind": "struct",
+          "fields": {
+            "architecture": {
+              "kind": "optional",
+              "of": {
+                "kind": "string"
+              }
+            },
+            "batch": {
+              "kind": "boolean"
+            },
+            "documents": {
+              "kind": "list",
+              "of": {
+                "kind": "string"
+              }
+            },
+            "horizon": {
+              "kind": "optional",
+              "of": {
+                "kind": "string"
+              }
+            },
+            "profile": {
+              "kind": "string"
+            },
+            "seed": {
+              "kind": "optional",
+              "of": {
+                "kind": "integer"
+              }
+            }
+          }
+        }
+      },
+      "result": {
+        "type_ref": "agenticspec.cli.SimScoreResult",
+        "shape": {
+          "kind": "struct",
+          "fields": {
+            "kpis": {
+              "kind": "optional",
+              "of": {
+                "kind": "json"
+              }
+            },
+            "per_part": {
+              "kind": "optional",
+              "of": {
+                "kind": "json"
+              }
+            },
+            "results": {
+              "kind": "optional",
+              "of": {
+                "kind": "list",
+                "of": {
+                  "kind": "json"
+                }
+              }
+            }
+          }
+        }
+      },
+      "errors": {
+        "architecture_refused": {
+          "type_ref": "agenticspec.cli.Refusal",
+          "shape": {
+            "kind": "struct",
+            "fields": {
+              "detail": {
+                "kind": "string"
+              }
+            }
+          }
+        },
+        "document_unreadable": {
+          "type_ref": "agenticspec.cli.Refusal",
+          "shape": {
+            "kind": "struct",
+            "fields": {
+              "detail": {
+                "kind": "string"
+              }
+            }
+          }
+        },
+        "documents_missing": {
+          "type_ref": "agenticspec.cli.Refusal",
+          "shape": {
+            "kind": "struct",
+            "fields": {
+              "detail": {
+                "kind": "string"
+              }
+            }
+          }
+        },
+        "horizon_invalid": {
+          "type_ref": "agenticspec.cli.Refusal",
+          "shape": {
+            "kind": "struct",
+            "fields": {
+              "detail": {
+                "kind": "string"
+              }
+            }
+          }
+        },
+        "kpis_unreadable": {
+          "type_ref": "agenticspec.cli.Refusal",
+          "shape": {
+            "kind": "struct",
+            "fields": {
+              "detail": {
+                "kind": "string"
+              }
+            }
+          }
+        },
+        "ports_unreadable": {
+          "type_ref": "agenticspec.cli.Refusal",
+          "shape": {
+            "kind": "struct",
+            "fields": {
+              "detail": {
+                "kind": "string"
+              }
+            }
+          }
+        },
+        "profile_refused": {
+          "type_ref": "agenticspec.cli.Refusal",
+          "shape": {
+            "kind": "struct",
+            "fields": {
+              "detail": {
+                "kind": "string"
+              }
+            }
+          }
+        },
+        "simulation_refused": {
+          "type_ref": "agenticspec.cli.Refusal",
+          "shape": {
+            "kind": "struct",
+            "fields": {
+              "detail": {
+                "kind": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "sim_trace": {
       "target": {
         "kind": "local",
@@ -4986,6 +5150,58 @@
     {
       "path": [
         "sim",
+        "score"
+      ],
+      "aliases": [],
+      "callable": "sim_score",
+      "about": "Simulate each architecture once as written, a marked place at its value, and print its KPIs and per-part KPIs as JSON; with --batch or more than one document a list in their order",
+      "arguments": [
+        {
+          "field": "architecture",
+          "source": {
+            "kind": "positional",
+            "index": 1
+          }
+        },
+        {
+          "field": "profile",
+          "source": {
+            "kind": "option",
+            "long": "profile"
+          }
+        },
+        {
+          "field": "seed",
+          "source": {
+            "kind": "option",
+            "long": "seed"
+          }
+        },
+        {
+          "field": "horizon",
+          "source": {
+            "kind": "option",
+            "long": "horizon"
+          }
+        },
+        {
+          "field": "batch",
+          "source": {
+            "kind": "flag",
+            "long": "batch"
+          }
+        },
+        {
+          "field": "documents",
+          "source": {
+            "kind": "trailing"
+          }
+        }
+      ]
+    },
+    {
+      "path": [
+        "sim",
         "trace"
       ],
       "aliases": [],
@@ -5384,6 +5600,7 @@
     "handler:sim_render: implement the owner-qualified callable and its declared result/error contract",
     "handler:sim_run: implement the owner-qualified callable and its declared result/error contract",
     "handler:sim_scenario: implement the owner-qualified callable and its declared result/error contract",
+    "handler:sim_score: implement the owner-qualified callable and its declared result/error contract",
     "handler:sim_trace: implement the owner-qualified callable and its declared result/error contract",
     "handler:sync: implement the owner-qualified callable and its declared result/error contract",
     "handler:ui_build: implement the owner-qualified callable and its declared result/error contract",

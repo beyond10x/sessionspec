@@ -1,5 +1,5 @@
 // generated from agenticspec v1
-// contract digest 6107cda5fc3da4e3cc9ada6dcc08af755bfd9d53f930d1be89b1d7b1f074179f
+// contract digest ccb8808b577e000f62b25eea26b56257870a4af7bcbda0f276d5b2bb26a8a862
 // do not edit: regenerate with `ess synthesize`
 
 //! How the specification's primitives are spelled in this workspace.

@@ -1,5 +1,5 @@
 // generated from agenticspec v1
-// contract digest 6107cda5fc3da4e3cc9ada6dcc08af755bfd9d53f930d1be89b1d7b1f074179f
+// contract digest ccb8808b577e000f62b25eea26b56257870a4af7bcbda0f276d5b2bb26a8a862
 // do not edit: regenerate with `ess synthesize`
 
 //! Ephemeral stores for the generated network entry points; no durability.
@@ -8,9 +8,9 @@
 #[derive(Clone, Default)]
 pub struct MemoryAgentStorage(std::rc::Rc<std::cell::RefCell<Vec<agenticspec_types::session::AgentSnapshot>>>);
 impl agenticspec_types::behaviour::AgentStorage for MemoryAgentStorage {
-fn get(&self, identity: &agenticspec_types::session::AgentId) -> Option<agenticspec_types::session::AgentSnapshot> { let key = memory_key_101(identity); self.0.borrow().iter().find(|row| memory_key_101(&row.data.agent_id) == key).cloned() }
-fn put(&mut self, snapshot: agenticspec_types::session::AgentSnapshot) { self.delete(&snapshot.data.agent_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_101(&row.data.agent_id).cmp(&memory_key_101(&other.data.agent_id))); }
-fn delete(&mut self, identity: &agenticspec_types::session::AgentId) { let key = memory_key_101(identity); self.0.borrow_mut().retain(|row| memory_key_101(&row.data.agent_id) != key); }
+fn get(&self, identity: &agenticspec_types::session::AgentId) -> Option<agenticspec_types::session::AgentSnapshot> { let key = memory_key_103(identity); self.0.borrow().iter().find(|row| memory_key_103(&row.data.agent_id) == key).cloned() }
+fn put(&mut self, snapshot: agenticspec_types::session::AgentSnapshot) { self.delete(&snapshot.data.agent_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_103(&row.data.agent_id).cmp(&memory_key_103(&other.data.agent_id))); }
+fn delete(&mut self, identity: &agenticspec_types::session::AgentId) { let key = memory_key_103(identity); self.0.borrow_mut().retain(|row| memory_key_103(&row.data.agent_id) != key); }
 fn list(&self) -> Vec<agenticspec_types::session::AgentSnapshot> { self.0.borrow().clone() }
 }
 impl agenticspec_types::behaviour::AgentStorage for MemoryPorts {
@@ -24,9 +24,9 @@ fn list(&self) -> Vec<agenticspec_types::session::AgentSnapshot> { agenticspec_t
 #[derive(Clone, Default)]
 pub struct MemoryExposureStorage(std::rc::Rc<std::cell::RefCell<Vec<agenticspec_types::session::ExposureSnapshot>>>);
 impl agenticspec_types::behaviour::ExposureStorage for MemoryExposureStorage {
-fn get(&self, identity: &agenticspec_types::session::ExposureId) -> Option<agenticspec_types::session::ExposureSnapshot> { let key = memory_key_110(identity); self.0.borrow().iter().find(|row| memory_key_110(&row.data.exposure_id) == key).cloned() }
-fn put(&mut self, snapshot: agenticspec_types::session::ExposureSnapshot) { self.delete(&snapshot.data.exposure_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_110(&row.data.exposure_id).cmp(&memory_key_110(&other.data.exposure_id))); }
-fn delete(&mut self, identity: &agenticspec_types::session::ExposureId) { let key = memory_key_110(identity); self.0.borrow_mut().retain(|row| memory_key_110(&row.data.exposure_id) != key); }
+fn get(&self, identity: &agenticspec_types::session::ExposureId) -> Option<agenticspec_types::session::ExposureSnapshot> { let key = memory_key_112(identity); self.0.borrow().iter().find(|row| memory_key_112(&row.data.exposure_id) == key).cloned() }
+fn put(&mut self, snapshot: agenticspec_types::session::ExposureSnapshot) { self.delete(&snapshot.data.exposure_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_112(&row.data.exposure_id).cmp(&memory_key_112(&other.data.exposure_id))); }
+fn delete(&mut self, identity: &agenticspec_types::session::ExposureId) { let key = memory_key_112(identity); self.0.borrow_mut().retain(|row| memory_key_112(&row.data.exposure_id) != key); }
 fn list(&self) -> Vec<agenticspec_types::session::ExposureSnapshot> { self.0.borrow().clone() }
 }
 impl agenticspec_types::behaviour::ExposureStorage for MemoryPorts {
@@ -40,9 +40,9 @@ fn list(&self) -> Vec<agenticspec_types::session::ExposureSnapshot> { agenticspe
 #[derive(Clone, Default)]
 pub struct MemorySessionStorage(std::rc::Rc<std::cell::RefCell<Vec<agenticspec_types::session::SessionSnapshot>>>);
 impl agenticspec_types::behaviour::SessionStorage for MemorySessionStorage {
-fn get(&self, identity: &agenticspec_types::session::SessionId) -> Option<agenticspec_types::session::SessionSnapshot> { let key = memory_key_116(identity); self.0.borrow().iter().find(|row| memory_key_116(&row.data.session_id) == key).cloned() }
-fn put(&mut self, snapshot: agenticspec_types::session::SessionSnapshot) { self.delete(&snapshot.data.session_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_116(&row.data.session_id).cmp(&memory_key_116(&other.data.session_id))); }
-fn delete(&mut self, identity: &agenticspec_types::session::SessionId) { let key = memory_key_116(identity); self.0.borrow_mut().retain(|row| memory_key_116(&row.data.session_id) != key); }
+fn get(&self, identity: &agenticspec_types::session::SessionId) -> Option<agenticspec_types::session::SessionSnapshot> { let key = memory_key_118(identity); self.0.borrow().iter().find(|row| memory_key_118(&row.data.session_id) == key).cloned() }
+fn put(&mut self, snapshot: agenticspec_types::session::SessionSnapshot) { self.delete(&snapshot.data.session_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_118(&row.data.session_id).cmp(&memory_key_118(&other.data.session_id))); }
+fn delete(&mut self, identity: &agenticspec_types::session::SessionId) { let key = memory_key_118(identity); self.0.borrow_mut().retain(|row| memory_key_118(&row.data.session_id) != key); }
 fn list(&self) -> Vec<agenticspec_types::session::SessionSnapshot> { self.0.borrow().clone() }
 }
 impl agenticspec_types::behaviour::SessionStorage for MemoryPorts {
@@ -56,9 +56,9 @@ fn list(&self) -> Vec<agenticspec_types::session::SessionSnapshot> { agenticspec
 #[derive(Clone, Default)]
 pub struct MemoryToolCallStorage(std::rc::Rc<std::cell::RefCell<Vec<agenticspec_types::session::ToolCallSnapshot>>>);
 impl agenticspec_types::behaviour::ToolCallStorage for MemoryToolCallStorage {
-fn get(&self, identity: &agenticspec_types::session::ToolCallId) -> Option<agenticspec_types::session::ToolCallSnapshot> { let key = memory_key_119(identity); self.0.borrow().iter().find(|row| memory_key_119(&row.data.tool_call_id) == key).cloned() }
-fn put(&mut self, snapshot: agenticspec_types::session::ToolCallSnapshot) { self.delete(&snapshot.data.tool_call_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_119(&row.data.tool_call_id).cmp(&memory_key_119(&other.data.tool_call_id))); }
-fn delete(&mut self, identity: &agenticspec_types::session::ToolCallId) { let key = memory_key_119(identity); self.0.borrow_mut().retain(|row| memory_key_119(&row.data.tool_call_id) != key); }
+fn get(&self, identity: &agenticspec_types::session::ToolCallId) -> Option<agenticspec_types::session::ToolCallSnapshot> { let key = memory_key_121(identity); self.0.borrow().iter().find(|row| memory_key_121(&row.data.tool_call_id) == key).cloned() }
+fn put(&mut self, snapshot: agenticspec_types::session::ToolCallSnapshot) { self.delete(&snapshot.data.tool_call_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_121(&row.data.tool_call_id).cmp(&memory_key_121(&other.data.tool_call_id))); }
+fn delete(&mut self, identity: &agenticspec_types::session::ToolCallId) { let key = memory_key_121(identity); self.0.borrow_mut().retain(|row| memory_key_121(&row.data.tool_call_id) != key); }
 fn list(&self) -> Vec<agenticspec_types::session::ToolCallSnapshot> { self.0.borrow().clone() }
 }
 impl agenticspec_types::behaviour::ToolCallStorage for MemoryPorts {
@@ -72,9 +72,9 @@ fn list(&self) -> Vec<agenticspec_types::session::ToolCallSnapshot> { agenticspe
 #[derive(Clone, Default)]
 pub struct MemoryAgentListingStorage(std::rc::Rc<std::cell::RefCell<Vec<agenticspec_types::view::AgentListingSnapshot>>>);
 impl agenticspec_types::behaviour::AgentListingStorage for MemoryAgentListingStorage {
-fn get(&self, identity: &agenticspec_types::session::AgentId) -> Option<agenticspec_types::view::AgentListingSnapshot> { let key = memory_key_101(identity); self.0.borrow().iter().find(|row| memory_key_101(&row.data.agent_id) == key).cloned() }
-fn put(&mut self, snapshot: agenticspec_types::view::AgentListingSnapshot) { self.delete(&snapshot.data.agent_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_101(&row.data.agent_id).cmp(&memory_key_101(&other.data.agent_id))); }
-fn delete(&mut self, identity: &agenticspec_types::session::AgentId) { let key = memory_key_101(identity); self.0.borrow_mut().retain(|row| memory_key_101(&row.data.agent_id) != key); }
+fn get(&self, identity: &agenticspec_types::session::AgentId) -> Option<agenticspec_types::view::AgentListingSnapshot> { let key = memory_key_103(identity); self.0.borrow().iter().find(|row| memory_key_103(&row.data.agent_id) == key).cloned() }
+fn put(&mut self, snapshot: agenticspec_types::view::AgentListingSnapshot) { self.delete(&snapshot.data.agent_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_103(&row.data.agent_id).cmp(&memory_key_103(&other.data.agent_id))); }
+fn delete(&mut self, identity: &agenticspec_types::session::AgentId) { let key = memory_key_103(identity); self.0.borrow_mut().retain(|row| memory_key_103(&row.data.agent_id) != key); }
 fn list(&self) -> Vec<agenticspec_types::view::AgentListingSnapshot> { self.0.borrow().clone() }
 }
 impl agenticspec_types::behaviour::AgentListingStorage for MemoryPorts {
@@ -88,9 +88,9 @@ fn list(&self) -> Vec<agenticspec_types::view::AgentListingSnapshot> { agenticsp
 #[derive(Clone, Default)]
 pub struct MemoryEventRowStorage(std::rc::Rc<std::cell::RefCell<Vec<agenticspec_types::view::EventRowSnapshot>>>);
 impl agenticspec_types::behaviour::EventRowStorage for MemoryEventRowStorage {
-fn get(&self, identity: &agenticspec_types::view::EventId) -> Option<agenticspec_types::view::EventRowSnapshot> { let key = memory_key_131(identity); self.0.borrow().iter().find(|row| memory_key_131(&row.data.event_id) == key).cloned() }
-fn put(&mut self, snapshot: agenticspec_types::view::EventRowSnapshot) { self.delete(&snapshot.data.event_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_131(&row.data.event_id).cmp(&memory_key_131(&other.data.event_id))); }
-fn delete(&mut self, identity: &agenticspec_types::view::EventId) { let key = memory_key_131(identity); self.0.borrow_mut().retain(|row| memory_key_131(&row.data.event_id) != key); }
+fn get(&self, identity: &agenticspec_types::view::EventId) -> Option<agenticspec_types::view::EventRowSnapshot> { let key = memory_key_133(identity); self.0.borrow().iter().find(|row| memory_key_133(&row.data.event_id) == key).cloned() }
+fn put(&mut self, snapshot: agenticspec_types::view::EventRowSnapshot) { self.delete(&snapshot.data.event_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_133(&row.data.event_id).cmp(&memory_key_133(&other.data.event_id))); }
+fn delete(&mut self, identity: &agenticspec_types::view::EventId) { let key = memory_key_133(identity); self.0.borrow_mut().retain(|row| memory_key_133(&row.data.event_id) != key); }
 fn list(&self) -> Vec<agenticspec_types::view::EventRowSnapshot> { self.0.borrow().clone() }
 }
 impl agenticspec_types::behaviour::EventRowStorage for MemoryPorts {
@@ -104,9 +104,9 @@ fn list(&self) -> Vec<agenticspec_types::view::EventRowSnapshot> { agenticspec_t
 #[derive(Clone, Default)]
 pub struct MemoryFigureBucketStorage(std::rc::Rc<std::cell::RefCell<Vec<agenticspec_types::view::FigureBucketSnapshot>>>);
 impl agenticspec_types::behaviour::FigureBucketStorage for MemoryFigureBucketStorage {
-fn get(&self, identity: &agenticspec_types::view::BucketId) -> Option<agenticspec_types::view::FigureBucketSnapshot> { let key = memory_key_125(identity); self.0.borrow().iter().find(|row| memory_key_125(&row.data.bucket_id) == key).cloned() }
-fn put(&mut self, snapshot: agenticspec_types::view::FigureBucketSnapshot) { self.delete(&snapshot.data.bucket_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_125(&row.data.bucket_id).cmp(&memory_key_125(&other.data.bucket_id))); }
-fn delete(&mut self, identity: &agenticspec_types::view::BucketId) { let key = memory_key_125(identity); self.0.borrow_mut().retain(|row| memory_key_125(&row.data.bucket_id) != key); }
+fn get(&self, identity: &agenticspec_types::view::BucketId) -> Option<agenticspec_types::view::FigureBucketSnapshot> { let key = memory_key_127(identity); self.0.borrow().iter().find(|row| memory_key_127(&row.data.bucket_id) == key).cloned() }
+fn put(&mut self, snapshot: agenticspec_types::view::FigureBucketSnapshot) { self.delete(&snapshot.data.bucket_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_127(&row.data.bucket_id).cmp(&memory_key_127(&other.data.bucket_id))); }
+fn delete(&mut self, identity: &agenticspec_types::view::BucketId) { let key = memory_key_127(identity); self.0.borrow_mut().retain(|row| memory_key_127(&row.data.bucket_id) != key); }
 fn list(&self) -> Vec<agenticspec_types::view::FigureBucketSnapshot> { self.0.borrow().clone() }
 }
 impl agenticspec_types::behaviour::FigureBucketStorage for MemoryPorts {
@@ -120,9 +120,9 @@ fn list(&self) -> Vec<agenticspec_types::view::FigureBucketSnapshot> { agenticsp
 #[derive(Clone, Default)]
 pub struct MemorySessionCheckStorage(std::rc::Rc<std::cell::RefCell<Vec<agenticspec_types::view::SessionCheckSnapshot>>>);
 impl agenticspec_types::behaviour::SessionCheckStorage for MemorySessionCheckStorage {
-fn get(&self, identity: &agenticspec_types::view::CheckId) -> Option<agenticspec_types::view::SessionCheckSnapshot> { let key = memory_key_126(identity); self.0.borrow().iter().find(|row| memory_key_126(&row.data.check_id) == key).cloned() }
-fn put(&mut self, snapshot: agenticspec_types::view::SessionCheckSnapshot) { self.delete(&snapshot.data.check_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_126(&row.data.check_id).cmp(&memory_key_126(&other.data.check_id))); }
-fn delete(&mut self, identity: &agenticspec_types::view::CheckId) { let key = memory_key_126(identity); self.0.borrow_mut().retain(|row| memory_key_126(&row.data.check_id) != key); }
+fn get(&self, identity: &agenticspec_types::view::CheckId) -> Option<agenticspec_types::view::SessionCheckSnapshot> { let key = memory_key_128(identity); self.0.borrow().iter().find(|row| memory_key_128(&row.data.check_id) == key).cloned() }
+fn put(&mut self, snapshot: agenticspec_types::view::SessionCheckSnapshot) { self.delete(&snapshot.data.check_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_128(&row.data.check_id).cmp(&memory_key_128(&other.data.check_id))); }
+fn delete(&mut self, identity: &agenticspec_types::view::CheckId) { let key = memory_key_128(identity); self.0.borrow_mut().retain(|row| memory_key_128(&row.data.check_id) != key); }
 fn list(&self) -> Vec<agenticspec_types::view::SessionCheckSnapshot> { self.0.borrow().clone() }
 }
 impl agenticspec_types::behaviour::SessionCheckStorage for MemoryPorts {
@@ -136,9 +136,9 @@ fn list(&self) -> Vec<agenticspec_types::view::SessionCheckSnapshot> { agenticsp
 #[derive(Clone, Default)]
 pub struct MemorySessionListingStorage(std::rc::Rc<std::cell::RefCell<Vec<agenticspec_types::view::SessionListingSnapshot>>>);
 impl agenticspec_types::behaviour::SessionListingStorage for MemorySessionListingStorage {
-fn get(&self, identity: &agenticspec_types::session::SessionId) -> Option<agenticspec_types::view::SessionListingSnapshot> { let key = memory_key_116(identity); self.0.borrow().iter().find(|row| memory_key_116(&row.data.session_id) == key).cloned() }
-fn put(&mut self, snapshot: agenticspec_types::view::SessionListingSnapshot) { self.delete(&snapshot.data.session_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_116(&row.data.session_id).cmp(&memory_key_116(&other.data.session_id))); }
-fn delete(&mut self, identity: &agenticspec_types::session::SessionId) { let key = memory_key_116(identity); self.0.borrow_mut().retain(|row| memory_key_116(&row.data.session_id) != key); }
+fn get(&self, identity: &agenticspec_types::session::SessionId) -> Option<agenticspec_types::view::SessionListingSnapshot> { let key = memory_key_118(identity); self.0.borrow().iter().find(|row| memory_key_118(&row.data.session_id) == key).cloned() }
+fn put(&mut self, snapshot: agenticspec_types::view::SessionListingSnapshot) { self.delete(&snapshot.data.session_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_118(&row.data.session_id).cmp(&memory_key_118(&other.data.session_id))); }
+fn delete(&mut self, identity: &agenticspec_types::session::SessionId) { let key = memory_key_118(identity); self.0.borrow_mut().retain(|row| memory_key_118(&row.data.session_id) != key); }
 fn list(&self) -> Vec<agenticspec_types::view::SessionListingSnapshot> { self.0.borrow().clone() }
 }
 impl agenticspec_types::behaviour::SessionListingStorage for MemoryPorts {
@@ -152,9 +152,9 @@ fn list(&self) -> Vec<agenticspec_types::view::SessionListingSnapshot> { agentic
 #[derive(Clone, Default)]
 pub struct MemoryTimelineSlotStorage(std::rc::Rc<std::cell::RefCell<Vec<agenticspec_types::view::TimelineSlotSnapshot>>>);
 impl agenticspec_types::behaviour::TimelineSlotStorage for MemoryTimelineSlotStorage {
-fn get(&self, identity: &agenticspec_types::view::SlotId) -> Option<agenticspec_types::view::TimelineSlotSnapshot> { let key = memory_key_137(identity); self.0.borrow().iter().find(|row| memory_key_137(&row.data.slot_id) == key).cloned() }
-fn put(&mut self, snapshot: agenticspec_types::view::TimelineSlotSnapshot) { self.delete(&snapshot.data.slot_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_137(&row.data.slot_id).cmp(&memory_key_137(&other.data.slot_id))); }
-fn delete(&mut self, identity: &agenticspec_types::view::SlotId) { let key = memory_key_137(identity); self.0.borrow_mut().retain(|row| memory_key_137(&row.data.slot_id) != key); }
+fn get(&self, identity: &agenticspec_types::view::SlotId) -> Option<agenticspec_types::view::TimelineSlotSnapshot> { let key = memory_key_139(identity); self.0.borrow().iter().find(|row| memory_key_139(&row.data.slot_id) == key).cloned() }
+fn put(&mut self, snapshot: agenticspec_types::view::TimelineSlotSnapshot) { self.delete(&snapshot.data.slot_id); let mut rows = self.0.borrow_mut(); rows.push(snapshot); rows.sort_by(|row, other| memory_key_139(&row.data.slot_id).cmp(&memory_key_139(&other.data.slot_id))); }
+fn delete(&mut self, identity: &agenticspec_types::view::SlotId) { let key = memory_key_139(identity); self.0.borrow_mut().retain(|row| memory_key_139(&row.data.slot_id) != key); }
 fn list(&self) -> Vec<agenticspec_types::view::TimelineSlotSnapshot> { self.0.borrow().clone() }
 }
 impl agenticspec_types::behaviour::TimelineSlotStorage for MemoryPorts {
@@ -189,21 +189,21 @@ pub session_listing_storage: MemorySessionListingStorage,
 pub timeline_slot_storage: MemoryTimelineSlotStorage,
 }
 
-fn memory_key_101(value: &agenticspec_types::session::AgentId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
+fn memory_key_103(value: &agenticspec_types::session::AgentId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
 
-fn memory_key_110(value: &agenticspec_types::session::ExposureId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
+fn memory_key_112(value: &agenticspec_types::session::ExposureId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
 
-fn memory_key_116(value: &agenticspec_types::session::SessionId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
+fn memory_key_118(value: &agenticspec_types::session::SessionId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
 
-fn memory_key_119(value: &agenticspec_types::session::ToolCallId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
+fn memory_key_121(value: &agenticspec_types::session::ToolCallId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
 
-fn memory_key_125(value: &agenticspec_types::view::BucketId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
+fn memory_key_127(value: &agenticspec_types::view::BucketId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
 
-fn memory_key_126(value: &agenticspec_types::view::CheckId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
+fn memory_key_128(value: &agenticspec_types::view::CheckId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
 
-fn memory_key_131(value: &agenticspec_types::view::EventId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
+fn memory_key_133(value: &agenticspec_types::view::EventId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
 
-fn memory_key_137(value: &agenticspec_types::view::SlotId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
+fn memory_key_139(value: &agenticspec_types::view::SlotId) -> MemoryKey { let _ = value; MemoryKey::Text((&value.0).clone()) }
 
 // A common structural order; individual specifications use only a subset of the variants.
 #[allow(dead_code)]

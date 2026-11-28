@@ -273,7 +273,7 @@ A part `runtime`:
 | `per_day_usd` | number of at least 0 | USD |  |  | The spend cap of the runtime's runs per calendar day; without it, no cap. |
 | `per_month_usd` | number of at least 0 | USD |  |  | The spend cap of the runtime's runs per calendar month; without it, no cap. |
 | `route` | enum: `stop`, `ask`, `notify` |  | `stop` |  | What happens at a spend cap: further spending stops (stop), a question goes to the principal the runtime acts for (ask), or spending goes on and a notification is sent (notify). |
-| `count` | integer of at least 0 |  | `1` |  | How many copies of the part run. |
+| `count` | integer of at least 1 |  | `1` |  | How many copies of the part run. |
 | `per` | part |  |  |  | One copy of the part for each copy of the named part. |
 | `notes` | notes |  |  |  | Free notes on the part, a map with keys and values of any kind: what no setting of its block types. The check takes any map; the simulator, the search and the contract never read it. |
 

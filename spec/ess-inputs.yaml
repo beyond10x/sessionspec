@@ -5,4 +5,7 @@ specification:
   - domains/session.yaml
   - domains/cli.yaml
   - domains/view.yaml
-scenarios: []
+scenarios:
+  - scenarios/grants/who-submits-a-prompt.yaml
+  - scenarios/grants/only-the-agent-loop-records-its-turns.yaml
+  - scenarios/grants/only-the-redactor-records-an-exposure.yaml

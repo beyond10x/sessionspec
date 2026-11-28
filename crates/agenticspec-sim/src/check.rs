@@ -105,6 +105,14 @@ pub enum Refusal {
     AgentWithoutModelPath { part: String },
     /// A `question` link ends at a part that cannot answer (only principals and agents answer).
     QuestionWithoutAnswerer { link: usize, part: String },
+    /// In an architecture that has a principal part, a `question` link ends at an agent that acts
+    /// for no principal and has no `question` link of its own to a principal part, to which it
+    /// would forward what it cannot answer. Its rule is `question_without_answerer`, as the
+    /// block names it.
+    QuestionNotForwarded { link: usize, part: String },
+    /// In an architecture that has a principal part, a part on the border that no principal
+    /// part links to and no `grant` link reaches.
+    NotReachedByPrincipal { part: String },
     /// A `review` link ends at a part that is not an agent with `role: reviewer`.
     ReviewWithoutReviewer { link: usize, part: String },
     /// `border` names no part.
@@ -123,6 +131,19 @@ pub enum Refusal {
     SwarmNeedsAgent { part: String },
     /// No link, `per`, `acts_for`, `egress` or `border` reaches the part.
     UnreachablePart { part: String },
+    /// The document has no part; `part` is the architecture's name.
+    EmptyArchitecture { part: String },
+    /// A link goes from a part to itself (`link` is its index), or a part's `per` or `acts_for`
+    /// names the part itself (`link` is `None`).
+    SelfReference { link: Option<usize>, part: String },
+    /// A link's `over` names a part that is not a channel; `part` is that part.
+    NotAChannel { link: usize, part: String },
+    /// A link has the `from`, `to` and `carries` of an earlier link; `part` is its `from`.
+    LinkExists { link: usize, part: String },
+    /// An agent's `acts_for` names a part that is not a principal.
+    ActsForNotPrincipal { part: String, names: String },
+    /// A gateway part has no `model_call` link to a model part.
+    GatewayWithoutModel { part: String },
 }
 
 /// The values of `coordination` on an agent part (agentic.architecture.Coordination).
@@ -153,6 +174,13 @@ pub const GATE_KPIS: &[&str] = &[
     "invalid_schedule",
     "swarm_needs_agent",
     "unreachable_parts",
+    "empty_architecture",
+    "self_reference",
+    "not_a_channel",
+    "link_exists",
+    "acts_for_not_principal",
+    "not_reached_by_principal",
+    "gateway_without_model",
 ];
 
 impl Refusal {
@@ -167,7 +195,10 @@ impl Refusal {
             Refusal::ActsForWithoutPart { .. } => "acts_for_without_part",
             Refusal::EgressWithoutPart { .. } => "egress_without_part",
             Refusal::AgentWithoutModelPath { .. } => "agent_without_model_path",
-            Refusal::QuestionWithoutAnswerer { .. } => "question_without_answerer",
+            Refusal::QuestionWithoutAnswerer { .. } | Refusal::QuestionNotForwarded { .. } => {
+                "question_without_answerer"
+            }
+            Refusal::NotReachedByPrincipal { .. } => "not_reached_by_principal",
             Refusal::ReviewWithoutReviewer { .. } => "review_without_reviewer",
             Refusal::BorderWithoutPart { .. } => "border_without_part",
             Refusal::TriggerSourceNotTrigger { .. } => "trigger_source_not_trigger",
@@ -177,6 +208,12 @@ impl Refusal {
             Refusal::InvalidSchedule { .. } => "invalid_schedule",
             Refusal::SwarmNeedsAgent { .. } => "swarm_needs_agent",
             Refusal::UnreachablePart { .. } => "unreachable_parts",
+            Refusal::EmptyArchitecture { .. } => "empty_architecture",
+            Refusal::SelfReference { .. } => "self_reference",
+            Refusal::NotAChannel { .. } => "not_a_channel",
+            Refusal::LinkExists { .. } => "link_exists",
+            Refusal::ActsForNotPrincipal { .. } => "acts_for_not_principal",
+            Refusal::GatewayWithoutModel { .. } => "gateway_without_model",
         }
     }
 
@@ -192,6 +229,8 @@ impl Refusal {
             | Refusal::EgressWithoutPart { part, .. }
             | Refusal::AgentWithoutModelPath { part }
             | Refusal::QuestionWithoutAnswerer { part, .. }
+            | Refusal::QuestionNotForwarded { part, .. }
+            | Refusal::NotReachedByPrincipal { part }
             | Refusal::ReviewWithoutReviewer { part, .. }
             | Refusal::BorderWithoutPart { part }
             | Refusal::TriggerSourceNotTrigger { part, .. }
@@ -200,7 +239,13 @@ impl Refusal {
             | Refusal::InvalidConcurrency { part }
             | Refusal::InvalidSchedule { part }
             | Refusal::SwarmNeedsAgent { part }
-            | Refusal::UnreachablePart { part } => part,
+            | Refusal::UnreachablePart { part }
+            | Refusal::EmptyArchitecture { part }
+            | Refusal::SelfReference { part, .. }
+            | Refusal::NotAChannel { part, .. }
+            | Refusal::LinkExists { part, .. }
+            | Refusal::ActsForNotPrincipal { part, .. }
+            | Refusal::GatewayWithoutModel { part } => part,
         }
     }
 }
@@ -241,6 +286,13 @@ impl fmt::Display for Refusal {
             Refusal::QuestionWithoutAnswerer { link, .. } => {
                 format!("link {link} sends a question to a part that cannot answer")
             }
+            Refusal::QuestionNotForwarded { link, .. } => format!(
+                "link {link} sends a question to an agent that acts for no principal and forwards questions to no principal"
+            ),
+            Refusal::NotReachedByPrincipal { .. } => {
+                "on the border, and no principal part links to it and no grant link reaches it"
+                    .into()
+            }
             Refusal::ReviewWithoutReviewer { link, .. } => {
                 format!(
                     "link {link} sends a review to a part that is not an agent with role reviewer"
@@ -263,6 +315,25 @@ impl fmt::Display for Refusal {
                 COORDINATIONS.join(", ")
             ),
             Refusal::UnreachablePart { .. } => "nothing links to this part".into(),
+            Refusal::EmptyArchitecture { .. } => "an architecture has at least one part".into(),
+            Refusal::SelfReference { link: Some(link), .. } => {
+                format!("link {link} goes from the part to itself")
+            }
+            Refusal::SelfReference { link: None, .. } => {
+                "per or acts_for names the part itself".into()
+            }
+            Refusal::NotAChannel { link, .. } => {
+                format!("link {link} travels over a part that is not a channel")
+            }
+            Refusal::LinkExists { link, .. } => {
+                format!("link {link} repeats the from, to and carries of an earlier link")
+            }
+            Refusal::ActsForNotPrincipal { names, .. } => {
+                format!("acts_for `{names}` names a part that is not a principal")
+            }
+            Refusal::GatewayWithoutModel { .. } => {
+                "a gateway with no model_call link to a model".into()
+            }
         };
         write!(f, "{}: part `{}`: {detail}", self.rule(), self.part())
     }
@@ -369,7 +440,7 @@ fn trigger_source(architecture: &Value, p: &Value) -> Option<String> {
 /// The settings refusals of the parts: a setting the part's block does not declare, and a value
 /// outside its declared type. A marked place is judged by its `value`. A part of a block that is
 /// no part kind is left to `unknown_blocks`.
-fn settings(parts: &serde_json::Map<String, Value>) -> Vec<Refusal> {
+fn settings(architecture: &Value, parts: &serde_json::Map<String, Value>) -> Vec<Refusal> {
     let table = crate::settings::table();
     let mut out = Vec::new();
     for (name, p) in parts {
@@ -411,10 +482,56 @@ fn settings(parts: &serde_json::Map<String, Value>) -> Vec<Refusal> {
                     value: v.to_string(),
                     expected: expected.to_string(),
                 });
+            } else if let Some(expected) = shares_reach(architecture, name, &setting.ty.kind, v) {
+                out.push(Refusal::SettingInvalid {
+                    part: name.clone(),
+                    setting: key.clone(),
+                    value: v.to_string(),
+                    expected,
+                });
             }
         }
     }
     out
+}
+
+/// Why shares `v` of part `name` do not fit the architecture, as `sim run` would refuse them:
+/// a key that names no model part the part reaches over `model_call`, or shares that give every
+/// model it reaches 0 (an empty map among them).
+fn shares_reach(
+    architecture: &Value,
+    name: &str,
+    kind: &crate::settings::Kind,
+    v: &Value,
+) -> Option<String> {
+    let crate::settings::Kind::Shares = kind else {
+        return None;
+    };
+    let shares = v.as_object()?;
+    let reached: Vec<String> = reach(architecture, name, "model_call")
+        .into_iter()
+        .filter(|r| block(architecture, r) == Some("model"))
+        .collect();
+    let names = || {
+        if reached.is_empty() {
+            "none".to_string()
+        } else {
+            reached.join(", ")
+        }
+    };
+    if let Some(k) = shares.keys().find(|k| !reached.contains(k)) {
+        return Some(format!(
+            "a map from the model parts it reaches over model_call ({}) to shares; `{k}` is none of them",
+            names()
+        ));
+    }
+    let total: f64 = shares.values().filter_map(|x| num(value(x))).sum();
+    (!reached.is_empty() && total <= 0.0).then(|| {
+        format!(
+            "a map from the model parts it reaches over model_call ({}) to shares, one above 0",
+            names()
+        )
+    })
 }
 
 /// What setting `key` of a part of block `b` needs beside it, when the part lacks it: a
@@ -428,6 +545,10 @@ fn beside(b: &str, key: &str, p: &Value) -> Option<&'static str> {
 }
 
 pub fn check(architecture: &Value) -> Vec<Refusal> {
+    // The rules of triggers, channels and coordination read the one spelling of each enum
+    // setting, also for a caller that hands in the document as written (agenticstudio).
+    let canonical = crate::settings::canonical(architecture);
+    let architecture = &canonical;
     let empty = serde_json::Map::new();
     let parts = architecture["parts"].as_object().unwrap_or(&empty);
     let known = |n: &str| parts.contains_key(n);
@@ -481,7 +602,7 @@ pub fn check(architecture: &Value) -> Vec<Refusal> {
             });
         }
     }
-    out.extend(settings(parts));
+    out.extend(settings(architecture, parts));
     for (key, make) in [
         (
             "per",
@@ -633,6 +754,151 @@ pub fn check(architecture: &Value) -> Vec<Refusal> {
     for (name, p) in parts {
         if !referenced.contains(name.as_str()) && p.get("per").is_none() {
             out.push(Refusal::UnreachablePart { part: name.clone() });
+        }
+    }
+    out.extend(block_rules(architecture, parts, &links));
+    out
+}
+
+/// The refusals of the architecture block (blocks/9-composition/architecture.yaml) that a
+/// document can write and the rules above do not name: each carries the name of the block's
+/// error, in the order the block's commands meet them (parts, acts-for, links, border, commit). A
+/// name that is no part is left to the `*_without_part` and `unknown_link_parts` rules.
+fn block_rules(
+    architecture: &Value,
+    parts: &serde_json::Map<String, Value>,
+    links: &[Value],
+) -> Vec<Refusal> {
+    let mut out = Vec::new();
+    if parts.is_empty() {
+        out.push(Refusal::EmptyArchitecture {
+            part: s(&architecture["architecture"])
+                .unwrap_or("architecture")
+                .to_string(),
+        });
+    }
+    out.extend(acts_for_rules(architecture, parts));
+    out.extend(link_rules(architecture, links));
+    out.extend(principal_rules(architecture, parts, links));
+    for (name, p) in parts {
+        let to_model = links.iter().any(|l| {
+            s(&l["from"]) == Some(name.as_str())
+                && s(&l["carries"]) == Some("model_call")
+                && s(&l["to"]).and_then(|t| block(architecture, t)) == Some("model")
+        });
+        if s(&p["block"]) == Some("gateway") && !to_model {
+            out.push(Refusal::GatewayWithoutModel { part: name.clone() });
+        }
+    }
+    out
+}
+
+/// `SetBorder` and the question guard of `CommitRevision`, which hold only in an architecture that
+/// has a principal part (one with none is made to be nested: the architecture that nests it links
+/// to its border and forwards its questions). `NotReachedByPrincipal`: a part of `border` that no
+/// principal part links to and no `grant` link reaches (an authority part holds a principal's
+/// grant). `QuestionWithoutAnswerer`: a `question` link to an agent that acts for no principal and
+/// has no `question` link of its own to a principal part, as the simulator forwards a question an
+/// agent cannot answer. The border parts of a nested document are its interface and not checked.
+fn principal_rules(
+    architecture: &Value,
+    parts: &serde_json::Map<String, Value>,
+    links: &[Value],
+) -> Vec<Refusal> {
+    let mut out = Vec::new();
+    let is_principal =
+        |n: Option<&str>| n.and_then(|n| block(architecture, n)) == Some("principal");
+    if !parts.keys().any(|n| is_principal(Some(n))) {
+        return out;
+    }
+    for n in names(&architecture["border"]) {
+        let reached = links.iter().any(|l| {
+            s(&l["to"]) == Some(n)
+                && (is_principal(s(&l["from"])) || s(&l["carries"]) == Some("grant"))
+        });
+        if parts.contains_key(n) && !reached {
+            out.push(Refusal::NotReachedByPrincipal {
+                part: n.to_string(),
+            });
+        }
+    }
+    for (i, l) in links.iter().enumerate() {
+        let Some(to) = s(&l["to"]) else { continue };
+        if s(&l["carries"]) != Some("question") || block(architecture, to) != Some("agent") {
+            continue;
+        }
+        let acts_for = !value(&parts[to]["acts_for"]).is_null();
+        let forwards = links.iter().any(|f| {
+            s(&f["from"]) == Some(to)
+                && s(&f["carries"]) == Some("question")
+                && is_principal(s(&f["to"]))
+        });
+        if !acts_for && !forwards {
+            out.push(Refusal::QuestionNotForwarded {
+                link: i,
+                part: to.to_string(),
+            });
+        }
+    }
+    out
+}
+
+/// `SetPer` and `SetActsFor` of the block: a `per` or `acts_for` naming the part itself; then an
+/// agent's `acts_for` naming a part that is no principal. `acts_for` on a part that is no agent
+/// (the block's `ActsForNeedsAgent`) is `setting_unknown`: `blocks/settings.yaml` declares it
+/// on agents only.
+fn acts_for_rules(architecture: &Value, parts: &serde_json::Map<String, Value>) -> Vec<Refusal> {
+    let mut out = Vec::new();
+    for (name, p) in parts {
+        let own = |key: &str| names(&p[key]).contains(&name.as_str());
+        if own("per") || own("acts_for") {
+            out.push(Refusal::SelfReference {
+                link: None,
+                part: name.clone(),
+            });
+        }
+        if s(&p["block"]) != Some("agent") {
+            continue;
+        }
+        for n in names(&p["acts_for"]).into_iter().filter(|n| n != name) {
+            if block(architecture, n).is_some_and(|b| b != "principal") {
+                out.push(Refusal::ActsForNotPrincipal {
+                    part: name.clone(),
+                    names: n.to_string(),
+                });
+            }
+        }
+    }
+    out
+}
+
+/// `AddLink` of the block for each link: a link from a part to itself, over a part that is no
+/// channel, or repeating the `from`, `to` and `carries` of an earlier link.
+fn link_rules(architecture: &Value, links: &[Value]) -> Vec<Refusal> {
+    let mut out = Vec::new();
+    let end = |l: &Value, k: &str| s(&l[k]).map(str::to_string);
+    for (i, l) in links.iter().enumerate() {
+        let from = end(l, "from");
+        if from.is_some() && from == end(l, "to") {
+            out.push(Refusal::SelfReference {
+                link: Some(i),
+                part: from.clone().unwrap_or_default(),
+            });
+        }
+        if let Some(over) = s(&l["over"])
+            && block(architecture, over).is_some_and(|b| b != "channel")
+        {
+            out.push(Refusal::NotAChannel {
+                link: i,
+                part: over.to_string(),
+            });
+        }
+        let key = |l: &Value| (end(l, "from"), end(l, "to"), end(l, "carries"));
+        if links[..i].iter().any(|e| key(e) == key(l)) {
+            out.push(Refusal::LinkExists {
+                link: i,
+                part: from.unwrap_or_default(),
+            });
         }
     }
     out

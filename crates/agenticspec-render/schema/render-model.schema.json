@@ -80,7 +80,7 @@
         "label": { "type": "string" },
         "group": { "type": "string" },
         "badges": { "type": "array", "items": { "$ref": "#/$defs/Badge" } },
-        "region": { "type": "string" }
+        "region": { "description": "The id of a region, or of a node, the node is drawn in; a page whose node names neither is refused (node_region_unknown).", "type": "string" }
       }
     },
     "Badge": {
@@ -99,7 +99,7 @@
       "additionalProperties": false,
       "required": ["node", "name", "kind", "direction"],
       "properties": {
-        "node": { "type": "string" },
+        "node": { "description": "The id of the node the port is a row of; a page whose port names no node is refused (port_node_unknown).", "type": "string" },
         "name": { "type": "string" },
         "kind": { "type": "string" },
         "direction": { "enum": ["in", "out", "both"] },
@@ -130,7 +130,7 @@
       }
     },
     "Mark": {
-      "description": "A refusal (the default) or a piece of information on a node or a port. A refusal rings its card or port.",
+      "description": "A refusal (the default) or a piece of information on a node or a port. A refusal rings its card or port. Its target is a node, a port of a node (node and port) or a region (node names the region; the chip sits on the region's frame label, its band label, or its card while collapsed, and a refusal rings it). A page whose mark targets none of them is refused (mark_target_unknown).",
       "type": "object",
       "additionalProperties": false,
       "required": ["target", "name"],

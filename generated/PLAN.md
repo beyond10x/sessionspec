@@ -1,13 +1,13 @@
 <!--
   generated from agenticspec v1
-  contract digest 6107cda5fc3da4e3cc9ada6dcc08af755bfd9d53f930d1be89b1d7b1f074179f
+  contract digest ccb8808b577e000f62b25eea26b56257870a4af7bcbda0f276d5b2bb26a8a862
   do not edit: regenerate with `ess synthesize`
 -->
 # Synthesis plan — agenticspec v1
 
 Scope: `component-skeletons`, planned by `ess-synth`. Regenerate with `ess synthesize`.
 
-235 capabilities: **232 generated**, **3 obligations**, **0 refused**. An obligation is yours to implement against its contract; a refusal is a fact about this synthesis scope, not about the specification.
+237 capabilities: **234 generated**, **3 obligations**, **0 refused**. An obligation is yours to implement against its contract; a refusal is a fact about this synthesis scope, not about the specification.
 
 ## Generated
 
@@ -91,6 +91,8 @@ Scope: `component-skeletons`, planned by `ess-synth`. Regenerate with `ess synth
 | domain type | `agenticspec.cli.SimRunResult` |
 | domain type | `agenticspec.cli.SimScenarioInput` |
 | domain type | `agenticspec.cli.SimScenarioResult` |
+| domain type | `agenticspec.cli.SimScoreInput` |
+| domain type | `agenticspec.cli.SimScoreResult` |
 | domain type | `agenticspec.cli.SimTraceInput` |
 | domain type | `agenticspec.cli.SimTraceResult` |
 | domain type | `agenticspec.cli.StepKind` |

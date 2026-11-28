@@ -240,10 +240,16 @@ errors:
   - name: agentic.workspace.NotExpired
     summary: The lease has not reached its expiry.
 
+  - name: agentic.workspace.LeasePastExpiry
+    summary: The lease has reached its expiry; nothing is done under it any more.
+
   - name: agentic.workspace.UnknownProposal
     summary: No proposal has this identity.
     fields:
       - {name: proposal_id, type: agentic.shared.ProposalId}
+
+  - name: agentic.workspace.SupersededByItself
+    summary: A proposal is replaced by another proposal, never by itself.
 
   - name: agentic.workspace.ProposalStateConflict
     summary: The proposal is no longer Proposed.
@@ -448,6 +454,11 @@ commands:
         when_subject:
           predicate: sharing == SharedReadOnly
         error: agentic.workspace.ReadOnlyWorkspace
+      # A lease holds until it expires, whether or not ExpireLease has ended it yet.
+      - name: past-expiry
+        when_subject:
+          predicate: expires_at <= now
+        error: agentic.workspace.LeasePastExpiry
       - name: written
         when_subject_state: Live
         updates: agentic.workspace.Lease
@@ -468,13 +479,19 @@ commands:
       wire: propose
       display: Propose a change
       summary: A change leaves the workspace of a live lease as a proposal.
+    # The caller names itself as `holder`; its credential decides. ESS reads no caller attribute
+    # in a `when_related` guard (ESS-COMMAND-003), so the lease's holder is compared with it.
     input:
       - {name: lease_id, type: agentic.shared.LeaseId}
+      - {name: holder, type: agentic.channel.PartyId}
       - {name: base_revision, type: agentic.workspace.Revision}
       - {name: change, type: agentic.shared.Content}
       - {name: handback, type: Optional<agentic.shared.RecordId>}
       - {name: head_revision, type: Optional<agentic.workspace.Revision>}
     outcomes:
+      - name: holder-not-the-caller
+        when: holder != caller.party
+        error: agentic.workspace.NotTheHolder
       - name: no-lease
         when_related:
           via: input.lease_id
@@ -487,6 +504,22 @@ commands:
           via: input.lease_id
           predicate: state != Live
         error: agentic.workspace.LeaseNotLive
+      # Only the holder acts under a lease, and a lease past its expiry holds no more: the
+      # refusals of RecordWrite, read through the lease the input names.
+      # UNMAPPED: a proposal out of a workspace shared read-only is not refused. The guard
+      # (`sharing == SharedReadOnly` on the lease) is valid, but ESS 0.99.2 synthesis then arranges
+      # no lease Propose accepts, so the proposal's lifecycle and every pack command that names a
+      # proposal leave the conformance suites. Open question for the owner.
+      - name: not-the-holder
+        when_related:
+          via: input.lease_id
+          predicate: holder != input.holder
+        error: agentic.workspace.NotTheHolder
+      - name: past-expiry
+        when_related:
+          via: input.lease_id
+          predicate: expires_at <= now
+        error: agentic.workspace.LeasePastExpiry
       - name: proposed
         creates: agentic.workspace.Proposal
         instance: proposal_id
@@ -573,6 +606,9 @@ commands:
       - {name: proposal_id, type: agentic.shared.ProposalId}
       - {name: superseded_by, type: agentic.shared.ProposalId}
     outcomes:
+      - name: superseded-by-itself
+        when: proposal_id == superseded_by
+        error: agentic.workspace.SupersededByItself
       - name: unknown
         unknown_instance: true
         error: agentic.workspace.UnknownProposal

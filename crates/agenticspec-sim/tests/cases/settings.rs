@@ -90,12 +90,12 @@ fn an_integer_setting_takes_a_whole_number_in_range() {
         "builds",
         "capacity",
         json!("many"),
-        "an integer of at least 0 (slots)",
+        "an integer of at least 1 (slots)",
     );
     invalid("builds", "capacity", json!(2.5), "an integer");
-    invalid("builds", "capacity", json!(-1), "an integer of at least 0");
-    invalid("worker", "count", json!(-2), "an integer of at least 0");
-    fine("builds", "capacity", json!(0));
+    invalid("builds", "capacity", json!(-1), "an integer of at least 1");
+    invalid("worker", "count", json!(-2), "an integer of at least 1");
+    fine("builds", "capacity", json!(1));
 }
 
 #[test]
@@ -148,13 +148,13 @@ fn a_duration_setting_takes_a_duration_or_seconds() {
         "builds",
         "job_limit",
         json!("soon"),
-        "a duration of at least 0s",
+        "a duration of at least 1s",
     );
     invalid(
         "builds",
         "job_limit",
         json!("-10m"),
-        "a duration of at least 0s",
+        "a duration of at least 1s",
     );
     fine("builds", "job_limit", json!("1h"));
     fine("builds", "job_limit", json!(600));

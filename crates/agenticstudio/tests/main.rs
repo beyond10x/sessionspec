@@ -23,11 +23,23 @@ fn call_raw(
     path: &str,
     body: Option<Value>,
 ) -> (u16, String, String) {
+    call_raw_as(s, None, method, path, body)
+}
+
+/// A request sent as `caller` (its `X-Studio-Caller` header), or with no such header.
+fn call_raw_as(
+    s: &Mutex<Studio>,
+    caller: Option<&str>,
+    method: &str,
+    path: &str,
+    body: Option<Value>,
+) -> (u16, String, String) {
     let request = Request {
         method: method.into(),
         path: path.into(),
         query: String::new(),
         body: body.map(|b| b.to_string().into_bytes()).unwrap_or_default(),
+        caller: caller.map(str::to_string),
     };
     let r = answer(s, &request);
     (
@@ -38,7 +50,17 @@ fn call_raw(
 }
 
 fn call(s: &Mutex<Studio>, method: &str, path: &str, body: Option<Value>) -> (u16, Value) {
-    let (status, ctype, body) = call_raw(s, method, path, body);
+    call_as(s, None, method, path, body)
+}
+
+fn call_as(
+    s: &Mutex<Studio>,
+    caller: Option<&str>,
+    method: &str,
+    path: &str,
+    body: Option<Value>,
+) -> (u16, Value) {
+    let (status, ctype, body) = call_raw_as(s, caller, method, path, body);
     assert!(ctype.starts_with("application/json"), "{ctype}: {body}");
     (status, serde_json::from_str(&body).unwrap())
 }
@@ -308,6 +330,7 @@ fn view(s: &Mutex<Studio>, name: &str, query: &str) -> (u16, Value) {
         path: format!("/api/views/{name}"),
         query: query.into(),
         body: Vec::new(),
+        caller: None,
     };
     let r = answer(s, &request);
     (r.status, serde_json::from_slice(&r.body).unwrap())
@@ -506,6 +529,7 @@ mod static_files {
             path: path.into(),
             query: String::new(),
             body: Vec::new(),
+            caller: None,
         };
         let r = serve(s, www, &request);
         (r.status, r.content_type.to_string(), r.body)

@@ -14,17 +14,26 @@
 # that fails against the mutant's interpreter kills it) or by declaring what makes the rule
 # observable, never by listing it without a reason.
 #
-# Every class runs but `grant-add`: a synthesized suite sends each command as one actor it does
-# not grant (`<command>/grant/denied`), so adding a grant to any other actor is not told apart.
+# Every class runs, `grant-add` included. A synthesized suite sends each command as one actor it
+# does not grant (`<command>/grant/denied`), so a grant added to another actor is told apart only
+# by an authored scenario that sends the command as that actor and expects `refused: not_granted`
+# (<dir>/scenarios/grants/).
+#
+# A site the audit does not mutate is not a failure, but its count is printed with every run so a
+# drop in coverage shows: the stillborn mutants, the unmutated sites (`unmutated_sites`, by reason)
+# and the unavailable ones (`unavailable_sites`).
 #
 # spec/ holds Binary64 fields (the costs and shares of the session view), which ESS 0.99.2's
 # mutation audit refuses to carry. They are view, event and entity fields no guard reads, so the
 # audit runs on a copy under target/mutation/ with Binary64 read as Decimal; every mutant of a
 # rule is the same as on spec/ itself.
 #
-# Takes about 4 s for studio/ and 15 s for spec/.
+# Takes about 7 s for studio/ and 13 s for spec/.
 #
-#   check-mutation.sh <dir> [--known FILE]
+#   check-mutation.sh <dir> [--known FILE] [--class CLASS]...
+#
+# `--class` audits only the classes named, against the lines of the known list in those classes;
+# scripts/check-mutation.test.sh uses it to stay fast. The gate names none: every class runs.
 #
 # Exit 0: the non-killed mutants are exactly the listed ones. 1: they differ (each difference is
 # named), or the suite failed on the unchanged specification. 2: a usage error, or the audit did
@@ -35,15 +44,17 @@ root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 
 dir=
 known=
+only=
 while [ $# -gt 0 ]; do
   case $1 in
     --known) known=$2; shift 2 ;;
+    --class) only="$only $2"; shift 2 ;;
     -*) echo "check-mutation: unknown argument $1" >&2; exit 2 ;;
     *) dir=${1%/}; shift ;;
   esac
 done
 [ -n "$dir" ] && [ -f "$dir/ess-inputs.yaml" ] || {
-  echo "check-mutation: usage: check-mutation.sh <dir with ess-inputs.yaml> [--known FILE]" >&2
+  echo "check-mutation: usage: check-mutation.sh <dir with ess-inputs.yaml> [--known FILE] [--class CLASS]..." >&2
   exit 2
 }
 [ -n "$known" ] || known=$dir/mutation-known.txt
@@ -66,9 +77,12 @@ if awk '/^scenarios:/ { on = 1; next } /^[a-z_]+:/ { on = 0 } on && /^  - / { fo
   scenarios="--scenarios $src"
 fi
 
+narrow=$only
+[ -n "$only" ] || only="from-drop transition-to guard-boundary sets-retarget guard-negate \
+  guard-connective error-swap emit-drop order-flip sets-drop precedence-swap emit-swap grant-drop \
+  grant-add"
 classes=
-for c in from-drop transition-to guard-boundary sets-retarget guard-negate guard-connective \
-  error-swap emit-drop order-flip sets-drop precedence-swap emit-swap grant-drop; do
+for c in $only; do
   classes="$classes --class $c"
 done
 
@@ -95,8 +109,18 @@ esac
 
 jq -r '.mutants[] | select(.verdict != "killed" and .verdict != "equivalent" and .verdict != "stillborn") | .id' \
   "$work/report.json" | LC_ALL=C sort > "$work/open.txt"
-grep -v -e '^#' -e '^$' "$known" | cut -d' ' -f1 | LC_ALL=C sort > "$work/known.txt"
+grep -v -e '^#' -e '^$' "$known" | cut -d' ' -f1 | while IFS= read -r id; do
+  [ -n "$narrow" ] || { echo "$id"; continue; }
+  for c in $narrow; do
+    case $id in "$c"/*) echo "$id" ;; esac
+  done
+done | LC_ALL=C sort > "$work/known.txt"
 counts=$(jq -r '.counts | "\(.mutants) mutants: \(.killed) killed, \(.survived) survived, \(.unwitnessed) unwitnessed, \(.inconclusive) inconclusive, \(.equivalent) equivalent, \(.stillborn) stillborn"' "$work/report.json")
+sites=$(jq -r '(.unmutated_sites // []) as $u | (.unavailable_sites // []) as $a
+  | "\($u | length) unmutated sites"
+  + (if ($u | length) > 0 then " (" + ($u | group_by(.reason) | map("\(.[0].reason) \(length)") | join(", ")) + ")" else "" end)
+  + ", \($a | length) unavailable"' "$work/report.json")
+counts="$counts; $sites"
 
 if cmp -s "$work/open.txt" "$work/known.txt"; then
   echo "check-mutation: $dir: $counts; the $(wc -l < "$work/known.txt" | tr -d ' ') not killed are exactly those of $known"

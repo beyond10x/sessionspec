@@ -496,9 +496,10 @@ fn check_names(units: &[Unit], problems: &mut Vec<String>) {
     }
 }
 
-/// The units listed under `units:`. A listed unit's `image:`, `env:` and `args:` are the binding's,
-/// checked and read by [`crate::deploy::binding`] and [`crate::deploy::config`]; its `image:` is
-/// read through [`crate::deploy::binding::unit_image`].
+/// The units listed under `units:`. A listed unit's `image:`, `env:`, `args:`, `secret_files:` and
+/// `scratch:` are the binding's, checked and read by [`crate::deploy::binding`],
+/// [`crate::deploy::config`] and [`crate::deploy::scratch`]; its `image:` is read through
+/// [`crate::deploy::binding::unit_image`].
 fn explicit(
     section: &Value,
     known: &dyn Fn(&str, &str, &mut Vec<String>),
@@ -516,7 +517,16 @@ fn explicit(
         };
         for k in m.keys() {
             if ![
-                "name", "kind", "parts", "replicas", "schedule", "image", "env", "args",
+                "name",
+                "kind",
+                "parts",
+                "replicas",
+                "schedule",
+                "image",
+                "env",
+                "args",
+                "scratch",
+                "secret_files",
             ]
             .contains(&k.as_str())
             {

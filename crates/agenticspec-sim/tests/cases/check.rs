@@ -102,6 +102,7 @@ fn a_model_call_path_that_ends_before_a_model_is_refused_for_every_agent() {
         vec![
             ("agent_without_model_path".into(), "operator".into()),
             ("agent_without_model_path".into(), "worker".into()),
+            ("gateway_without_model".into(), "gateway".into()),
             ("unreachable_parts".into(), "model".into()),
         ]
     );

@@ -28,15 +28,17 @@ pub const SOURCES: &str = "bundles/sources.sha256";
 pub const REGENERATE: &str = "task bundles:generate";
 
 /// The generator's own sources, relative to the repository root.
-const GENERATOR: &[&str] = &[
+pub const GENERATOR: &[&str] = &[
     "crates/agenticspec-sim/src/contract/derive.rs",
     "crates/agenticspec-sim/src/contract/ingress.rs",
     "crates/agenticspec-sim/src/deploy/admit.rs",
     "crates/agenticspec-sim/src/deploy/binding.rs",
     "crates/agenticspec-sim/src/deploy/bundle.rs",
+    "crates/agenticspec-sim/src/deploy/config.rs",
     "crates/agenticspec-sim/src/deploy/grants.rs",
     "crates/agenticspec-sim/src/deploy/mod.rs",
     "crates/agenticspec-sim/src/deploy/packing.rs",
+    "crates/agenticspec-sim/src/deploy/scratch.rs",
     "crates/agenticspec-sim/src/deploy/ui.rs",
     "crates/agenticspec-sim/src/nest.rs",
     "crates/agenticspec-sim/src/requirements.rs",

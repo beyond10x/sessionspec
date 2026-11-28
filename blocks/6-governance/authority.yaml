@@ -309,6 +309,14 @@ errors:
       - name: grant_id
         type: agentic.shared.GrantId
 
+  - name: agentic.authority.GrantRequiresApproval
+    summary: >-
+      The grant named lets the action happen only once approved (effect ApprovalRequired); an Allow
+      is not recorded under it, an ApprovalRequired verdict is.
+    fields:
+      - name: grant_id
+        type: agentic.shared.GrantId
+
   - name: agentic.authority.DenyNeedsNoGrant
     summary: A Deny is recorded by DenyRequest, not DecideRequest.
     fields: []
@@ -572,7 +580,8 @@ commands:
         Records an Allow or an ApprovalRequired verdict for one request, under the grant that covers
         it. Without an active grant the command is refused: default deny. A Deny is recorded by
         DenyRequest, which needs no grant. An ApprovalRequired decision awaits approval until
-        approved or rejected. UNMAPPED: that the grant's grantee, action class, scope and expiry
+        approved or rejected; under a grant whose effect is ApprovalRequired an Allow is refused.
+        UNMAPPED: that the grant's grantee, action class, scope and expiry
         equal the request's is not compared here (a related row's fields cannot be compared to
         input fields); the evaluator that names the grant checks it.
     input:
@@ -625,6 +634,13 @@ commands:
         error: agentic.authority.GrantForbids
         payload:
           agentic.authority.GrantForbids:
+            grant_id: input.grant_id
+      - name: grant-requires-approval
+        when: verdict == Allow
+        when_related: {via: input.grant_id, predicate: effect == ApprovalRequired}
+        error: agentic.authority.GrantRequiresApproval
+        payload:
+          agentic.authority.GrantRequiresApproval:
             grant_id: input.grant_id
       - name: recorded
         creates: agentic.authority.Decision

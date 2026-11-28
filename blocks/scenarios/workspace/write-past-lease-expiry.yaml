@@ -1,0 +1,54 @@
+# The interpreter's clock is the time of the run, so an expiry in January 2026 lies in the past
+# of any run, as in question/answer-after-deadline.yaml.
+type: ess-scenario/7
+domain: agentic.workspace
+scenario: write-past-lease-expiry
+summary: A lease holds until it expires; under a lease granted after its expiry a write is refused (LeasePastExpiry) and none is counted.
+
+arrange:
+  - instance: shared
+    entity: agentic.workspace.Workspace
+  - instance: stale
+    entity: agentic.workspace.Lease
+
+timeline:
+  - at: 2026-01-15T09:00:05Z
+    command: agentic.workspace.CreateWorkspace
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input: {kind: Checkout, sharing: SharedReadWrite, base_revision: rev-1}
+    outcome: created
+    capture: {instance: shared, event: agentic.workspace.WorkspaceCreated, field: workspace_id}
+
+  - at: 2026-01-15T09:00:06Z
+    command: agentic.workspace.RequestLease
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input: {workspace_id: {$instance: shared}, expires_at: 2026-01-15T08:00:00Z}
+    outcome: requested
+    capture: {instance: stale, event: agentic.workspace.LeaseRequested, field: lease_id}
+
+  - at: 2026-01-15T09:00:07Z
+    command: agentic.workspace.GrantLease
+    actor: agentic.workspace.Keeper
+    input: {lease_id: {$instance: stale}}
+    outcome: granted-shared
+    events:
+      - event: agentic.workspace.LeaseGranted
+        payload: {lease_id: {$instance: stale}, workspace_id: {$instance: shared}}
+
+  - at: 2026-01-15T09:00:08Z
+    command: agentic.workspace.RecordWrite
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input: {lease_id: {$instance: stale}, path: src/a.rs}
+    outcome: past-expiry
+    error:
+      name: agentic.workspace.LeasePastExpiry
+    no_events: [agentic.workspace.PathWritten]
+
+assert:
+  - view: agentic.workspace.Leases
+    excludes:
+      lease_id: {$instance: stale}
+      writes: 1

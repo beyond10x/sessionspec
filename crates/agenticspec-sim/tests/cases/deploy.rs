@@ -978,6 +978,26 @@ fn a_part_of_a_pack_block_is_packed_bundled_and_checked_like_any_part() {
         .unwrap_or_else(|r| panic!("{}: {}", r.code, r.detail));
 }
 
+/// Every module of the deploy directory but the fixtures' own shapes a bundle, so its digest is a
+/// source of every fixture bundle: a module left out lets a bundle change while its digest holds.
+#[test]
+fn every_module_of_the_deploy_directory_is_a_source_of_the_fixture_bundles() {
+    let root = repo_root();
+    let dir = "crates/agenticspec-sim/src/deploy";
+    let mut missing = Vec::new();
+    for e in std::fs::read_dir(root.join(dir)).unwrap() {
+        let name = e.unwrap().file_name().into_string().unwrap();
+        let path = format!("{dir}/{name}");
+        if name.ends_with(".rs")
+            && name != "fixtures.rs"
+            && !fixtures::GENERATOR.contains(&path.as_str())
+        {
+            missing.push(path);
+        }
+    }
+    assert_eq!(missing, Vec::<String>::new());
+}
+
 #[test]
 fn the_fixture_bundles_are_current_and_hold_only_accepted_kinds_and_roles() {
     let root = repo_root();

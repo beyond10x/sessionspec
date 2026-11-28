@@ -1120,6 +1120,53 @@ types:
         type: Optional<String>
         summary: The trace as written, when no `--out` was given.
 
+  - name: agenticspec.cli.SimScoreInput
+    kind: struct
+    fields:
+      - name: architecture
+        type: Optional<String>
+        summary: One architecture document to score, given without `--`.
+      - name: profile
+        type: String
+        summary: The behaviour profile (`agenticspec-profile/1`).
+      - name: seed
+        type: Optional<Integer>
+        summary: >-
+          The seed of the run, as an experiment's `seed:`; 0 by default. The KPIs equal those `sim
+          run` reports for the baseline of an experiment with this seed and `seeds: 1`.
+      - name: horizon
+        type: Optional<String>
+        summary: The simulated time, as a duration (`24h`); one day by default.
+      - name: batch
+        type: Boolean
+        summary: Answer a list (`results`) also for one document.
+      - name: documents
+        type: List<String>
+        summary: The architecture documents to score, after `--`, in the order they are answered.
+
+  - name: agenticspec.cli.SimScoreResult
+    kind: struct
+    naming:
+      summary: >-
+        The KPIs of one architecture document simulated once, or with `--batch` or more than one
+        document the answer of each document in their order. A refused document answers
+        `{"error": {"code", "message"}}`: alone on standard output with exit 3, in a batch as its
+        entry.
+    fields:
+      - name: kpis
+        type: Optional<Json>
+        summary: >-
+          The KPIs of the run by the ids of `kpis/catalogue.yaml`, a number each: the simulator's,
+          the gate counts of the check and the KPIs of the architecture as a whole.
+      - name: per_part
+        type: Optional<Json>
+        summary: The KPIs the simulator reports per part, by part name and KPI id, a number each.
+      - name: results
+        type: Optional<List<Json>>
+        summary: >-
+          One entry per document in the order given, each byte for byte the answer of that
+          document alone: `{kpis, per_part}` or `{error}`.
+
   - name: agenticspec.cli.UiGenerateInput
     kind: struct
     fields:

@@ -168,13 +168,14 @@ commands:
         wrong_state: true
         error: studio.session.ClosedSession
 
+  # Who made the call is not part of what the call sends: it is the caller the request is sent
+  # as (the sending actor's `kind`), so no input names a caller other than the sender.
   - name: studio.session.CallTool
     naming:
       display: Call a studio tool
     input:
       - {name: session_id, type: studio.shared.SessionId}
       - {name: tool, type: studio.session.Tool}
-      - {name: caller, type: studio.session.Caller}
       - {name: arguments, type: String}
       - {name: dry_run, type: Boolean}
     outcomes:
@@ -196,7 +197,7 @@ commands:
         sets:
           session_id: input.session_id
           tool: input.tool
-          caller: input.caller
+          caller: {caller: kind}
           arguments: input.arguments
           dry_run: input.dry_run
         emits: [studio.session.ToolCalled]
@@ -205,7 +206,7 @@ commands:
             call_id: {generated: true}
             session_id: input.session_id
             tool: input.tool
-            caller: input.caller
+            caller: {caller: kind}
             dry_run: input.dry_run
 
   - name: studio.session.AnswerToolCall
@@ -295,11 +296,23 @@ views:
 
 # Who works in the studio: the user opens drafts and calls the tools on them from the page, the
 # agent through the agent channel; the studio server records what it carried out.
+#
+# The user and the agent carry `kind`, the caller a request is sent as, and a tool call records it
+# as its `caller`. `agenticstudio serve` reads it from the request's `X-Studio-Caller` header
+# (`User` when there is none; the agent channel sends `Agent`), never from the call's body
+# (`routes::call`, crates/agenticstudio/src/routes.rs). ESS 0.99.2 reads no actor's own name in a
+# guard or a write, so the attribute is how the sending actor reaches the record.
+# UNMAPPED: that the user's `kind` is always `User` and the agent's always `Agent`. ESS 0.99.2 has
+# no construct that fixes an attribute's value per actor, and the server takes the header as
+# sent: no credential authenticates the agent channel. Open question for the owner: authenticate
+# the agent channel (a token the server issues to agenticstudio-mcp), or accept the header.
 actors:
   - name: studio.session.User
     naming:
       display: User
       summary: Whoever designs an architecture in the studio, in the browser.
+    attributes:
+      - {name: kind, type: studio.session.Caller}
     may:
       - studio.draft.OpenDraft
       - studio.session.StartSession
@@ -325,6 +338,8 @@ actors:
       summary: >-
         An agent harness that drives a draft through the agent channel (MCP). It opens the draft
         itself when the channel is started on an architecture.
+    attributes:
+      - {name: kind, type: studio.session.Caller}
     may:
       - studio.draft.OpenDraft
       - studio.session.StartSession

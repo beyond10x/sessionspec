@@ -492,6 +492,11 @@ errors:
     fields:
       - {name: verdict, type: agentic.shared.Verdict}
 
+  - name: agentic.harness.UnknownToolCall
+    summary: No tool call has this identity.
+    fields:
+      - {name: tool_call_id, type: agentic.shared.ToolCallId}
+
   - name: agentic.harness.ToolCallStateConflict
     summary: >-
       The call is not in a state this command acts from. Completing a call that is Requested or
@@ -1096,6 +1101,21 @@ commands:
       - {name: decider, type: agentic.shared.Decider}
       - {name: attribution, type: agentic.shared.Attribution}
     outcomes:
+      # ApprovalRequired is never a final decision, whatever call it names: refused from the input
+      # alone, before the call is looked up.
+      - name: approval-pending
+        when: verdict == ApprovalRequired
+        error: agentic.harness.ApprovalNotFinal
+        payload:
+          agentic.harness.ApprovalNotFinal:
+            verdict: input.verdict
+        summary: The verdict was ApprovalRequired; the call stays Requested.
+      - name: unknown
+        unknown_instance: true
+        error: agentic.harness.UnknownToolCall
+        payload:
+          agentic.harness.UnknownToolCall: {tool_call_id: input.tool_call_id}
+        summary: No call has this identity; nothing changed.
       - name: allowed
         when: verdict == Allow
         moves: agentic.harness.ToolCall.allow
@@ -1128,12 +1148,6 @@ commands:
             decider: input.decider
             attribution: input.attribution
         summary: The call is Denied; the tool does not run.
-      - name: approval-pending
-        error: agentic.harness.ApprovalNotFinal
-        payload:
-          agentic.harness.ApprovalNotFinal:
-            verdict: input.verdict
-        summary: The verdict was ApprovalRequired; the call stays Requested.
       - name: wrong-state
         wrong_state: true
         error: agentic.harness.ToolCallStateConflict
@@ -1148,6 +1162,12 @@ commands:
       - {name: ok, type: Boolean}
       - {name: output, type: agentic.shared.Content}
     outcomes:
+      - name: unknown
+        unknown_instance: true
+        error: agentic.harness.UnknownToolCall
+        payload:
+          agentic.harness.UnknownToolCall: {tool_call_id: input.tool_call_id}
+        summary: No call has this identity; nothing changed.
       - name: completed
         when: ok == true
         moves: agentic.harness.ToolCall.complete
@@ -1188,6 +1208,12 @@ commands:
       - {name: tool_call_id, type: agentic.shared.ToolCallId}
       - {name: read_failure, type: String}
     outcomes:
+      - name: unknown
+        unknown_instance: true
+        error: agentic.harness.UnknownToolCall
+        payload:
+          agentic.harness.UnknownToolCall: {tool_call_id: input.tool_call_id}
+        summary: No call has this identity; nothing changed.
       - name: recorded
         moves: agentic.harness.ToolCall.could_not_read
         instance: tool_call_id

@@ -1,0 +1,49 @@
+type: ess-scenario/7
+domain: agentic.authority
+scenario: allow-under-approval-grant
+summary: A grant whose effect is ApprovalRequired lets an action happen only once approved; an Allow under it is refused (GrantRequiresApproval) and no decision is recorded.
+
+arrange:
+  - instance: grant
+    entity: agentic.authority.Grant
+
+timeline:
+  - at: 2026-11-28T09:00:07Z
+    command: agentic.authority.GrantAuthority
+    actor: agentic.authority.Steward
+    input:
+      grantee_kind: AgentRevision
+      grantee_id: 00000000-0000-4000-8000-00000000f001
+      action_class: Execute
+      scope: repo
+      expires_at: 2026-11-29T09:00:00Z
+      granted_by: 00000000-0000-4000-8000-00000000a001
+      effect: ApprovalRequired
+      excludes: []
+      at: 2026-11-28T09:00:07Z
+    outcome: granted
+    capture: {instance: grant, event: agentic.authority.GrantIssued, field: grant_id}
+
+  - at: 2026-11-28T09:00:08Z
+    command: agentic.authority.DecideRequest
+    actor: agentic.authority.Authority
+    input:
+      grant_id: {$instance: grant}
+      requester_kind: AgentRevision
+      requester_id: 00000000-0000-4000-8000-00000000f001
+      action_class: Execute
+      scope: repo
+      verdict: Allow
+      decider: Rule
+      attribution: Known
+      at: 2026-11-28T09:00:08Z
+    outcome: grant-requires-approval
+    error:
+      name: agentic.authority.GrantRequiresApproval
+    no_events: [agentic.authority.DecisionRecorded]
+
+assert:
+  - view: agentic.authority.Decisions
+    excludes:
+      grant_id: {$instance: grant}
+      verdict: Allow

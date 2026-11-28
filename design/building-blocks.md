@@ -297,7 +297,7 @@ KPI, the count of its refusals:
 | `unknown_carries` | a link's `carries` is not a variant of `agentic.architecture.Carries` |
 | `per_without_part`, `acts_for_without_part`, `egress_without_part` | the field names no part |
 | `agent_without_model_path` | an agent reaches no `model` part over `model_call` links (through a gateway or not) |
-| `question_without_answerer` | a `question` link ends at a part that is not a principal or an agent |
+| `question_without_answerer` | a `question` link ends at a part that is not a principal or an agent; or, in an architecture that has a principal part, at an agent that acts for no principal and has no `question` link to a principal part |
 | `review_without_reviewer` | a `review` link ends at a part that is not an agent with `role: reviewer` |
 | `border_without_part` | `border` names no part |
 | `trigger_source_not_trigger` | a `trigger` link starts at a part that is not a trigger or a schedule |
@@ -307,6 +307,29 @@ KPI, the count of its refusals:
 | `invalid_schedule` | a schedule part has no positive `every` |
 | `swarm_needs_agent` | `coordination` or `start_stagger` is on a part that is not an agent; or the coordination is unknown; or the stagger is not a duration |
 | `unreachable_parts` | no link, `per`, `acts_for`, `egress` or `border` names the part, and it has no `per`; a trigger's `schedule`, `channel` and `source` count as names |
+| `empty_architecture` | the document has no part; the refusal names the architecture |
+| `self_reference` | a link goes from a part to itself, or a part's `per` or `acts_for` names the part itself |
+| `not_a_channel` | a link's `over` names a part that is not a channel |
+| `link_exists` | a link has the `from`, `to` and `carries` of an earlier link |
+| `acts_for_not_principal` | an agent's `acts_for` names a part that is not a principal |
+| `not_reached_by_principal` | in an architecture that has a principal part, a `border` part that no principal part links to and no `grant` link reaches |
+| `gateway_without_model` | a gateway part has no `model_call` link to a model part |
+
+The last seven rules are refusals of the architecture block
+(`blocks/9-composition/architecture.yaml`) and carry the names of its errors.
+`question_without_answerer` is its `QuestionWithoutAnswerer` and its `TargetCannotAnswer`, and its
+`ActsForNeedsAgent` is `setting_unknown` (`blocks/settings.yaml` declares `acts_for` on agents
+only).
+
+`NotReachedByPrincipal` and `QuestionWithoutAnswerer` hold only in an architecture that has a
+principal part. One with none is made to be nested (`architectures/console.yaml`): its border is
+its interface, which the nesting architecture links to and through which its questions leave it.
+A part counts as reached through a `grant` link, because an authority part holds a principal's
+grant (the coding field's `auto-merger`). An agent that acts for no principal answers a question
+when it forwards questions to a principal part, as the simulator lets it answer and forward one
+hop. The block cannot test that the authority part a grant comes from is itself reached by a
+principal (a test over rows holds one level of rows inside it), so the check counts any `grant`
+link as well.
 
 The trigger, schedule and swarm rules read the `value` of a marked place, so a document with
 markers is checked as built.

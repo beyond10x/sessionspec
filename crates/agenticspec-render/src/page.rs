@@ -32,7 +32,9 @@
 //! - An edge with a `count` is drawn heavier: 2 or 3 wider than 1, 4 or more wider again.
 //! - A badge is a pill on its card, or with `on: panel` a row of the table "Details" under the
 //!   graph.
-//! - A mark is a chip on its card. A refusal also rings the card, or marks its port.
+//! - A mark is a chip on its card. A refusal also rings the card, or marks its port. A mark whose
+//!   target is a region (one that is no node) is a chip on the label line of its frame, or of its
+//!   band with `layout: bands`; a refusal rings the frame or band.
 //! - A panel is a table in a card beside the graph, or with `place: below` across the page under
 //!   it. A cell value longer than 32 characters wraps its long words instead of being cut, and
 //!   has its full value as its title.
@@ -40,7 +42,8 @@
 //! A region with `"collapsed": true` is drawn as one card until it is opened:
 //!
 //! - The card shows the region's label and the count of the nodes inside it, nested regions
-//!   included; it is a button named `Open region <label>, <n> nodes`. A refusal inside rings it.
+//!   included; it is a button named `Open region <label>, <n> nodes`. A mark on the region is a
+//!   chip on the card; a refusal inside it (on a node or a region it holds) rings it.
 //! - An edge between two collapsed regions, or between one and a node outside it, is drawn once
 //!   per pair of visible ends. It reads `×<n>` when it stands for more than one edge; one edge
 //!   keeps its own label. An edge inside a collapsed region is not drawn.
@@ -53,8 +56,10 @@
 //!   which the script swaps in.
 //!
 //! An edge end names a node, or a port the page declares as `node.port`. A page read from JSON
-//! with an end that names neither is refused as `edge_end_unknown` ([`Page::check`]). A
-//! `collapsed` that is no boolean is refused as `region_collapsed_invalid`, and a collapsed region
+//! with an end that names neither is refused as `edge_end_unknown` ([`Page::check`]). So is every
+//! other reference that names nothing: a port's `node` (`port_node_unknown`), a mark's target
+//! that is no node, no port of a node and no region (`mark_target_unknown`) and a node's `region`
+//! (`node_region_unknown`). A `collapsed` that is no boolean is refused as `region_collapsed_invalid`, and a collapsed region
 //! that holds no node besides its own as `region_collapsed_empty`.
 //!
 //! With `"layout": "bands"` the graph is drawn in bands instead (`"graph"`, the default, draws it
@@ -452,10 +457,14 @@ impl Page {
 
     /// Whether every edge end resolves: to a node's id, or as `node.port` to a port the page
     /// declares on that node. The first end that does not is refused as `edge_end_unknown`,
-    /// naming the edge and the end. A region with `collapsed: true` that holds no node besides
-    /// its own (in it or in a region inside it) would be a card that opens onto nothing; it is
-    /// refused as `region_collapsed_empty`, naming the region. Reading a page from JSON runs this
-    /// check.
+    /// naming the edge and the end. Every other reference resolves too, or the first that does
+    /// not is refused: a port whose `node` is no node as `port_node_unknown`, naming the port; a
+    /// mark whose target is no node and no region, or names a port the page does not declare on
+    /// that node, as `mark_target_unknown`, naming the mark and its target; a node whose `region`
+    /// is no region and no node as `node_region_unknown`, naming the node and the region. A region
+    /// with `collapsed: true` that holds no node besides its own (in it or in a region inside it)
+    /// would be a card that opens onto nothing; it is refused as `region_collapsed_empty`, naming
+    /// the region. Reading a page from JSON runs this check.
     pub fn check(&self) -> Result<(), String> {
         for e in &self.edges {
             for end in [&e.from, &e.to] {
@@ -467,7 +476,47 @@ impl Page {
                 }
             }
         }
+        for p in &self.ports {
+            if !self.has_node(&p.node) {
+                return Err(format!(
+                    "port_node_unknown: the port {:?}: {:?} is no node",
+                    format!("{}.{}", p.node, p.name),
+                    p.node
+                ));
+            }
+        }
         let tree = crate::collapse::Tree::of(self);
+        for m in &self.marks {
+            let t = &m.target;
+            let on = match &t.port {
+                None => t.node.clone(),
+                Some(port) => format!("{}.{port}", t.node),
+            };
+            let resolves = match &t.port {
+                None => self.has_node(&t.node) || tree.regions.iter().any(|r| r.id == t.node),
+                Some(port) => self
+                    .ports
+                    .iter()
+                    .any(|p| p.node == t.node && p.name == *port && self.has_node(&p.node)),
+            };
+            if !resolves {
+                return Err(format!(
+                    "mark_target_unknown: the mark {:?} on {on:?}: {on:?} is no node, no port of a node and no region",
+                    m.name
+                ));
+            }
+        }
+        for n in &self.nodes {
+            if let Some(region) = &n.region
+                && !tree.regions.iter().any(|r| r.id == *region)
+                && !self.has_node(region)
+            {
+                return Err(format!(
+                    "node_region_unknown: the node {:?}: its region {region:?} is no region and no node",
+                    n.id
+                ));
+            }
+        }
         for r in tree.regions.iter().filter(|r| r.collapsed) {
             if tree.inside(self, &r.id) == 0 {
                 return Err(format!(
@@ -479,11 +528,15 @@ impl Page {
         Ok(())
     }
 
+    fn has_node(&self, id: &str) -> bool {
+        self.nodes.iter().any(|n| n.id == id)
+    }
+
     fn resolves(&self, end: &str) -> bool {
-        self.nodes.iter().any(|n| n.id == end)
+        self.has_node(end)
             || self.ports.iter().any(|p| {
                 end.strip_prefix(p.node.as_str()) == Some(&format!(".{}", p.name))
-                    && self.nodes.iter().any(|n| n.id == p.node)
+                    && self.has_node(&p.node)
             })
     }
 }
@@ -647,7 +700,8 @@ pub struct Edge {
     pub count: Option<u64>,
 }
 
-/// What a mark is shown on.
+/// What a mark is shown on: a node, a port of a node (`node` and `port`), or a region (`node`
+/// names the region's id).
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Target {
@@ -656,7 +710,8 @@ pub struct Target {
     pub port: Option<String>,
 }
 
-/// A mark on a node or a port, drawn as a chip on the card. A refusal also rings its card (or
+/// A mark on a node, a port or a region, drawn as a chip on the card (on a region, on its frame's
+/// label line, or its card while it is collapsed). A refusal also rings its card or frame (or
 /// its port); a piece of information does not.
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]

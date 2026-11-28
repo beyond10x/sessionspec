@@ -950,7 +950,7 @@ kpis:
     kind: correctness
     unit: count
     summary: Question links that end at a part that cannot answer.
-    how: Links carrying questions whose target is not a principal or an agent part. Must be 0.
+    how: Links carrying questions whose target is not a principal or an agent part, or, in an architecture that has a principal part, an agent part that acts for no principal and has no link carrying questions to a principal part. Must be 0.
     direction: lower
     gate: true
     reads: [agentic.architecture.LinkAdded, agentic.architecture.PartAdded]
@@ -966,6 +966,18 @@ kpis:
     direction: lower
     gate: true
     reads: [agentic.architecture.PartBordered, agentic.architecture.PartAdded]
+    status: simulated
+    source: design
+
+  - id: not_reached_by_principal
+    block: architecture
+    kind: correctness
+    unit: count
+    summary: Border parts that no principal part reaches.
+    how: In an architecture that has a principal part, border parts with no link from a principal part and no link carrying grants. An architecture with no principal part is made to be nested and counts 0. Must be 0.
+    direction: lower
+    gate: true
+    reads: [agentic.architecture.PartBordered, agentic.architecture.LinkAdded, agentic.architecture.PartAdded]
     status: simulated
     source: design
 

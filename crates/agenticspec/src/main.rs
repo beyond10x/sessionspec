@@ -15,10 +15,13 @@ use serde_json::{Value, json};
 const VERSION_LINE: &str = concat!("agenticspec ", env!("CARGO_PKG_VERSION"), "\n");
 
 /// The handler. `stdout` is what a command prints before the generated adapter's own output: the
-/// document of `sim check --json` when the check refuses the architecture.
+/// document of `sim check --json` when the check refuses the architecture, the error answer of
+/// `sim score`. `exit` replaces the adapter's exit code 1 of a declared refusal: `sim score` of a
+/// refused document exits [`sim::SCORE_REFUSED_EXIT`].
 #[derive(Default)]
 struct Commands {
     stdout: String,
+    exit: Option<i32>,
 }
 
 fn refusal(code: &str, detail: String) -> HandlerReply {
@@ -609,6 +612,12 @@ impl Handler for Commands {
                     horizon: inv.input.get("horizon").and_then(Value::as_str),
                     out: out.as_deref(),
                 }))
+            }
+            "sim_score" => {
+                let (reply, stdout, exit) = sim_score(&inv.input);
+                self.stdout = stdout;
+                self.exit = exit;
+                reply
             }
             "ui_conform" => {
                 let (reply, stdout) = ui_conform(&inv.input, inv.context.output);
@@ -1244,6 +1253,57 @@ fn draft_reply(outcome: Result<Value, agenticspec::draft::Refused>) -> HandlerRe
     }
 }
 
+/// `agenticspec sim score`: the reply, what it prints on standard output before the adapter's
+/// output, and the exit code that replaces the adapter's 1. One scored document is the reply's
+/// result; a refusal prints its error answer (`{"error": {"code", "message"}}`) and is refused
+/// with its code, exit [`sim::SCORE_REFUSED_EXIT`] for a refused document and 1 for refused fixed
+/// arguments; a batch is the reply's result. No document is a usage error.
+fn sim_score(input: &Value) -> (HandlerReply, String, Option<i32>) {
+    let mut documents: Vec<PathBuf> = Vec::new();
+    if let Some(one) = input.get("architecture").and_then(Value::as_str) {
+        documents.push(PathBuf::from(one));
+    }
+    for d in input
+        .get("documents")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+    {
+        documents.push(PathBuf::from(d.as_str().unwrap_or("")));
+    }
+    let profile = path_of(input, "profile");
+    let options = sim::ScoreOptions {
+        profile: &profile,
+        seed: input
+            .get("seed")
+            .and_then(Value::as_i64)
+            .and_then(|s| u64::try_from(s).ok()),
+        horizon: input.get("horizon").and_then(Value::as_str),
+    };
+    let batch = input.get("batch").and_then(Value::as_bool).unwrap_or(false);
+    let paths: Vec<&std::path::Path> = documents.iter().map(PathBuf::as_path).collect();
+    let refused = |r: sim::Refusal| {
+        let stdout = format!("{}\n", sim::score_error(&r));
+        let exit = sim::score_refuses_document(r.code).then_some(sim::SCORE_REFUSED_EXIT);
+        (refusal(r.code, r.detail), stdout, exit)
+    };
+    match sim::score(&options, &paths, batch) {
+        Ok(sim::Scored::One(Ok(result)) | sim::Scored::Batch(result)) => {
+            (HandlerReply::Success(result), String::new(), None)
+        }
+        Ok(sim::Scored::One(Err(r))) => refused(r),
+        Err(r) if r.code == "documents_missing" => (
+            HandlerReply::UsageError {
+                code: r.code.to_owned(),
+                data: json!({ "detail": r.detail }),
+            },
+            String::new(),
+            None,
+        ),
+        Err(r) => refused(r),
+    }
+}
+
 /// The reply of an `agenticspec sim` command.
 fn sim_reply(outcome: Result<Value, sim::Refusal>) -> HandlerReply {
     match outcome {
@@ -1279,7 +1339,11 @@ fn main() {
     let mut commands = Commands::default();
     let output = cli_contract::run(args, &mut cli_contract::OsSources, &mut commands, None);
     let stdout = commands.stdout + &output.stdout;
-    std::process::exit(emit(&stdout, &output.stderr, output.exit_code));
+    let exit_code = match (output.exit_code, commands.exit) {
+        (1, Some(code)) => code,
+        (code, _) => code,
+    };
+    std::process::exit(emit(&stdout, &output.stderr, exit_code));
 }
 
 fn emit(stdout: &str, stderr: &str, exit_code: i32) -> i32 {
