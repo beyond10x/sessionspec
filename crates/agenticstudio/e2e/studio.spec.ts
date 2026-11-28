@@ -119,15 +119,19 @@ test.describe('live', () => {
     await expect(result(page)).toContainText('Applied as revision 2');
     await expect(summary(other, 'revision')).toHaveText('2', { timeout: 2_000 });
 
-    const api = (p: string, body: unknown) =>
-      other.request.post(`${process.env.STUDIO_URL}api/${p}`, { data: body }).then((r) => r.json());
+    const api = (p: string, body: unknown, headers: Record<string, string> = {}) =>
+      other.request.post(`${process.env.STUDIO_URL}api/${p}`, { data: body, headers }).then((r) => r.json());
     const session = (await api('sessions', { draft_id: id })).session.session_id;
-    const call = await api(`sessions/${session}/calls`, {
-      tool: 'apply',
-      caller: 'Agent',
-      arguments: { patch: 'set(P, count, 5) :- part{id: P, block: "agent", count: 3}.' },
-    });
+    const call = await api(
+      `sessions/${session}/calls`,
+      {
+        tool: 'apply',
+        arguments: { patch: 'set(P, count, 5) :- part{id: P, block: "agent", count: 3}.' },
+      },
+      { 'X-Studio-Caller': 'Agent' },
+    );
     expect(call.call.answer.outcome).toBe('Applied');
+    expect(call.call.caller).toBe('Agent');
     await expect(summary(other, 'revision')).toHaveText('3', { timeout: 2_000 });
     await expect(summary(page, 'revision')).toHaveText('3', { timeout: 2_000 });
     await expect(other.locator('[data-graph-facts]')).toContainText('revision 3');

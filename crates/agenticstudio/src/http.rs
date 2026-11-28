@@ -14,6 +14,10 @@ pub const JSON: &str = "application/json";
 pub const HTML: &str = "text/html; charset=utf-8";
 pub const TEXT: &str = "text/plain; charset=utf-8";
 
+/// The header that names the caller a request is sent as, `User` or `Agent`: the `kind` of
+/// `studio.session.User` and `studio.session.Agent`. The agent channel sends `Agent`.
+pub const CALLER_HEADER: &str = "X-Studio-Caller";
+
 #[derive(Debug, Clone, Default)]
 pub struct Request {
     pub method: String,
@@ -21,6 +25,9 @@ pub struct Request {
     pub path: String,
     pub query: String,
     pub body: Vec<u8>,
+    /// The caller the request is sent as (its [`CALLER_HEADER`]); `None` when it names none,
+    /// which is the user in the browser.
+    pub caller: Option<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -49,6 +56,7 @@ pub fn reason(status: u16) -> &'static str {
         200 => "OK",
         201 => "Created",
         400 => "Bad Request",
+        403 => "Forbidden",
         404 => "Not Found",
         405 => "Method Not Allowed",
         409 => "Conflict",
@@ -73,6 +81,7 @@ pub fn read(stream: &TcpStream) -> io::Result<Request> {
     };
     let (path, query) = target.split_once('?').unwrap_or((target, ""));
     let mut length = 0usize;
+    let mut caller = None;
     loop {
         let mut header = String::new();
         if reader.read_line(&mut header)? == 0 {
@@ -82,10 +91,13 @@ pub fn read(stream: &TcpStream) -> io::Result<Request> {
         if header.is_empty() {
             break;
         }
-        if let Some((k, v)) = header.split_once(':')
-            && k.trim().eq_ignore_ascii_case("content-length")
-        {
-            length = v.trim().parse().map_err(|_| bad("bad content-length"))?;
+        if let Some((k, v)) = header.split_once(':') {
+            let k = k.trim();
+            if k.eq_ignore_ascii_case("content-length") {
+                length = v.trim().parse().map_err(|_| bad("bad content-length"))?;
+            } else if k.eq_ignore_ascii_case(CALLER_HEADER) {
+                caller = Some(v.trim().to_string());
+            }
         }
     }
     if length > MAX_BODY {
@@ -98,6 +110,7 @@ pub fn read(stream: &TcpStream) -> io::Result<Request> {
         path: path.to_string(),
         query: query.to_string(),
         body,
+        caller,
     })
 }
 

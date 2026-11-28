@@ -210,7 +210,7 @@ pub fn caller(name: &str) -> Option<Caller> {
 }
 
 /// The name of a value of a generated enum, as it is written on the wire.
-fn wire<T: serde::Serialize>(v: &T) -> String {
+pub fn wire<T: serde::Serialize>(v: &T) -> String {
     serde_json::to_value(v)
         .ok()
         .and_then(|v| v.as_str().map(str::to_string))

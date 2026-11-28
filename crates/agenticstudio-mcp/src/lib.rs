@@ -1,6 +1,7 @@
 //! agenticstudio-mcp: the agent channel of agenticstudio. An MCP server over stdio (JSON-RPC 2.0,
 //! one message per line) whose four tools, `query`, `apply`, `check` and `simulate`, are tool
-//! calls with caller `Agent` in a studio session on one draft. The calls go to the tool-call
+//! calls with caller `Agent` in a studio session on one draft: each request is sent as the agent
+//! (`X-Studio-Caller: Agent`), which the studio records as the caller. The calls go to the tool-call
 //! route of `agenticstudio serve` (`POST /api/sessions/<id>/calls`), so every client open on the
 //! draft sees each change live on the draft's event channel.
 //!
@@ -13,7 +14,7 @@ use std::net::TcpStream;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
-use agenticstudio::http::Request;
+use agenticstudio::http::{CALLER_HEADER, Request};
 use agenticstudio::routes::answer;
 use agenticstudio::studio::Studio;
 use serde_json::{Value, json};
@@ -87,7 +88,7 @@ impl Backend for Http {
         let _ = stream.set_write_timeout(Some(TIMEOUT));
         let body = body.map(Value::to_string).unwrap_or_default();
         let head = format!(
-            "{method} {path} HTTP/1.1\r\nHost: {at}\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+            "{method} {path} HTTP/1.1\r\nHost: {at}\r\n{CALLER_HEADER}: Agent\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
             body.len()
         );
         stream
@@ -130,6 +131,7 @@ impl Backend for Local {
             path: path.to_string(),
             query: query.to_string(),
             body: body.map(|b| b.to_string().into_bytes()).unwrap_or_default(),
+            caller: Some("Agent".to_string()),
         };
         let r = answer(&self.0, &request);
         let value = serde_json::from_slice(&r.body).map_err(|e| e.to_string())?;
@@ -406,8 +408,7 @@ impl<B: Backend> Server<B> {
                 (a, false)
             }
         };
-        let body =
-            json!({"tool": name, "caller": "Agent", "arguments": arguments, "dry_run": dry_run});
+        let body = json!({"tool": name, "arguments": arguments, "dry_run": dry_run});
         let mut retried = false;
         loop {
             let session = match self.start_session() {

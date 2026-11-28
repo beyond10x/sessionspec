@@ -1,0 +1,86 @@
+# Only the studio server records what it carried out: a new revision of a draft, and the answer or
+# failure of a tool call. The user and the agent are refused each of these as not granted. A
+# synthesized suite sends each command as one actor it does not grant, so a mutation that granted
+# ReviseDraft to the user survived: the suite then sent it as the agent alone. The user and the
+# agent carry the caller's `kind`, so the mutation audit no longer adds these grants to them
+# (`attributed_holder`); this scenario holds them.
+type: ess-scenario/7
+domain: studio.draft
+scenario: only-the-server-records-revisions
+summary: The server records a revision of a draft; the user and the agent are refused a revision, an answer and a failure of a tool call as not granted.
+
+arrange:
+  - instance: draft
+    entity: studio.draft.Draft
+
+timeline:
+  - at: 2026-11-28T10:00:00Z
+    command: studio.draft.OpenDraft
+    actor: studio.session.User
+    input:
+      name: workstation
+      architecture: 00000000-0000-4000-8000-0000000000a1
+    outcome: opened
+    capture: {instance: draft, event: studio.draft.DraftOpened, field: draft_id}
+
+  - at: 2026-11-28T10:00:01Z
+    command: studio.draft.ReviseDraft
+    actor: studio.session.Server
+    input:
+      draft_id: {$instance: draft}
+      revision: 00000000-0000-4000-8000-0000000000b1
+      number: 1
+      cause: Patch
+    outcome: revised
+
+  - at: 2026-11-28T10:00:02Z
+    command: studio.draft.ReviseDraft
+    actor: studio.session.User
+    input:
+      draft_id: {$instance: draft}
+      revision: 00000000-0000-4000-8000-0000000000b2
+      number: 2
+      cause: Patch
+    refused: not_granted
+
+  - at: 2026-11-28T10:00:03Z
+    command: studio.draft.ReviseDraft
+    actor: studio.session.Agent
+    input:
+      draft_id: {$instance: draft}
+      revision: 00000000-0000-4000-8000-0000000000b3
+      number: 2
+      cause: Patch
+    refused: not_granted
+
+  - at: 2026-11-28T10:00:04Z
+    command: studio.session.AnswerToolCall
+    actor: studio.session.User
+    input:
+      call_id: 00000000-0000-4000-8000-0000000000c1
+      answer: '{}'
+    refused: not_granted
+
+  - at: 2026-11-28T10:00:05Z
+    command: studio.session.AnswerToolCall
+    actor: studio.session.Agent
+    input:
+      call_id: 00000000-0000-4000-8000-0000000000c1
+      answer: '{}'
+    refused: not_granted
+
+  - at: 2026-11-28T10:00:06Z
+    command: studio.session.FailToolCall
+    actor: studio.session.User
+    input:
+      call_id: 00000000-0000-4000-8000-0000000000c1
+      failure: no such call
+    refused: not_granted
+
+  - at: 2026-11-28T10:00:07Z
+    command: studio.session.FailToolCall
+    actor: studio.session.Agent
+    input:
+      call_id: 00000000-0000-4000-8000-0000000000c1
+      failure: no such call
+    refused: not_granted

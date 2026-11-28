@@ -17,7 +17,7 @@
 //! | POST | `/api/sessions` | start a session on a draft: `{"draft_id"}` |
 //! | POST | `/api/sessions/<id>/close` | close it |
 //! | GET | `/api/sessions/<id>/calls` | its tool calls (the `ToolCalls` view) |
-//! | POST | `/api/sessions/<id>/calls` | make a tool call: `{"tool", "caller"?, "arguments"?, "dry_run"?}` |
+//! | POST | `/api/sessions/<id>/calls` | make a tool call: `{"tool", "arguments"?, "dry_run"?}`, by the caller the `X-Studio-Caller` header names (`User` when none) |
 
 use std::path::Path;
 use std::sync::mpsc::Receiver;
@@ -27,7 +27,7 @@ use agenticspec_records::sq::facts::Val;
 use agenticspec_sim::check;
 use serde_json::{Value, json};
 
-use crate::http::{HTML, Request, Response};
+use crate::http::{CALLER_HEADER, HTML, Request, Response};
 use crate::live::Event;
 use crate::studio::{self as st, Call, Draft, Revision, Studio, StudioError};
 use crate::tools::check_json;
@@ -145,8 +145,13 @@ fn open(studio: &Mutex<Studio>, request: &Request) -> Response {
     }
 }
 
-/// `POST /api/drafts/<id>/patches`: an apply in the draft's editor session.
+/// `POST /api/drafts/<id>/patches`: an apply in the draft's editor session, by the caller the
+/// request is sent as.
 fn apply(studio: &Mutex<Studio>, id: &str, request: &Request) -> Response {
+    let caller = match sender(request) {
+        Ok(c) => c,
+        Err(r) => return r,
+    };
     let v = match body(request) {
         Ok(v) => v,
         Err(r) => return r,
@@ -171,7 +176,7 @@ fn apply(studio: &Mutex<Studio>, id: &str, request: &Request) -> Response {
     let call = match s.call(
         &session,
         st::tool("apply").expect("a tool"),
-        Caller::User,
+        caller,
         &arguments,
         dry_run,
     ) {
@@ -212,22 +217,48 @@ fn start_session(studio: &Mutex<Studio>, request: &Request) -> Response {
     }
 }
 
-/// The tool call a request names: `{"tool", "caller"?, "arguments"?, "dry_run"?}`; the caller
-/// is `User` when none is named.
-pub fn call(studio: &Mutex<Studio>, session: &str, input: &Value) -> Response {
+/// The caller a request is sent as: its `X-Studio-Caller` header, `User` when it names none.
+/// A call records this caller and no other (`studio.session.CallTool` sets `caller` from the
+/// sending actor's `kind`, not from its input).
+pub(crate) fn sender(request: &Request) -> Result<Caller, Response> {
+    match request.caller.as_deref() {
+        None => Ok(Caller::User),
+        Some(name) => st::caller(name).ok_or_else(|| {
+            error(
+                400,
+                "InvalidRequest",
+                &format!("the {CALLER_HEADER} header names User or Agent"),
+            )
+        }),
+    }
+}
+
+/// The tool call a request names, `{"tool", "arguments"?, "dry_run"?}`, made by the caller the
+/// request is sent as ([`sender`]). A body that names another caller is refused with
+/// `CallerNotSender` and makes no call; one that names the sender itself is taken.
+pub fn call(studio: &Mutex<Studio>, session: &str, request: &Request, input: &Value) -> Response {
+    let caller = match sender(request) {
+        Ok(c) => c,
+        Err(r) => return r,
+    };
+    if !input["caller"].is_null()
+        && input["caller"].as_str().and_then(st::caller) != Some(caller.clone())
+    {
+        return error(
+            403,
+            "CallerNotSender",
+            &format!(
+                "a call is made by the caller it is sent as ({CALLER_HEADER}: {}), and its body named another",
+                st::wire(&caller)
+            ),
+        );
+    }
     let Some(tool) = input["tool"].as_str().and_then(st::tool) else {
         return error(
             400,
             "InvalidRequest",
             "a call names its tool: query, apply, check or simulate",
         );
-    };
-    let caller = match &input["caller"] {
-        Value::Null => Caller::User,
-        v => match v.as_str().and_then(st::caller) {
-            Some(c) => c,
-            None => return error(400, "InvalidRequest", "a call's caller is User or Agent"),
-        },
     };
     let arguments = match &input["arguments"] {
         Value::Null => json!({}),
@@ -391,7 +422,7 @@ pub fn answer(studio: &Mutex<Studio>, request: &Request) -> Response {
             Err(e) => studio_error(&e),
         },
         ("POST", ["api", "sessions", id, "calls"]) => match body(request) {
-            Ok(v) => call(studio, id, &v),
+            Ok(v) => call(studio, id, request, &v),
             Err(r) => r,
         },
         (_, ["api", "architectures"] | ["api", "drafts"] | ["api", "drafts", _])

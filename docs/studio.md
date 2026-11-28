@@ -153,10 +153,14 @@ waiting on the human owner. (share, lower is better)`. An apply that a rule or t
 answered, and the draft keeps its revision. A call that cannot be carried out (a selector that
 does not parse, a budget out of range) is `Failed` with the reason.
 
+A call records who made it from how it was sent, not from what it says: a request with the header
+`X-Studio-Caller: Agent` is the agent's, one without it the user's. The agent channel below sends
+the header on every request.
+
 ```console
 curl -s -X POST localhost:7431/api/sessions -d '{"draft_id": "<draft>"}'
-curl -s -X POST localhost:7431/api/sessions/<session>/calls \
-  -d '{"tool": "apply", "caller": "Agent", "arguments": {"patch": "set(P, count, 3) :- part{id: P, block: \"agent\", count: 12}."}, "dry_run": true}'
+curl -s -X POST localhost:7431/api/sessions/<session>/calls -H 'X-Studio-Caller: Agent' \
+  -d '{"tool": "apply", "arguments": {"patch": "set(P, count, 3) :- part{id: P, block: \"agent\", count: 12}."}, "dry_run": true}'
 ```
 
 A simulate runs the current revision at its marked values, without faults. It is a quick reading,
@@ -233,7 +237,7 @@ A script can also use these endpoints:
 | `GET /api/drafts/<id>/events` | the draft's event channel, as server-sent events: `studio.draft.DraftRevised` (`number`, `digest`, `cause`, `application`), `studio.session.ToolCallAnswered` and `studio.session.ToolCallFailed` (`call_id`, `session_id`, `tool`, `caller`, and the first line of the answer's `summary` or the `failure`) |
 | `POST /api/sessions` | starts a session on a draft: `{"draft_id"}` |
 | `GET /api/sessions` | the sessions |
-| `POST /api/sessions/<id>/calls` | a tool call: `{"tool", "caller": "User" or "Agent", "arguments", "dry_run"}`; answers `{"call": <the call, with its answer>}` |
+| `POST /api/sessions/<id>/calls` | a tool call: `{"tool", "arguments", "dry_run"}`, made by the caller the request is sent as: the `X-Studio-Caller` header, `User` or `Agent`, and `User` without one. A body that names another `caller` is refused with `CallerNotSender` (403) and makes no call. Answers `{"call": <the call, with its answer>}` |
 | `GET /api/sessions/<id>/calls` | the calls of the session |
 | `POST /api/sessions/<id>/close` | closes the session; a call in it is refused with `ClosedSession` |
 

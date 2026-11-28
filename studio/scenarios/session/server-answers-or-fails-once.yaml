@@ -41,9 +41,9 @@ timeline:
     input:
       session_id: {$instance: session}
       tool: Check
-      caller: User
       arguments: '{}'
       dry_run: false
+    caller: {kind: User}
     outcome: called
     capture: {instance: answered, event: studio.session.ToolCalled, field: call_id}
 
@@ -53,9 +53,9 @@ timeline:
     input:
       session_id: {$instance: session}
       tool: Query
-      caller: User
       arguments: '{}'
       dry_run: false
+    caller: {kind: User}
     outcome: called
     capture: {instance: failed, event: studio.session.ToolCalled, field: call_id}
 

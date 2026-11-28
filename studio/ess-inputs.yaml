@@ -11,3 +11,6 @@ scenarios:
   - scenarios/session/call-tool-dry-run-only-for-apply.yaml
   - scenarios/session/agent-opens-draft.yaml
   - scenarios/session/server-answers-or-fails-once.yaml
+  - scenarios/session/call-records-its-sender.yaml
+  - scenarios/grants/only-the-server-records-revisions.yaml
+  - scenarios/grants/the-server-calls-no-tool.yaml

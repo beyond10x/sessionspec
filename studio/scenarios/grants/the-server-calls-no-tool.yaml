@@ -1,0 +1,51 @@
+# The studio server carries out tool calls and makes none: a call is the user's or the agent's.
+# The server is refused CallTool as not granted. The mutation audit does not mutate this grant
+# (CallTool reads the caller's `kind`, which the server does not carry), so this scenario holds it.
+type: ess-scenario/7
+domain: studio.session
+scenario: the-server-calls-no-tool
+summary: In an open session the server is refused a tool call as not granted, and the user then makes one.
+
+arrange:
+  - instance: draft
+    entity: studio.draft.Draft
+  - instance: session
+    entity: studio.session.Session
+
+timeline:
+  - at: 2026-11-28T10:00:00Z
+    command: studio.draft.OpenDraft
+    actor: studio.session.User
+    input:
+      name: workstation
+      architecture: 00000000-0000-4000-8000-0000000000a1
+    outcome: opened
+    capture: {instance: draft, event: studio.draft.DraftOpened, field: draft_id}
+
+  - at: 2026-11-28T10:00:01Z
+    command: studio.session.StartSession
+    actor: studio.session.User
+    input: {draft_id: {$instance: draft}}
+    outcome: started
+    capture: {instance: session, event: studio.session.SessionStarted, field: session_id}
+
+  - at: 2026-11-28T10:00:02Z
+    command: studio.session.CallTool
+    actor: studio.session.Server
+    input:
+      session_id: {$instance: session}
+      tool: Check
+      arguments: '{}'
+      dry_run: false
+    refused: not_granted
+
+  - at: 2026-11-28T10:00:03Z
+    command: studio.session.CallTool
+    actor: studio.session.User
+    caller: {kind: User}
+    input:
+      session_id: {$instance: session}
+      tool: Check
+      arguments: '{}'
+      dry_run: false
+    outcome: called

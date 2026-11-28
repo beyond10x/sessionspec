@@ -20,7 +20,7 @@ use serde_json::{Value, json};
 use crate::http::{HTML, Request, Response, TEXT};
 use crate::routes::{error, lock, studio_error, to_json, val};
 use crate::studio::{Draft, Studio};
-use crate::types::session::{StudioSessionCaller as Caller, StudioSessionTool as Tool};
+use crate::types::session::StudioSessionTool as Tool;
 
 /// The value of `key` in a query string, percent-decoded.
 pub(crate) fn param(query: &str, key: &str) -> Option<String> {
@@ -185,13 +185,14 @@ fn outcome_row(answer: &Value) -> Value {
     row
 }
 
-/// `studio.session.CallTool`. With a `session_id`: the call `{"session_id", "tool", "caller"?,
-/// "arguments"?, "dry_run"?}` of that session, answered as the call's row. Without one, from
-/// the patch form: `{"draft_id", "arguments": "<patch rules>", "dry_run"?}`, an apply in the
-/// draft's editor session, answered as the row the form shows (status 422 when refused).
-fn call_tool(studio: &Mutex<Studio>, input: &Value) -> Response {
+/// `studio.session.CallTool`, by the caller the request is sent as (`routes::sender`). With a
+/// `session_id`: the call `{"session_id", "tool", "arguments"?, "dry_run"?}` of that session,
+/// answered as the call's row. Without one, from the patch form: `{"draft_id", "arguments":
+/// "<patch rules>", "dry_run"?}`, an apply in the draft's editor session, answered as the row the
+/// form shows (status 422 when refused).
+fn call_tool(studio: &Mutex<Studio>, request: &Request, input: &Value) -> Response {
     if let Some(session) = input["session_id"].as_str() {
-        let r = crate::routes::call(studio, session, input);
+        let r = crate::routes::call(studio, session, request, input);
         if r.status != 200 {
             return r;
         }
@@ -205,6 +206,10 @@ fn call_tool(studio: &Mutex<Studio>, input: &Value) -> Response {
             "CallTool takes {\"draft_id\", \"arguments\": \"<patch rules>\", \"dry_run\"?}",
         );
     };
+    let caller = match crate::routes::sender(request) {
+        Ok(c) => c,
+        Err(r) => return r,
+    };
     let dry_run = input["dry_run"].as_bool().unwrap_or(false);
     let mut s = lock(studio);
     let session = match s.editor_session(id) {
@@ -214,7 +219,7 @@ fn call_tool(studio: &Mutex<Studio>, input: &Value) -> Response {
     let call = match s.call(
         &session,
         Tool::Apply,
-        Caller::User,
+        caller,
         &json!({"patch": text}),
         dry_run,
     ) {
@@ -252,7 +257,7 @@ pub fn command(studio: &Mutex<Studio>, name: &str, request: &Request) -> Respons
                 Err(e) => studio_error(&e),
             }
         }
-        "studio.session.CallTool" => call_tool(studio, &input),
+        "studio.session.CallTool" => call_tool(studio, request, &input),
         "studio.session.StartSession" => {
             let Some(draft) = input["draft_id"].as_str() else {
                 return error(400, "InvalidRequest", "StartSession takes {\"draft_id\"}");

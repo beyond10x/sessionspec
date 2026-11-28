@@ -1,0 +1,54 @@
+# Only the agent loop records a model turn and ends its turn. Every other actor is refused both as
+# not granted while the agent is working, when the loop itself would be admitted. A synthesized
+# suite sends each command as one actor it does not grant, so a mutation that granted either
+# command to any other actor survived, or was not witnessed at all.
+type: ess-scenario/7
+domain: agenticspec.session
+scenario: only-the-agent-loop-records-its-turns
+summary: While an agent works, every actor but the agent loop is refused a model turn and the end of the turn as not granted; the agent loop then records one and ends the turn.
+
+timeline:
+  - at: 2026-11-28T10:00:00Z
+    command: agenticspec.session.OpenSession
+    actor: agenticspec.session.HarnessRuntime
+    input: {session_id: s-1, harness: ClaudeCode, at: 2026-11-28T10:00:00Z}
+    outcome: opened
+
+  - at: 2026-11-28T10:00:01Z
+    command: agenticspec.session.StartAgent
+    actor: agenticspec.session.HarnessRuntime
+    input: {agent_id: a-1, session_id: s-1, role: Main, at: 2026-11-28T10:00:01Z}
+    outcome: started
+
+  - at: 2026-11-28T10:00:02Z
+    command: agenticspec.session.SubmitPrompt
+    actor: agenticspec.session.Human
+    input: &prompt
+      agent_id: a-1
+      author: Human
+      attribution: Known
+      class: Task
+      content: {digest: '0000000000000000000000000000000000000000000000000000000000000000', bytes: 0}
+      at: 2026-11-28T10:00:02Z
+    outcome: submitted
+
+  - {at: 2026-11-28T10:00:03Z, command: agenticspec.session.RecordModelTurn, actor: agenticspec.session.HarnessRuntime, input: &turn {agent_id: a-1, model: m, usage: {uncached_input: 1, cache_read: 0, cache_write_5m: 0, cache_write_1h: 0, output: 1}, context_tokens: 1, at: 2026-11-28T10:00:03Z}, refused: not_granted}
+  - {at: 2026-11-28T10:00:04Z, command: agenticspec.session.RecordModelTurn, actor: agenticspec.session.Human, input: *turn, refused: not_granted}
+  - {at: 2026-11-28T10:00:05Z, command: agenticspec.session.RecordModelTurn, actor: agenticspec.session.Delegate, input: *turn, refused: not_granted}
+  - {at: 2026-11-28T10:00:06Z, command: agenticspec.session.RecordModelTurn, actor: agenticspec.session.PeerSession, input: *turn, refused: not_granted}
+  - {at: 2026-11-28T10:00:07Z, command: agenticspec.session.RecordModelTurn, actor: agenticspec.session.PermissionAuthority, input: *turn, refused: not_granted}
+  - {at: 2026-11-28T10:00:08Z, command: agenticspec.session.RecordModelTurn, actor: agenticspec.session.ToolProvider, input: *turn, refused: not_granted}
+  - {at: 2026-11-28T10:00:09Z, command: agenticspec.session.RecordModelTurn, actor: agenticspec.session.Redactor, input: *turn, refused: not_granted}
+  - {at: 2026-11-28T10:00:10Z, command: agenticspec.session.RecordModelTurn, actor: agenticspec.view.Viewer, input: *turn, refused: not_granted}
+
+  - {at: 2026-11-28T10:00:11Z, command: agenticspec.session.EndTurn, actor: agenticspec.session.HarnessRuntime, input: &end {agent_id: a-1, at: 2026-11-28T10:00:04Z}, refused: not_granted}
+  - {at: 2026-11-28T10:00:12Z, command: agenticspec.session.EndTurn, actor: agenticspec.session.Human, input: *end, refused: not_granted}
+  - {at: 2026-11-28T10:00:13Z, command: agenticspec.session.EndTurn, actor: agenticspec.session.Delegate, input: *end, refused: not_granted}
+  - {at: 2026-11-28T10:00:14Z, command: agenticspec.session.EndTurn, actor: agenticspec.session.PeerSession, input: *end, refused: not_granted}
+  - {at: 2026-11-28T10:00:15Z, command: agenticspec.session.EndTurn, actor: agenticspec.session.PermissionAuthority, input: *end, refused: not_granted}
+  - {at: 2026-11-28T10:00:16Z, command: agenticspec.session.EndTurn, actor: agenticspec.session.ToolProvider, input: *end, refused: not_granted}
+  - {at: 2026-11-28T10:00:17Z, command: agenticspec.session.EndTurn, actor: agenticspec.session.Redactor, input: *end, refused: not_granted}
+  - {at: 2026-11-28T10:00:18Z, command: agenticspec.session.EndTurn, actor: agenticspec.view.Viewer, input: *end, refused: not_granted}
+
+  - {at: 2026-11-28T10:00:19Z, command: agenticspec.session.RecordModelTurn, actor: agenticspec.session.AgentLoop, input: *turn, outcome: recorded}
+  - {at: 2026-11-28T10:00:20Z, command: agenticspec.session.EndTurn, actor: agenticspec.session.AgentLoop, input: *end, outcome: ended}

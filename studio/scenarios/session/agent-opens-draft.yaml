@@ -34,7 +34,7 @@ timeline:
     input:
       session_id: {$instance: session}
       tool: Query
-      caller: Agent
       arguments: '{"selector": "part{id: P}"}'
       dry_run: false
+    caller: {kind: Agent}
     outcome: called
