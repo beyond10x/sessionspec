@@ -211,3 +211,59 @@ fn check_json_prints_the_same_bytes_on_every_run() {
     sorted.sort_unstable();
     assert_eq!(rules, sorted);
 }
+
+#[test]
+fn check_json_names_the_border_part_and_the_question_link_no_principal_reaches() {
+    let dir = scratch("check-json-principal");
+    let path = dir.join("unreached.yaml");
+    std::fs::write(
+        &path,
+        r#"
+format: agenticspec-architecture/1
+architecture: unreached
+parts:
+  you:     { block: principal, kind: human }
+  lead:    { block: agent, harness: coding }
+  helper:  { block: agent, harness: coding }
+  model:   { block: model, route: frontier }
+links:
+  - { from: you,    to: helper, carries: prompt }
+  - { from: helper, to: lead,   carries: question }
+  - { from: lead,   to: model,  carries: model_call }
+  - { from: helper, to: model,  carries: model_call }
+border: [lead]
+"#,
+    )
+    .unwrap();
+    let doc = json_of(&path).unwrap().document;
+    assert_eq!(doc["valid"], false);
+    assert_eq!(doc["counts"]["not_reached_by_principal"], 1);
+    assert_eq!(doc["counts"]["question_without_answerer"], 1);
+    let got: Vec<(&str, &str, &str)> = doc["violations"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|v| {
+            (
+                v["rule"].as_str().unwrap(),
+                v["subject"].as_str().unwrap(),
+                v["message"].as_str().unwrap(),
+            )
+        })
+        .collect();
+    assert_eq!(
+        got,
+        vec![
+            (
+                "not_reached_by_principal",
+                "lead",
+                "on the border, and no principal part links to it and no grant link reaches it"
+            ),
+            (
+                "question_without_answerer",
+                "helper->lead:question",
+                "link 1 sends a question to an agent that acts for no principal and forwards questions to no principal"
+            ),
+        ]
+    );
+}

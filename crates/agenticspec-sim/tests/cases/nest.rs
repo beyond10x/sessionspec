@@ -197,6 +197,7 @@ links:
   - {{ from: grants, to: agent, carries: grant }}
   - {{ from: owner, to: deputy, carries: grant }}
   - {{ from: agent, to: console.steward, carries: order }}
+  - {{ from: console.steward, to: owner, carries: question }}
 "#,
         nest::digest(&yaml(INNER))
     );

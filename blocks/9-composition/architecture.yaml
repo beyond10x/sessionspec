@@ -704,13 +704,13 @@ errors:
   - name: agentic.architecture.LinkExists
     summary: The architecture already has this link, and nothing was added.
   - name: agentic.architecture.NotReachedByPrincipal
-    summary: No link from a principal part reaches this part, so it cannot be on the border; nothing changed.
+    summary: The architecture has a principal part, and neither a link from one nor a link carrying Grant reaches this part, so it cannot be on the border; nothing changed.
   - name: agentic.architecture.EmptyArchitecture
     summary: The architecture has no part, so no revision was recorded.
   - name: agentic.architecture.AgentWithoutModel
     summary: An agent part has no link carrying model calls to a model or gateway part, so no revision was recorded.
   - name: agentic.architecture.QuestionWithoutAnswerer
-    summary: A link carries questions to an agent part that acts for no principal, so no party may answer and no revision was recorded.
+    summary: A link carries questions to an agent part that acts for no principal and forwards questions to none, in an architecture that has a principal part, so no party may answer and no revision was recorded.
   - name: agentic.architecture.GatewayWithoutModel
     summary: A gateway part has no link carrying model calls to a model part, so the calls it passes reach no model and no revision was recorded.
   - name: agentic.architecture.EmptyPatch
@@ -1164,10 +1164,18 @@ commands:
             coordination: input.coordination
             start_stagger: input.start_stagger
 
-  # Put a part on the border: a human principal reaches it from outside. Only a part a principal
-  # part already links to may be on it (no link, no reach).
+  # Put a part on the border: a human principal reaches it from outside. In an architecture that
+  # has a principal part, only a part a principal part reaches may be on it (no link, no reach): a
+  # principal part links to it, or a link carrying Grant ends at it (an authority part holds a
+  # principal's grant and permits the part through it). An architecture with no principal part is
+  # made to be nested: its border is its interface, which the architecture that nests it links to,
+  # so any of its parts may be on the border.
   # UNMAPPED: the design says "what a human reaches"; a principal part carries no principal kind
   # here (human, organization, service). Taken: any principal part's link counts.
+  # UNMAPPED: whether the authority part a grant comes from is itself reached by a principal part
+  # is not tested: a test over rows holds one level of rows inside it (ESS-COMMAND-009), and a
+  # success outcome cannot answer before an error outcome (ESS-COMMAND-004). Taken: any link
+  # carrying Grant counts.
   - name: agentic.architecture.SetBorder
     naming:
       display: Put a part on the border
@@ -1192,12 +1200,26 @@ commands:
         error: agentic.architecture.RetiredArchitecture
       - name: not-reached
         when_related:
-          entity: agentic.architecture.Link
+          entity: agentic.architecture.Part
           where:
             all:
-              - to_part_id == input.part_id
-              - from_kind == Principal
-          exists: false
+              - part_id == input.part_id
+              - exists:
+                  in: {entity: agentic.architecture.Part}
+                  as: principal
+                  that:
+                    all:
+                      - principal.architecture_id == architecture_id
+                      - principal.kind == Principal
+              - not:
+                  exists:
+                    in: {entity: agentic.architecture.Link}
+                    as: link
+                    that:
+                      all:
+                        - link.to_part_id == part_id
+                        - any: [link.from_kind == Principal, link.carries == Grant]
+          exists: true
         error: agentic.architecture.NotReachedByPrincipal
       - name: bordered
         updates: agentic.architecture.Part
@@ -1211,8 +1233,9 @@ commands:
             architecture_id: input.architecture_id
 
   # Freeze the current parts, links and border into a revision. Refused when nothing is declared,
-  # when an agent part has no path to a model, when a question has no party that may answer, and
-  # when a gateway part links to no model.
+  # when an agent part has no path to a model, when a question has no party that may answer (an
+  # agent it goes to acts for no principal and forwards to none, in an architecture that has a
+  # principal part), and when a gateway part links to no model.
   - name: agentic.architecture.CommitRevision
     naming:
       display: Commit an architecture revision
@@ -1254,6 +1277,9 @@ commands:
         # [name, part_id], first: name}}`) validates, and the interpreted target answers it
         # ESS-CF-TARGET ("the value source ... of an error is not interpreted yet"), so the error
         # carries no part name here.
+      # The agent a question goes to answers it when it acts for a principal part, or when it
+      # forwards it: a link of its own carries questions to a principal part. An architecture
+      # with no principal part is made to be nested, and its questions leave it through its border.
       - name: question-without-answerer
         when_related:
           entity: agentic.architecture.Link
@@ -1270,6 +1296,22 @@ commands:
                       all:
                         - target.part_id == to_part_id
                         - defined(target.acts_for_part_id)
+              - not:
+                  exists:
+                    in: {entity: agentic.architecture.Link}
+                    as: forward
+                    that:
+                      all:
+                        - forward.from_part_id == to_part_id
+                        - forward.carries == Question
+                        - forward.to_kind == Principal
+              - exists:
+                  in: {entity: agentic.architecture.Part}
+                  as: principal
+                  that:
+                    all:
+                      - principal.architecture_id == architecture_id
+                      - principal.kind == Principal
           exists: true
         error: agentic.architecture.QuestionWithoutAnswerer
       # A gateway part passes model calls on, so agent-without-model counts it as a path to a

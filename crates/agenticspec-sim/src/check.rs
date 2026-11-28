@@ -105,6 +105,14 @@ pub enum Refusal {
     AgentWithoutModelPath { part: String },
     /// A `question` link ends at a part that cannot answer (only principals and agents answer).
     QuestionWithoutAnswerer { link: usize, part: String },
+    /// In an architecture that has a principal part, a `question` link ends at an agent that acts
+    /// for no principal and has no `question` link of its own to a principal part, to which it
+    /// would forward what it cannot answer. Its rule is `question_without_answerer`, as the
+    /// block names it.
+    QuestionNotForwarded { link: usize, part: String },
+    /// In an architecture that has a principal part, a part on the border that no principal
+    /// part links to and no `grant` link reaches.
+    NotReachedByPrincipal { part: String },
     /// A `review` link ends at a part that is not an agent with `role: reviewer`.
     ReviewWithoutReviewer { link: usize, part: String },
     /// `border` names no part.
@@ -171,6 +179,7 @@ pub const GATE_KPIS: &[&str] = &[
     "not_a_channel",
     "link_exists",
     "acts_for_not_principal",
+    "not_reached_by_principal",
     "gateway_without_model",
 ];
 
@@ -186,7 +195,10 @@ impl Refusal {
             Refusal::ActsForWithoutPart { .. } => "acts_for_without_part",
             Refusal::EgressWithoutPart { .. } => "egress_without_part",
             Refusal::AgentWithoutModelPath { .. } => "agent_without_model_path",
-            Refusal::QuestionWithoutAnswerer { .. } => "question_without_answerer",
+            Refusal::QuestionWithoutAnswerer { .. } | Refusal::QuestionNotForwarded { .. } => {
+                "question_without_answerer"
+            }
+            Refusal::NotReachedByPrincipal { .. } => "not_reached_by_principal",
             Refusal::ReviewWithoutReviewer { .. } => "review_without_reviewer",
             Refusal::BorderWithoutPart { .. } => "border_without_part",
             Refusal::TriggerSourceNotTrigger { .. } => "trigger_source_not_trigger",
@@ -217,6 +229,8 @@ impl Refusal {
             | Refusal::EgressWithoutPart { part, .. }
             | Refusal::AgentWithoutModelPath { part }
             | Refusal::QuestionWithoutAnswerer { part, .. }
+            | Refusal::QuestionNotForwarded { part, .. }
+            | Refusal::NotReachedByPrincipal { part }
             | Refusal::ReviewWithoutReviewer { part, .. }
             | Refusal::BorderWithoutPart { part }
             | Refusal::TriggerSourceNotTrigger { part, .. }
@@ -271,6 +285,13 @@ impl fmt::Display for Refusal {
             }
             Refusal::QuestionWithoutAnswerer { link, .. } => {
                 format!("link {link} sends a question to a part that cannot answer")
+            }
+            Refusal::QuestionNotForwarded { link, .. } => format!(
+                "link {link} sends a question to an agent that acts for no principal and forwards questions to no principal"
+            ),
+            Refusal::NotReachedByPrincipal { .. } => {
+                "on the border, and no principal part links to it and no grant link reaches it"
+                    .into()
             }
             Refusal::ReviewWithoutReviewer { link, .. } => {
                 format!(
@@ -741,15 +762,8 @@ pub fn check(architecture: &Value) -> Vec<Refusal> {
 
 /// The refusals of the architecture block (blocks/9-composition/architecture.yaml) that a
 /// document can write and the rules above do not name: each carries the name of the block's
-/// error, in the order the block's commands meet them (parts, acts-for, links, commit). A name
-/// that is no part is left to the `*_without_part` and `unknown_link_parts` rules.
-///
-/// Two refusals of the block are not held here, because committed documents the simulator runs
-/// write what they refuse: `NotReachedByPrincipal` (a border part no principal links to:
-/// `architectures/console.yaml`, nested with no principal of its own, and the coding field's
-/// `auto-merger.yaml`, whose owner reaches the merger through a grant) and
-/// `QuestionWithoutAnswerer` (a question to an agent that acts for no principal: the console's
-/// steward, which the simulator lets answer and forward to a principal).
+/// error, in the order the block's commands meet them (parts, acts-for, links, border, commit). A
+/// name that is no part is left to the `*_without_part` and `unknown_link_parts` rules.
 fn block_rules(
     architecture: &Value,
     parts: &serde_json::Map<String, Value>,
@@ -765,6 +779,7 @@ fn block_rules(
     }
     out.extend(acts_for_rules(architecture, parts));
     out.extend(link_rules(architecture, links));
+    out.extend(principal_rules(architecture, parts, links));
     for (name, p) in parts {
         let to_model = links.iter().any(|l| {
             s(&l["from"]) == Some(name.as_str())
@@ -773,6 +788,56 @@ fn block_rules(
         });
         if s(&p["block"]) == Some("gateway") && !to_model {
             out.push(Refusal::GatewayWithoutModel { part: name.clone() });
+        }
+    }
+    out
+}
+
+/// `SetBorder` and the question guard of `CommitRevision`, which hold only in an architecture that
+/// has a principal part (one with none is made to be nested: the architecture that nests it links
+/// to its border and forwards its questions). `NotReachedByPrincipal`: a part of `border` that no
+/// principal part links to and no `grant` link reaches (an authority part holds a principal's
+/// grant). `QuestionWithoutAnswerer`: a `question` link to an agent that acts for no principal and
+/// has no `question` link of its own to a principal part, as the simulator forwards a question an
+/// agent cannot answer. The border parts of a nested document are its interface and not checked.
+fn principal_rules(
+    architecture: &Value,
+    parts: &serde_json::Map<String, Value>,
+    links: &[Value],
+) -> Vec<Refusal> {
+    let mut out = Vec::new();
+    let is_principal =
+        |n: Option<&str>| n.and_then(|n| block(architecture, n)) == Some("principal");
+    if !parts.keys().any(|n| is_principal(Some(n))) {
+        return out;
+    }
+    for n in names(&architecture["border"]) {
+        let reached = links.iter().any(|l| {
+            s(&l["to"]) == Some(n)
+                && (is_principal(s(&l["from"])) || s(&l["carries"]) == Some("grant"))
+        });
+        if parts.contains_key(n) && !reached {
+            out.push(Refusal::NotReachedByPrincipal {
+                part: n.to_string(),
+            });
+        }
+    }
+    for (i, l) in links.iter().enumerate() {
+        let Some(to) = s(&l["to"]) else { continue };
+        if s(&l["carries"]) != Some("question") || block(architecture, to) != Some("agent") {
+            continue;
+        }
+        let acts_for = !value(&parts[to]["acts_for"]).is_null();
+        let forwards = links.iter().any(|f| {
+            s(&f["from"]) == Some(to)
+                && s(&f["carries"]) == Some("question")
+                && is_principal(s(&f["to"]))
+        });
+        if !acts_for && !forwards {
+            out.push(Refusal::QuestionNotForwarded {
+                link: i,
+                part: to.to_string(),
+            });
         }
     }
     out

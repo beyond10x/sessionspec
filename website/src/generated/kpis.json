@@ -1759,7 +1759,7 @@
       "direction": "lower",
       "family": "composition",
       "gate": true,
-      "how": "Links carrying questions whose target is not a principal or an agent part. Must be 0.",
+      "how": "Links carrying questions whose target is not a principal or an agent part, or, in an architecture that has a principal part, an agent part that acts for no principal and has no link carrying questions to a principal part. Must be 0.",
       "id": "question_without_answerer",
       "kind": "correctness",
       "layer": 9,
@@ -1794,6 +1794,28 @@
       "source": "design",
       "status": "simulated",
       "summary": "Border entries that name no part.",
+      "unit": "count"
+    },
+    {
+      "block": "architecture",
+      "direction": "lower",
+      "family": "composition",
+      "gate": true,
+      "how": "In an architecture that has a principal part, border parts with no link from a principal part and no link carrying grants. An architecture with no principal part is made to be nested and counts 0. Must be 0.",
+      "id": "not_reached_by_principal",
+      "kind": "correctness",
+      "layer": 9,
+      "modes": [],
+      "planned": false,
+      "reads": [
+        "agentic.architecture.PartBordered",
+        "agentic.architecture.LinkAdded",
+        "agentic.architecture.PartAdded"
+      ],
+      "route": "/docs/blocks/9-composition/architecture#kpis",
+      "source": "design",
+      "status": "simulated",
+      "summary": "Border parts that no principal part reaches.",
       "unit": "count"
     },
     {
