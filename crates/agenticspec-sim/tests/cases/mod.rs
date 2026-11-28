@@ -33,6 +33,7 @@ mod replay;
 mod requirements;
 mod rows;
 mod scenario;
+mod score;
 mod search;
 mod settings;
 mod shares_check;

@@ -368,6 +368,28 @@ Error `unknown_event`: `agenticspec.cli.Refusal`.
 
 Error `unknown_refusal`: `agenticspec.cli.Refusal`.
 
+### `sim score`
+
+Simulate each architecture once as written, a marked place at its value, and print its KPIs and per-part KPIs as JSON; with --batch or more than one document a list in their order
+
+Callable: `sim_score`. Input: `agenticspec.cli.SimScoreInput`. Result: `agenticspec.cli.SimScoreResult`.
+
+Error `architecture_refused`: `agenticspec.cli.Refusal`.
+
+Error `document_unreadable`: `agenticspec.cli.Refusal`.
+
+Error `documents_missing`: `agenticspec.cli.Refusal`.
+
+Error `horizon_invalid`: `agenticspec.cli.Refusal`.
+
+Error `kpis_unreadable`: `agenticspec.cli.Refusal`.
+
+Error `ports_unreadable`: `agenticspec.cli.Refusal`.
+
+Error `profile_refused`: `agenticspec.cli.Refusal`.
+
+Error `simulation_refused`: `agenticspec.cli.Refusal`.
+
 ### `sim trace`
 
 Simulate an architecture once at its built values and write the port uses of the run as a trace (agenticspec-trace/1)
@@ -506,6 +528,7 @@ Error `sources_conflict`: `agenticspec.cli.Refusal`.
 - handler:sim_render: implement the owner-qualified callable and its declared result/error contract
 - handler:sim_run: implement the owner-qualified callable and its declared result/error contract
 - handler:sim_scenario: implement the owner-qualified callable and its declared result/error contract
+- handler:sim_score: implement the owner-qualified callable and its declared result/error contract
 - handler:sim_trace: implement the owner-qualified callable and its declared result/error contract
 - handler:sync: implement the owner-qualified callable and its declared result/error contract
 - handler:ui_build: implement the owner-qualified callable and its declared result/error contract

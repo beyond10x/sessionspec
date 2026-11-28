@@ -241,3 +241,146 @@ fn digest_prints_the_sha256_of_the_file_and_check_lists_the_nested_architecture(
     assert_eq!(accepted["nested"][0]["part"], "console");
     assert_eq!(accepted["nested"][0]["digest"], digest);
 }
+
+const BROKEN: &str = "format: agenticspec-architecture/1\narchitecture: broken\nparts:\n  you: { block: principal, kind: human }\nlinks:\n  - { from: you, to: nobody, carries: prompt }\n";
+
+/// `sim score` with the committed coding profile, seed 7, `extra` and the documents after `--`.
+fn score(extra: &[&str], documents: &[&str]) -> Output {
+    let mut args: Vec<&std::ffi::OsStr> = vec![
+        "score".as_ref(),
+        "--profile".as_ref(),
+        "fields/coding/profiles/coding.yaml".as_ref(),
+        "--seed".as_ref(),
+        "7".as_ref(),
+    ];
+    args.extend(extra.iter().map(std::ffi::OsStr::new));
+    args.push("--".as_ref());
+    args.extend(documents.iter().map(std::ffi::OsStr::new));
+    sim(&args)
+}
+
+fn stdout(out: &Output) -> String {
+    String::from_utf8(out.stdout.clone()).unwrap()
+}
+
+#[test]
+fn score_prints_the_kpis_of_one_document() {
+    let out = score(&[], &["architectures/author-reviewer.yaml"]);
+    let scored = result(&out);
+    assert!(scored["kpis"]["tasks_done"].is_number(), "{scored}");
+    assert!(scored["kpis"]["cost_usd"].is_number(), "{scored}");
+    assert!(scored["per_part"]["reviewer"].is_object(), "{scored}");
+    assert_eq!(
+        scored.as_object().unwrap().keys().collect::<Vec<_>>(),
+        ["kpis", "per_part"]
+    );
+    assert_eq!(stdout(&out).lines().count(), 1);
+
+    let plain = sim(&[
+        "score".as_ref(),
+        "--profile".as_ref(),
+        "fields/coding/profiles/coding.yaml".as_ref(),
+        "--seed".as_ref(),
+        "7".as_ref(),
+        "architectures/author-reviewer.yaml".as_ref(),
+    ]);
+    assert_eq!(
+        plain.stdout, out.stdout,
+        "the path as the last argument, without --"
+    );
+}
+
+#[test]
+fn score_is_byte_equal_for_the_same_document_and_arguments() {
+    let first = score(&[], &["architectures/solo.yaml"]);
+    let again = score(&[], &["architectures/solo.yaml"]);
+    assert_eq!(first.status.code(), Some(0));
+    assert_eq!(first.stdout, again.stdout);
+    let other_seed = sim(&[
+        "score".as_ref(),
+        "--profile".as_ref(),
+        "fields/coding/profiles/coding.yaml".as_ref(),
+        "--seed".as_ref(),
+        "8".as_ref(),
+        "architectures/solo.yaml".as_ref(),
+    ]);
+    assert_eq!(other_seed.status.code(), Some(0));
+    assert_ne!(
+        first.stdout, other_seed.stdout,
+        "the seed is an argument of the run"
+    );
+}
+
+#[test]
+fn score_exits_3_with_the_error_of_a_refused_document() {
+    let arch = scratch("score-refused").join("broken.yaml");
+    std::fs::write(&arch, BROKEN).unwrap();
+    let out = score(&[], &[arch.to_str().unwrap()]);
+    assert_eq!(out.status.code(), Some(3));
+    let text = stdout(&out);
+    assert_eq!(text.lines().count(), 1, "{text}");
+    let answer: Value = serde_json::from_str(&text).unwrap();
+    assert_eq!(answer["error"]["code"], "architecture_refused");
+    assert!(
+        answer["error"]["message"]
+            .as_str()
+            .unwrap()
+            .contains("nobody"),
+        "{answer}"
+    );
+    let stderr = String::from_utf8_lossy(&out.stderr);
+    assert!(stderr.starts_with("architecture_refused: "), "{stderr}");
+
+    let missing = score(&[], &["architectures/missing.yaml"]);
+    assert_eq!(missing.status.code(), Some(3));
+    let answer: Value = serde_json::from_slice(&missing.stdout).unwrap();
+    assert_eq!(answer["error"]["code"], "document_unreadable");
+}
+
+#[test]
+fn score_exits_1_with_the_error_of_a_profile_it_cannot_read() {
+    let out = sim(&[
+        "score".as_ref(),
+        "--profile".as_ref(),
+        "fields/coding/profiles/missing.yaml".as_ref(),
+        "architectures/solo.yaml".as_ref(),
+    ]);
+    assert_eq!(out.status.code(), Some(1));
+    let answer: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(answer["error"]["code"], "profile_refused");
+}
+
+#[test]
+fn score_batch_answers_each_path_in_order_byte_equal_to_its_single_run() {
+    let broken = scratch("score-batch").join("broken.yaml");
+    std::fs::write(&broken, BROKEN).unwrap();
+    let paths = [
+        "architectures/solo.yaml",
+        broken.to_str().unwrap(),
+        "architectures/author-reviewer.yaml",
+    ];
+    let batch = score(&[], &paths);
+    assert_eq!(
+        batch.status.code(),
+        Some(0),
+        "{}",
+        String::from_utf8_lossy(&batch.stderr)
+    );
+    let singles: Vec<String> = paths
+        .iter()
+        .map(|p| stdout(&score(&[], &[p])).trim_end().to_owned())
+        .collect();
+    assert_eq!(
+        stdout(&batch),
+        format!("{{\"results\":[{}]}}\n", singles.join(","))
+    );
+    let answer: Value = serde_json::from_slice(&batch.stdout).unwrap();
+    assert_eq!(
+        answer["results"][1]["error"]["code"],
+        "architecture_refused"
+    );
+
+    let one = score(&["--batch"], &[paths[0]]);
+    assert_eq!(one.status.code(), Some(0));
+    assert_eq!(stdout(&one), format!("{{\"results\":[{}]}}\n", singles[0]));
+}

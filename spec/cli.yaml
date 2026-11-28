@@ -190,6 +190,19 @@ callables:
       architecture_refused: agenticspec.cli.Refusal
       simulation_refused: agenticspec.cli.Refusal
       out_unwritable: agenticspec.cli.Refusal
+  sim_score:
+    target: {kind: local, owner: agenticspec.cli, action: sim_score}
+    input: agenticspec.cli.SimScoreInput
+    result: agenticspec.cli.SimScoreResult
+    errors:
+      document_unreadable: agenticspec.cli.Refusal
+      architecture_refused: agenticspec.cli.Refusal
+      ports_unreadable: agenticspec.cli.Refusal
+      kpis_unreadable: agenticspec.cli.Refusal
+      simulation_refused: agenticspec.cli.Refusal
+      profile_refused: agenticspec.cli.Refusal
+      horizon_invalid: agenticspec.cli.Refusal
+      documents_missing: agenticspec.cli.Refusal
   ui_generate:
     target: {kind: local, owner: agenticspec.cli, action: ui_generate}
     input: agenticspec.cli.UiGenerateInput
@@ -455,6 +468,16 @@ commands:
       - {field: seed, source: {kind: option, long: seed}}
       - {field: horizon, source: {kind: option, long: horizon}}
       - {field: out, source: {kind: option, long: out}}
+  - path: [sim, score]
+    callable: sim_score
+    about: Simulate each architecture once as written, a marked place at its value, and print its KPIs and per-part KPIs as JSON; with --batch or more than one document a list in their order
+    arguments:
+      - {field: architecture, source: {kind: positional, index: 1}}
+      - {field: profile, source: {kind: option, long: profile}}
+      - {field: seed, source: {kind: option, long: seed}}
+      - {field: horizon, source: {kind: option, long: horizon}}
+      - {field: batch, source: {kind: flag, long: batch}}
+      - {field: documents, source: {kind: trailing}}
   - path: [ui, generate]
     callable: ui_generate
     about: Generate the Vue app of an ess-ui/1 document over the components of ui/kit, or with --project a project that builds it with node into the archive a binding names

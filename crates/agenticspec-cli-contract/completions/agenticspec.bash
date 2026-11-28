@@ -202,6 +202,9 @@ _agenticspec() {
             agenticspec__subcmd__help__subcmd__sim,scenario)
                 cmd="agenticspec__subcmd__help__subcmd__sim__subcmd__scenario"
                 ;;
+            agenticspec__subcmd__help__subcmd__sim,score)
+                cmd="agenticspec__subcmd__help__subcmd__sim__subcmd__score"
+                ;;
             agenticspec__subcmd__help__subcmd__sim,trace)
                 cmd="agenticspec__subcmd__help__subcmd__sim__subcmd__trace"
                 ;;
@@ -283,6 +286,9 @@ _agenticspec() {
             agenticspec__subcmd__sim,scenario)
                 cmd="agenticspec__subcmd__sim__subcmd__scenario"
                 ;;
+            agenticspec__subcmd__sim,score)
+                cmd="agenticspec__subcmd__sim__subcmd__score"
+                ;;
             agenticspec__subcmd__sim,trace)
                 cmd="agenticspec__subcmd__sim__subcmd__trace"
                 ;;
@@ -315,6 +321,9 @@ _agenticspec() {
                 ;;
             agenticspec__subcmd__sim__subcmd__help,scenario)
                 cmd="agenticspec__subcmd__sim__subcmd__help__subcmd__scenario"
+                ;;
+            agenticspec__subcmd__sim__subcmd__help,score)
+                cmd="agenticspec__subcmd__sim__subcmd__help__subcmd__score"
                 ;;
             agenticspec__subcmd__sim__subcmd__help,trace)
                 cmd="agenticspec__subcmd__sim__subcmd__help__subcmd__trace"
@@ -1108,7 +1117,7 @@ _agenticspec() {
             return 0
             ;;
         agenticspec__subcmd__help__subcmd__sim)
-            opts="check contract corpus digest ladder ports render run scenario trace"
+            opts="check contract corpus digest ladder ports render run scenario score trace"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -1234,6 +1243,20 @@ _agenticspec() {
             return 0
             ;;
         agenticspec__subcmd__help__subcmd__sim__subcmd__scenario)
+            opts=""
+            if [[ ${cur} == -* || ${COMP_CWORD} -eq 4 ]] ; then
+                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+                return 0
+            fi
+            case "${prev}" in
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+            return 0
+            ;;
+        agenticspec__subcmd__help__subcmd__sim__subcmd__score)
             opts=""
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 4 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
@@ -1858,7 +1881,7 @@ _agenticspec() {
             return 0
             ;;
         agenticspec__subcmd__sim)
-            opts="-h --config --state-dir --output --help check contract corpus digest ladder ports render run scenario trace help"
+            opts="-h --config --state-dir --output --help check contract corpus digest ladder ports render run scenario score trace help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -2020,7 +2043,7 @@ _agenticspec() {
             return 0
             ;;
         agenticspec__subcmd__sim__subcmd__help)
-            opts="check contract corpus digest ladder ports render run scenario trace help"
+            opts="check contract corpus digest ladder ports render run scenario score trace help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -2160,6 +2183,20 @@ _agenticspec() {
             return 0
             ;;
         agenticspec__subcmd__sim__subcmd__help__subcmd__scenario)
+            opts=""
+            if [[ ${cur} == -* || ${COMP_CWORD} -eq 4 ]] ; then
+                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+                return 0
+            fi
+            case "${prev}" in
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+            return 0
+            ;;
+        agenticspec__subcmd__sim__subcmd__help__subcmd__score)
             opts=""
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 4 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
@@ -2335,6 +2372,44 @@ _agenticspec() {
             fi
             case "${prev}" in
                 --out)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                --config)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                --state-dir)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                --output)
+                    COMPREPLY=($(compgen -W "human json" -- "${cur}"))
+                    return 0
+                    ;;
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+            return 0
+            ;;
+        agenticspec__subcmd__sim__subcmd__score)
+            opts="-h --profile --seed --horizon --batch --config --state-dir --output --help"
+            if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
+                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+                return 0
+            fi
+            case "${prev}" in
+                --profile)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                --seed)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                --horizon)
                     COMPREPLY=($(compgen -f "${cur}"))
                     return 0
                     ;;
