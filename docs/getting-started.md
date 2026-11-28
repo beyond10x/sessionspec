@@ -106,6 +106,10 @@ blocks. It exits 0 and prints the architecture with its counts of parts and link
 architecture as a whole, the parts it cannot lose (`single_points`), the architectures it nests and
 the count of its ingresses, or exits 1 and names each refusal on standard error.
 
+The rules are the refusals of the architecture block that a document can write, with two left out
+for now: a border part that no principal part links to, and a question to an agent that acts for
+no principal (`design/building-blocks.md`, "An architecture document", lists the rules and why).
+
 Every key of a part other than `block` is a setting, and the part's block declares which settings
 it takes and of what type: the "Settings" section of each block page lists them with type, unit and
 default. The check refuses a setting the block does not declare (`setting_unknown`) and a value
@@ -143,7 +147,7 @@ no document.
 
 ```console
 $ agenticspec sim check --json broken.yaml
-{"architecture":"broken","counts":{"acts_for_without_part":0,…,"unknown_link_parts":1,"unreachable_parts":0},"format":"agenticspec-check/1","links":1,"parts":1,"valid":false,"violations":[{"gate":true,"link":0,"message":"link 0 names a part that does not exist","part":"nobody","rule":"unknown_link_parts","subject":"you->nobody:prompt"}]}
+{"architecture":"broken","counts":{"acts_for_not_principal":0,…,"unknown_link_parts":1,"unreachable_parts":0},"format":"agenticspec-check/1","links":1,"parts":1,"valid":false,"violations":[{"gate":true,"link":0,"message":"link 0 names a part that does not exist","part":"nobody","rule":"unknown_link_parts","subject":"you->nobody:prompt"}]}
 ```
 
 | field | what |
