@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-28T20:14:23Z",
+  "actor": "human:operator",
+  "artifact": "story:block-rules-follow-simulator",
+  "kind": "story",
+  "revision": 1,
+  "change": {
+    "change": "evidence",
+    "kind": "test_result",
+    "source": "slot --timeout 30m task check on integration/2026-11-28-e at 5a97fcd; CI of PR 47 passed; merged as d34ea91",
+    "reference": "https://github.com/beyond10x/agenticspec/pull/47"
+  }
+}

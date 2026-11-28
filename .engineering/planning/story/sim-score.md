@@ -2,11 +2,15 @@
 format: aep.planning-md/3
 id: story:sim-score
 kind: story
-status: draft
+status: implemented
 title: 'Score one architecture for a shared search: sim score'
 relations:
 - decomposes: epic:simulator-and-search
-revision: 1
+revision: 4
+transitions:
+- {from: "draft", to: "proposed", at: "2026-11-28T20:14:19Z", actor: "human:operator", revision: 2, decided_on: {"recorded":{"test_result":1}}}
+- {from: "proposed", to: "active", at: "2026-11-28T20:14:20Z", actor: "human:operator", revision: 3, decided_on: {"recorded":{"test_result":1}}}
+- {from: "active", to: "implemented", at: "2026-11-28T20:14:20Z", actor: "human:operator", revision: 4, decided_on: {"recorded":{"test_result":1}}}
 ---
 ## Outcome
 
