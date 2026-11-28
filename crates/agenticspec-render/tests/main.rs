@@ -8,6 +8,7 @@ mod model;
 mod optim;
 mod page;
 mod references;
+mod region_marks;
 mod wrap;
 
 use agenticspec_render::architecture::page;

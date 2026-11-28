@@ -1,8 +1,9 @@
 //! Every reference of a page names something the page declares: a port's `node` names a node, a
-//! mark's target names a node (and a port the page declares on it), a node's `region` names a
-//! region or a node. The renderer skips a reference that names nothing (`graph.rs` drops a port
-//! or a mark whose node is no part, and draws a node outside every region), so what an author
-//! declared would never be drawn where it was declared and no check would say why. Reading a page
+//! mark's target names a node (and a port the page declares on it) or a region, a node's
+//! `region` names a region or a node. The renderer skips a reference that names nothing
+//! (`graph.rs` drops a port or a mark whose node is no part, and draws a node outside every
+//! region), so what an author declared would never be drawn where it was declared and no check
+//! would say why. Reading a page
 //! from JSON refuses it instead, naming the code and the reference. Each case pairs a page that
 //! resolves (accepted) with the one reference that must be refused.
 
@@ -24,7 +25,9 @@ fn base() -> Value {
         "edges": [],
         "marks": [
             { "target": { "node": "pay" }, "name": "slow" },
-            { "target": { "node": "pay", "port": "charge" }, "name": "no_retry" }
+            { "target": { "node": "pay", "port": "charge" }, "name": "no_retry" },
+            { "target": { "node": "zone" }, "name": "scope_failed" },
+            { "target": { "node": "shelf" }, "name": "scope_info", "level": "info" }
         ]
     })
 }
@@ -89,11 +92,15 @@ fn a_port_built_in_code_whose_node_names_no_node_fails_the_check() {
 }
 
 #[test]
-fn a_mark_whose_target_names_no_node_or_no_port_of_it_is_refused() {
+fn a_mark_whose_target_names_no_node_no_port_of_it_and_no_region_is_refused() {
     for (target, named) in [
         (json!({ "node": "ghost" }), "\"ghost\""),
         (json!({ "node": "pay", "port": "refund" }), "\"pay.refund\""),
         (json!({ "node": "db", "port": "charge" }), "\"db.charge\""),
+        (
+            json!({ "node": "zone", "port": "charge" }),
+            "\"zone.charge\"",
+        ),
     ] {
         let mut v = base();
         v["marks"]

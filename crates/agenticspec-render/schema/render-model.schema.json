@@ -130,7 +130,7 @@
       }
     },
     "Mark": {
-      "description": "A refusal (the default) or a piece of information on a node or a port. A refusal rings its card or port. A page whose mark targets no node, or a port the page does not declare on that node, is refused (mark_target_unknown).",
+      "description": "A refusal (the default) or a piece of information on a node or a port. A refusal rings its card or port. Its target is a node, a port of a node (node and port) or a region (node names the region; the chip sits on the region's frame label, its band label, or its card while collapsed, and a refusal rings it). A page whose mark targets none of them is refused (mark_target_unknown).",
       "type": "object",
       "additionalProperties": false,
       "required": ["target", "name"],
