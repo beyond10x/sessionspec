@@ -156,7 +156,7 @@ pub fn load(root: &Path) -> Result<Catalog, String> {
         if searched.contains(&name) {
             continue;
         }
-        let doc = agenticspec_sim::doc::load_yaml(&path)?;
+        let doc = agenticspec_sim::settings::canonical(&agenticspec_sim::doc::load_yaml(&path)?);
         unsearched.push(Unsearched {
             name,
             summary: doc["summary"].as_str().unwrap_or("").to_string(),

@@ -16,7 +16,7 @@ summary: >-
   the search and the contract never read it.
 
 every_part:
-  - {name: count, type: integer, min: 0, default: 1, summary: "How many copies of the part run."}
+  - {name: count, type: integer, min: 1, default: 1, summary: "How many copies of the part run."}
   - {name: per, type: part, summary: "One copy of the part for each copy of the named part."}
   - {name: notes, type: notes, summary: "Free notes on the part, a map with keys and values of any kind: what no setting of its block types. The check takes any map; the simulator, the search and the contract never read it."}
 
@@ -103,8 +103,8 @@ blocks:
     domain: agentic.resource
     settings:
       - {name: kind, type: enum, enum: agentic.resource.PoolKind, narrows: [resource.claim], summary: "What the pool hands out."}
-      - {name: capacity, type: integer, unit: slots, min: 0, narrows: [resource.claim], summary: "How many claims the pool holds at once; without it, no limit."}
-      - {name: job_limit, type: duration, min: 0, narrows: [resource.claim], summary: "How long one claim may hold a slot; without it, no limit."}
+      - {name: capacity, type: integer, unit: slots, min: 1, narrows: [resource.claim], summary: "How many claims the pool holds at once; without it, no limit."}
+      - {name: job_limit, type: duration, min: 1s, narrows: [resource.claim], summary: "How long one claim may hold a slot; without it, no limit."}
       - {name: order, type: enum, values: [fifo, lifo, priority], default: fifo, summary: "The order the pool grants waiting claims in: first come first served (fifo), newest first (lifo), or by the claim's priority."}
 
   - kind: trigger

@@ -448,7 +448,7 @@ A part `trigger`:
 | `max_parallel` | integer |  | `1` | `trigger.firing` | How many runs may go at once under the parallel policy. |
 | `takes` | enum: `all` |  |  |  | `all`: one run takes every waiting task, not one. |
 | `task_template` | string |  |  |  | The template of the task each firing starts. |
-| `count` | integer of at least 0 |  | `1` |  | How many copies of the part run. |
+| `count` | integer of at least 1 |  | `1` |  | How many copies of the part run. |
 | `per` | part |  |  |  | One copy of the part for each copy of the named part. |
 | `notes` | notes |  |  |  | Free notes on the part, a map with keys and values of any kind: what no setting of its block types. The check takes any map; the simulator, the search and the contract never read it. |
 
@@ -458,7 +458,7 @@ A part `schedule`:
 |---|---|---|---|---|---|
 | `every` | duration |  |  | `trigger.firing`, `trigger.schedule` | The time between two firings. |
 | `next_fire_at` | duration of at least 0s |  | `0s` | `trigger.schedule` | When the schedule first fires, from the start of the run. |
-| `count` | integer of at least 0 |  | `1` |  | How many copies of the part run. |
+| `count` | integer of at least 1 |  | `1` |  | How many copies of the part run. |
 | `per` | part |  |  |  | One copy of the part for each copy of the named part. |
 | `notes` | notes |  |  |  | Free notes on the part, a map with keys and values of any kind: what no setting of its block types. The check takes any map; the simulator, the search and the contract never read it. |
 

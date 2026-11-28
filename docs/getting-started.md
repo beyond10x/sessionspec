@@ -110,7 +110,11 @@ Every key of a part other than `block` is a setting, and the part's block declar
 it takes and of what type: the "Settings" section of each block page lists them with type, unit and
 default. The check refuses a setting the block does not declare (`setting_unknown`) and a value
 outside its type or range (`setting_invalid`, for example `capacity: many` on a pool), each naming
-the part, the setting and what was expected.
+the part, the setting and what was expected. A setting whose values are a block's own enum takes
+the word (`sharing: shared_read_only`) or the variant as the block writes it (`SharedReadOnly`);
+both are one value, and what the simulator, the contract and the deployment bundle write carries
+the word. A `model_share` names only model parts the part reaches over `model_call`, and gives at
+least one of them a share above 0.
 
 What no setting of the block types goes into the part's `notes`, a map with free keys and values
 that every part may carry. The check takes any map there as written, and the simulator, the search

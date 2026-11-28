@@ -257,7 +257,8 @@ fn nested_parts(doc: &Value) -> Vec<String> {
         .collect()
 }
 
-/// Reads the document at `path` and resolves its nested architectures.
+/// Reads the document at `path` and resolves its nested architectures; each setting of a block's
+/// enum comes back as its word (`settings::canonical`).
 pub fn load(path: &Path) -> Result<Value, Error> {
     let text = std::fs::read_to_string(path)
         .map_err(|e| Error::Unreadable(format!("{}: {e}", path.display())))?;
@@ -273,7 +274,9 @@ pub fn load(path: &Path) -> Result<Value, Error> {
     let dir = path.parent().unwrap_or(Path::new("."));
     let doc = annotate(doc, dir, &mut stack, &mut out);
     if out.is_empty() {
-        Ok(doc)
+        // Each nested document was held to its pin as written; what a reader reads is the
+        // document with the one spelling of each enum setting.
+        Ok(crate::settings::canonical(&doc))
     } else {
         Err(Error::Refused(out))
     }
@@ -552,8 +555,14 @@ fn prefix_link(prefix: &str, l: &Value) -> Value {
 /// `<part>.<inner part>`, its links among them, and under `nested` one entry per nested
 /// architecture (its part, name, ref, digest, counts of its own parts and links, and its border
 /// parts by their flattened names). The outer `policies` hold; the nested ones do not. A
-/// document without nested architectures comes back unchanged.
+/// document without nested architectures comes back with its parts unchanged. Every setting of
+/// a block's enum is in its one spelling, the word (`settings::canonical`): this is the document
+/// as the check's rules, the simulator, the contract and the bundle read it.
 pub fn flatten(doc: &Value) -> Value {
+    crate::settings::canonical(&merge(doc))
+}
+
+fn merge(doc: &Value) -> Value {
     if nested_parts(doc).is_empty() {
         return doc.clone();
     }
@@ -567,7 +576,7 @@ pub fn flatten(doc: &Value) -> Value {
             continue;
         }
         let raw = &p[INNER];
-        let inner = flatten(raw);
+        let inner = merge(raw);
         for (n, ip) in inner["parts"].as_object().into_iter().flatten() {
             parts.insert(prefixed(name, n), prefix_part(name, ip));
         }

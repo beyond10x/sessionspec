@@ -253,10 +253,10 @@ A part `pool`:
 | setting | type | unit | default | contract | what |
 |---|---|---|---|---|---|
 | `kind` | enum `PoolKind`: `build_slots`, `rate_limit`, `cache`, `seats`, `queue` |  |  | `resource.claim` | What the pool hands out. |
-| `capacity` | integer of at least 0 | slots |  | `resource.claim` | How many claims the pool holds at once; without it, no limit. |
-| `job_limit` | duration of at least 0s |  |  | `resource.claim` | How long one claim may hold a slot; without it, no limit. |
+| `capacity` | integer of at least 1 | slots |  | `resource.claim` | How many claims the pool holds at once; without it, no limit. |
+| `job_limit` | duration of at least 1s |  |  | `resource.claim` | How long one claim may hold a slot; without it, no limit. |
 | `order` | enum: `fifo`, `lifo`, `priority` |  | `fifo` |  | The order the pool grants waiting claims in: first come first served (fifo), newest first (lifo), or by the claim's priority. |
-| `count` | integer of at least 0 |  | `1` |  | How many copies of the part run. |
+| `count` | integer of at least 1 |  | `1` |  | How many copies of the part run. |
 | `per` | part |  |  |  | One copy of the part for each copy of the named part. |
 | `notes` | notes |  |  |  | Free notes on the part, a map with keys and values of any kind: what no setting of its block types. The check takes any map; the simulator, the search and the contract never read it. |
 

@@ -329,7 +329,7 @@ A part `workspace`:
 |---|---|---|---|---|---|
 | `kind` | string |  |  | every port | What kind of workspace the part provides. |
 | `sharing` | enum `Sharing`: `exclusive`, `shared_read_only`, `shared_read_write` |  |  | every port | Whether more than one holder may use one workspace. |
-| `count` | integer of at least 0 |  | `1` |  | How many copies of the part run. |
+| `count` | integer of at least 1 |  | `1` |  | How many copies of the part run. |
 | `per` | part |  |  |  | One copy of the part for each copy of the named part. |
 | `notes` | notes |  |  |  | Free notes on the part, a map with keys and values of any kind: what no setting of its block types. The check takes any map; the simulator, the search and the contract never read it. |
 
