@@ -367,6 +367,12 @@ commands:
         when_subject:
           predicate: addressee != caller.party
         error: agentic.question.NotTheAddressee
+      # From the deadline on the question takes its default, as for Answer: a reply that could not
+      # be read is refused too and the question stays Open for the clock.
+      - name: deadline-passed
+        when_subject:
+          predicate: deadline <= now
+        error: agentic.question.DeadlinePassed
       - name: recorded
         moves: agentic.question.Question.could_not_read
         instance: question_id

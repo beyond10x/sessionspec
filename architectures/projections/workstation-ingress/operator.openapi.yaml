@@ -2602,7 +2602,7 @@ info:
     authenticated: true
     ingress: operator
   x-ess-provenance:
-    contract_digest: slice-sha256/2:efa1cd0d3b5a783c5c8516723d7b218bbbed3de6b7af4a446980f1b1b78a3910
+    contract_digest: slice-sha256/2:bb4fd8af64241c08f25961f132c252645fa27bbac0ea444e1731a1950dee5343
     specification_version: v1
     system: agentic
   x-ess-reached-by: network

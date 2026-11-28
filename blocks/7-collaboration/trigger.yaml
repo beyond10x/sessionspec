@@ -266,6 +266,8 @@ errors:
     summary: The schedule is not in a state this command acts from.
     fields:
       - {name: state, type: agentic.trigger.Schedule.State}
+  - name: agentic.trigger.FireTimeNotLater
+    summary: The next fire time is not after the stored one; a schedule only moves forward, nothing changed.
   - name: agentic.trigger.InvalidConcurrency
     summary: A trigger lets at least one run start, and only a Parallel trigger more than one; nothing was created.
   - name: agentic.trigger.TriggerSourceMissing
@@ -425,6 +427,11 @@ commands:
         when_subject:
           predicate: state != Enabled
         error: agentic.trigger.ScheduleNotEnabled
+      # A schedule only moves forward: a next fire time at or before the stored one is refused.
+      - name: not-later
+        when_subject:
+          predicate: input.next_fire_at <= next_fire_at
+        error: agentic.trigger.FireTimeNotLater
       - name: advanced
         updates: agentic.trigger.Schedule
         instance: schedule_id

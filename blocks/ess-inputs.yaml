@@ -50,6 +50,7 @@ scenarios:
   - scenarios/deployment/observe-unit-refuses-negative-ready.yaml
   - scenarios/deployment/roll-back-keeps-one-active.yaml
   - scenarios/question/answer-after-deadline.yaml
+  - scenarios/question/unreadable-after-deadline.yaml
   - scenarios/agent/use-leaves-revision-unchanged.yaml
   - scenarios/harness/restart-lineage.yaml
   - scenarios/resource/claim-withdrawn-from-queue.yaml
@@ -57,7 +58,12 @@ scenarios:
   - scenarios/trigger/subject-one-run.yaml
   - scenarios/work/run-records-steps.yaml
   - scenarios/workspace/exclusive-and-shared-leases.yaml
+  - scenarios/workspace/propose-by-another-party.yaml
+  - scenarios/workspace/supersede-by-itself.yaml
+  - scenarios/workspace/write-past-lease-expiry.yaml
+  - scenarios/workspace/proposal-merged-rejected-superseded.yaml
   - scenarios/authority/tool-call-decided-by-authority.yaml
+  - scenarios/authority/allow-under-approval-grant.yaml
   - scenarios/store/record-revised-by-compare-and-set.yaml
   - scenarios/store/artifact-immutable.yaml
   - scenarios/store/expire-and-delete.yaml
