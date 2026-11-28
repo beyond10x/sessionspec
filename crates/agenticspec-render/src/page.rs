@@ -53,7 +53,9 @@
 //!   which the script swaps in.
 //!
 //! An edge end names a node, or a port the page declares as `node.port`. A page read from JSON
-//! with an end that names neither is refused as `edge_end_unknown` ([`Page::check`]). A
+//! with an end that names neither is refused as `edge_end_unknown` ([`Page::check`]). So is every
+//! other reference that names nothing: a port's `node` (`port_node_unknown`), a mark's target
+//! (`mark_target_unknown`) and a node's `region` (`node_region_unknown`). A
 //! `collapsed` that is no boolean is refused as `region_collapsed_invalid`, and a collapsed region
 //! that holds no node besides its own as `region_collapsed_empty`.
 //!
@@ -452,7 +454,12 @@ impl Page {
 
     /// Whether every edge end resolves: to a node's id, or as `node.port` to a port the page
     /// declares on that node. The first end that does not is refused as `edge_end_unknown`,
-    /// naming the edge and the end. A region with `collapsed: true` that holds no node besides
+    /// naming the edge and the end. Every other reference resolves too, or the first that does
+    /// not is refused: a port whose `node` is no node as `port_node_unknown`, naming the port; a
+    /// mark whose target is no node, or names a port the page does not declare on that node, as
+    /// `mark_target_unknown`, naming the mark and its target; a node whose `region` is no region
+    /// and no node as `node_region_unknown`, naming the node and the region. A region with
+    /// `collapsed: true` that holds no node besides
     /// its own (in it or in a region inside it) would be a card that opens onto nothing; it is
     /// refused as `region_collapsed_empty`, naming the region. Reading a page from JSON runs this
     /// check.
@@ -467,7 +474,46 @@ impl Page {
                 }
             }
         }
+        for p in &self.ports {
+            if !self.has_node(&p.node) {
+                return Err(format!(
+                    "port_node_unknown: the port {:?}: {:?} is no node",
+                    format!("{}.{}", p.node, p.name),
+                    p.node
+                ));
+            }
+        }
+        for m in &self.marks {
+            let t = &m.target;
+            let on = match &t.port {
+                None => t.node.clone(),
+                Some(port) => format!("{}.{port}", t.node),
+            };
+            let resolves = self.has_node(&t.node)
+                && t.port.as_ref().is_none_or(|port| {
+                    self.ports
+                        .iter()
+                        .any(|p| p.node == t.node && p.name == *port)
+                });
+            if !resolves {
+                return Err(format!(
+                    "mark_target_unknown: the mark {:?} on {on:?}: {on:?} is no node and no port of a node",
+                    m.name
+                ));
+            }
+        }
         let tree = crate::collapse::Tree::of(self);
+        for n in &self.nodes {
+            if let Some(region) = &n.region
+                && !tree.regions.iter().any(|r| r.id == *region)
+                && !self.has_node(region)
+            {
+                return Err(format!(
+                    "node_region_unknown: the node {:?}: its region {region:?} is no region and no node",
+                    n.id
+                ));
+            }
+        }
         for r in tree.regions.iter().filter(|r| r.collapsed) {
             if tree.inside(self, &r.id) == 0 {
                 return Err(format!(
@@ -479,11 +525,15 @@ impl Page {
         Ok(())
     }
 
+    fn has_node(&self, id: &str) -> bool {
+        self.nodes.iter().any(|n| n.id == id)
+    }
+
     fn resolves(&self, end: &str) -> bool {
-        self.nodes.iter().any(|n| n.id == end)
+        self.has_node(end)
             || self.ports.iter().any(|p| {
                 end.strip_prefix(p.node.as_str()) == Some(&format!(".{}", p.name))
-                    && self.nodes.iter().any(|n| n.id == p.node)
+                    && self.has_node(&p.node)
             })
     }
 }

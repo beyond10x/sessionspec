@@ -23,7 +23,7 @@
 //! machine traffic, the commands of a port a link carrying a value of [`MACHINE_TRAFFIC`] stands
 //! for. Like the rest of the derivation, this module names no block other than the architecture
 //! block, no view, command or KPI: only that block's placement entity, the ingresses of the
-//! default control plane, the principal kinds and the values of machine traffic.
+//! default control plane, the enum of the principal kinds and the values of machine traffic.
 
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -33,8 +33,22 @@ use super::model::{Contract, Model, Panels, Port, Tree};
 use super::{Frame, LevelPlan, Section, capital, section_of, snake};
 use crate::Refusal;
 
-/// The principal kinds: a part of one of them is a principal part.
-pub const PRINCIPAL_KINDS: [&str; 2] = ["human", "service"];
+/// The enum of the compiled blocks whose values are the principal kinds, below the system's name
+/// (`<system>.shared.PrincipalKind`).
+pub const PRINCIPAL_KIND: &str = "shared.PrincipalKind";
+
+/// The principal kinds as an architecture writes them (`human`, `organization`, ...): the variants
+/// of [`PRINCIPAL_KIND`] in the compiled blocks `ir` the derivation reads, a root's or the copy
+/// built into the binary. A part of one of them is a principal part.
+pub fn principal_kinds(ir: &Value) -> BTreeSet<String> {
+    let model = Model { ir };
+    model
+        .variants(&format!("{}.{PRINCIPAL_KIND}", model.system()))
+        .iter()
+        .map(|v| snake(v))
+        .collect()
+}
+
 /// The values of a link's `carries` that are machine traffic, never an operation of an interface.
 pub const MACHINE_TRAFFIC: [&str; 3] = ["model_call", "tool_call", "claim"];
 /// The block of the architecture, whose views the Architecture page shows.
@@ -410,11 +424,11 @@ pub fn derive(i: &Inputs<'_>) -> Result<Control, Vec<Refusal>> {
     // Inbox: per principal part, the entities its principal ports open.
     let mut inbox = Vec::new();
     let mut inbox_entities = BTreeSet::new();
-    for part in parts.iter().filter(|p| {
-        p.kind
-            .as_deref()
-            .is_some_and(|k| PRINCIPAL_KINDS.contains(&k))
-    }) {
+    let principal_kinds = principal_kinds(i.model.ir);
+    for part in parts
+        .iter()
+        .filter(|p| p.kind.as_ref().is_some_and(|k| principal_kinds.contains(k)))
+    {
         let mut sections = Vec::new();
         for port in i
             .contract

@@ -160,8 +160,9 @@ commands against a running runtime under one sign-in and one action set.
 The derivation names no block, view, command or KPI. It reads port classes (principal, outbound,
 clock), the I4 split, the contract's block-to-domain table (`story:contract-derivation`) and the
 KPI catalogues by block and status. It names only `agentic.architecture` entities (D10), the
-reserved path `control` and the principal kinds `human` and `service`
-(`blocks/0-foundation/shared.yaml:96-98`). A field's or pack's blocks (`design/fields.md` § "Two
+reserved path `control` and the enum of the principal kinds, `agentic.shared.PrincipalKind`
+(`blocks/0-foundation/shared.yaml`), whose variants it reads from the compiled blocks, so every
+kind of principal gets an Inbox. A field's or pack's blocks (`design/fields.md` § "Two
 layers", § "Packs") get Inbox, Activity and Operations rows by the same rules, and a field
 catalogue's `computed` KPIs join `metrics: computed`, under the one-model limit of D10 (O8).
 

@@ -9,6 +9,7 @@ use serde_yaml_ng::Value;
 
 mod control;
 mod ingress;
+mod principal_kinds;
 
 fn root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
