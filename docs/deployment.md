@@ -537,7 +537,7 @@ name:
 
 | page | shows |
 |---|---|
-| Inbox | per principal part (kind `human` or `service`), the views over the entity each of its principal ports opens, with the port's answers as row actions |
+| Inbox | per principal part (any kind of principal: `human`, `organization`, `service` or `agent`), the views over the entity each of its principal ports opens, with the port's answers as row actions |
 | Activity | the views over the entities the other ports the parts use open, across parts, newest first |
 | Operations | per part, the views over the entities a configuration command of its blocks creates or an administration command moves, with the administration commands of the operator ingress as row actions; then the placements |
 | Metrics | the KPIs of the `metrics` ingress, each with the simulator's prediction from `--prediction` (a result of the same revision; another is refused) |

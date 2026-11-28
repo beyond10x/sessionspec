@@ -30,6 +30,8 @@ const MIN_W: f64 = 168.0;
 const LINE_GAP: f64 = 12.0;
 const ROW_GAP: f64 = 20.0;
 const PILL_H: f64 = 20.0;
+/// The gap before a chip on a label line.
+const CHIP_GAP: f64 = 8.0;
 
 /// The accessible title and description of the SVG.
 #[derive(Clone, Default)]
@@ -1019,7 +1021,52 @@ fn frame_head_w(sc: &Scene, p: usize) -> f64 {
     };
     label.map(|l| text_w(&l, 12.0, true) + 8.0).unwrap_or(0.0)
         + text_w(&heading, 11.0, false)
+        + frame_chips_w(sc, p)
         + close
+}
+
+/// The chips of the marks on a region that is no node: drawn on its frame's label line, after
+/// the heading. Those of a node others are in are drawn on its card.
+fn frame_chips(sc: &Scene, p: usize) -> &[Chip] {
+    if sc.parts[p].frame_only {
+        &sc.parts[p].chips
+    } else {
+        &[]
+    }
+}
+
+/// The width the chips of a label line take, the gap before each included.
+fn chips_w(chips: &[Chip]) -> f64 {
+    chips.iter().map(|c| CHIP_GAP + c.width()).sum()
+}
+
+fn frame_chips_w(sc: &Scene, p: usize) -> f64 {
+    chips_w(frame_chips(sc, p))
+}
+
+/// Draws `chips` side by side on a label line, the first `CHIP_GAP` right of `x`, their top at
+/// `y`. Returns where the last ends.
+fn line_chips(svg: &mut String, chips: &[Chip], mut x: f64, y: f64) -> f64 {
+    for c in chips {
+        x += CHIP_GAP;
+        c.svg(svg, x, y);
+        x += c.width();
+    }
+    x
+}
+
+/// The ring around a refused frame or band, `off` outside its box.
+fn frame_ring(svg: &mut String, x: f64, y: f64, w: f64, h: f64) {
+    let off = 5.0;
+    let _ = write!(
+        svg,
+        "<rect class=\"refusal-ring\" x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" rx=\"{}\"/>",
+        px(x - off),
+        px(y - off),
+        px(w + 2.0 * off),
+        px(h + 2.0 * off),
+        px(12.0 + off)
+    );
 }
 
 /// The width of the control that closes an open region.
@@ -1983,8 +2030,16 @@ fn bands(page: &Page, decor: &Decor, colours_of: &Page) -> (String, f64, f64) {
                 .filter(|p| held(&p.node))
                 .cloned()
                 .collect();
+            // A mark on a region inside the band is drawn on that region's frame in it.
+            let inside = |id: &str| {
+                top.is_some_and(|t| t.id != id)
+                    && region_band.iter().any(|&(r, rb)| r == id && rb == b)
+            };
             let marks: Vec<usize> = (0..page.marks.len())
-                .filter(|&i| held(&page.marks[i].target.node))
+                .filter(|&i| {
+                    let t = &page.marks[i].target;
+                    held(&t.node) || (t.port.is_none() && inside(&t.node))
+                })
                 .collect();
             let sd = Decor {
                 words: Words::default(),
@@ -2031,17 +2086,55 @@ fn bands(page: &Page, decor: &Decor, colours_of: &Page) -> (String, f64, f64) {
             })
         })
         .collect();
+    // The marks on a band's region, when it is no node: chips on its label line, and whether one
+    // is a refusal, which rings the band. Those on a region that is a node are on its card.
+    let band_marks: Vec<(Vec<Chip>, bool)> = shown
+        .iter()
+        .map(|&b| {
+            let Some(r) = tops
+                .get(b)
+                .filter(|r| !page.nodes.iter().any(|n| n.id == r.id))
+            else {
+                return (Vec::new(), false);
+            };
+            let on: Vec<usize> = (0..page.marks.len())
+                .filter(|&i| {
+                    page.marks[i].target.node == r.id && page.marks[i].target.port.is_none()
+                })
+                .collect();
+            let chips = on
+                .iter()
+                .map(|&i| {
+                    decor
+                        .chips
+                        .get(i)
+                        .and_then(|c| c.clone())
+                        .unwrap_or_else(|| Chip::of(&page.marks[i]))
+                })
+                .collect();
+            let refused = on
+                .iter()
+                .any(|&i| page.marks[i].level == page::Level::Refusal);
+            (chips, refused)
+        })
+        .collect();
     let band_w = measured
         .iter()
         .zip(&heads)
         .zip(&shown)
-        .map(|((d, h), &b)| {
+        .zip(&band_marks)
+        .map(|(((d, h), &b), (chips, _))| {
             let close = tops
                 .get(b)
                 .filter(|r| decor.closable.contains(&r.id))
                 .map_or(0.0, |_| close_w() + 8.0);
             let head = h.as_ref().map_or(0.0, |(l, s, _)| {
-                text_w(l, 12.0, true) + 8.0 + text_w(s, 11.0, false) + 2.0 * FPAD + close
+                text_w(l, 12.0, true)
+                    + 8.0
+                    + text_w(s, 11.0, false)
+                    + chips_w(chips)
+                    + 2.0 * FPAD
+                    + close
             });
             d.width.max(head)
         })
@@ -2210,14 +2303,24 @@ fn bands(page: &Page, decor: &Decor, colours_of: &Page) -> (String, f64, f64) {
 
     let mut svg = String::new();
     svg.push_str("<g class=\"bands\">");
-    for ((&b, head), bx) in shown.iter().zip(&heads).zip(&boxes) {
+    for (((&b, head), bx), (chips, refused)) in
+        shown.iter().zip(&heads).zip(&boxes).zip(&band_marks)
+    {
         let id = tops.get(b).map_or("", |r| r.id.as_str());
         let per = head.as_ref().is_some_and(|h| h.2);
         let _ = write!(
             svg,
-            "<g class=\"region band{} f-other\" data-band=\"{}\"><rect class=\"region-bg\" x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" rx=\"12\" data-band-box=\"{} {} {} {}\"/>",
+            "<g class=\"region band{}{} f-other\" data-band=\"{}\">",
             if per { " per" } else { "" },
+            if *refused { " refused" } else { "" },
             esc(id),
+        );
+        if *refused {
+            frame_ring(&mut svg, bx[0], bx[1], bx[2], bx[3]);
+        }
+        let _ = write!(
+            svg,
+            "<rect class=\"region-bg\" x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" rx=\"12\" data-band-box=\"{} {} {} {}\"/>",
             px(bx[0]),
             px(bx[1]),
             px(bx[2]),
@@ -2238,6 +2341,12 @@ fn bands(page: &Page, decor: &Decor, colours_of: &Page) -> (String, f64, f64) {
                 px(tx + text_w(label, 12.0, true) + 8.0),
                 px(bx[1] + 17.0),
                 esc(heading)
+            );
+            line_chips(
+                &mut svg,
+                chips,
+                tx + text_w(label, 12.0, true) + 8.0 + text_w(heading, 11.0, false),
+                bx[1] + 3.0,
             );
             if decor.closable.iter().any(|c| c == id) {
                 close_control(&mut svg, id, label, bx[0] + bx[2] - FPAD, bx[1] + 5.0);
@@ -3958,13 +4067,22 @@ fn draw_card(svg: &mut String, sc: &Scene, card: &Card, x: f64, y: f64) {
         let (label, heading, per) = frame_head(sc, p);
         let part = &sc.parts[p];
         let (fx, fy) = (x + dx, y + dy);
+        let refused = part.frame_only && part.refused;
         let _ = write!(
             svg,
-            "<g class=\"region{} f-{}\"{} data-region=\"{}\"><rect class=\"region-bg\" x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" rx=\"12\"/>",
+            "<g class=\"region{}{} f-{}\"{} data-region=\"{}\">",
             if per { " per" } else { "" },
+            if refused { " refused" } else { "" },
             part.slot,
             look(part),
             esc(&part.id),
+        );
+        if refused {
+            frame_ring(svg, fx, fy, w, h);
+        }
+        let _ = write!(
+            svg,
+            "<rect class=\"region-bg\" x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" rx=\"12\"/>",
             px(fx),
             px(fy),
             px(w),
@@ -3987,6 +4105,12 @@ fn draw_card(svg: &mut String, sc: &Scene, card: &Card, x: f64, y: f64) {
             px(tx),
             px(fy + 16.0),
             esc(&heading)
+        );
+        line_chips(
+            svg,
+            frame_chips(sc, p),
+            tx + text_w(&heading, 11.0, false),
+            fy + 2.0,
         );
         if sc.closable.contains(&part.id) {
             close_control(svg, &part.id, &part.label, fx + w - FPAD, fy + 4.0);
