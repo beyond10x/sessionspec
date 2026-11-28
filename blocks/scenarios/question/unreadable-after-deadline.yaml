@@ -1,0 +1,51 @@
+type: ess-scenario/7
+domain: agentic.question
+scenario: unreadable-after-deadline
+summary: Past its deadline a question takes its default; an answer is refused (DeadlinePassed) and so is a record that a reply could not be read, so the question stays Open for the clock.
+
+arrange:
+  - instance: late
+    entity: agentic.question.Question
+
+timeline:
+  - at: 2026-01-15T10:00:01Z
+    command: agentic.question.Ask
+    actor: agentic.question.Asker
+    caller: {party: 00000000-0000-4000-8000-0000000005a1}
+    input:
+      addressee: 00000000-0000-4000-8000-0000000005b1
+      kind: Choice
+      text: {digest: sha256-late, length: 40, class: prompt}
+      options:
+        - {letter: A, label: ship, meaning: Choice}
+        - {letter: B, label: hold, meaning: Choice}
+      default_option: B
+      deadline: 2026-01-15T10:05:00Z
+    outcome: asked
+    capture: {instance: late, event: agentic.question.QuestionAsked, field: question_id}
+
+  - at: 2026-01-15T10:05:00Z
+    command: agentic.question.Answer
+    actor: agentic.question.Answerer
+    caller: {party: 00000000-0000-4000-8000-0000000005b1}
+    input: {question_id: {$instance: late}, option: A}
+    outcome: deadline-passed
+    error:
+      name: agentic.question.DeadlinePassed
+    no_events: [agentic.question.QuestionAnswered]
+
+  - at: 2026-01-15T10:05:01Z
+    command: agentic.question.RecordUnreadableAnswer
+    actor: agentic.question.Answerer
+    caller: {party: 00000000-0000-4000-8000-0000000005b1}
+    input: {question_id: {$instance: late}, read_failure: garbled}
+    outcome: deadline-passed
+    error:
+      name: agentic.question.DeadlinePassed
+    no_events: [agentic.question.AnswerNotRead]
+
+assert:
+  - view: agentic.question.Questions
+    excludes:
+      question_id: {$instance: late}
+      state: CouldNotRead

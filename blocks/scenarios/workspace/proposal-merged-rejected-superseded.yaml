@@ -1,0 +1,216 @@
+# A change leaves a workspace only as a proposal made by the holder of a live lease, and a
+# proposal ends merged, rejected or superseded. Synthesis arranges no lease RecordWrite accepts
+# (its guards read the lease's holder and sharing, ESS-SYNTH-003), so no write is recorded in
+# the synthesized suite; this scenario walks it by hand beside the proposal's lifecycle: a write
+# and four proposals under one lease, a proposal by another party refused, one proposal merged,
+# one rejected, one superseded by another, each end refusing a second decision, a successor
+# nothing holds refused, and a proposal under the released lease refused.
+type: ess-scenario/7
+domain: agentic.workspace
+scenario: proposal-merged-rejected-superseded
+summary: The holder of a live lease writes and proposes; a proposal is merged, rejected or superseded once, and not under a released lease.
+
+arrange:
+  - instance: ws
+    entity: agentic.workspace.Workspace
+  - instance: lease
+    entity: agentic.workspace.Lease
+  - instance: merged
+    entity: agentic.workspace.Proposal
+  - instance: rejected
+    entity: agentic.workspace.Proposal
+  - instance: replaced
+    entity: agentic.workspace.Proposal
+  - instance: successor
+    entity: agentic.workspace.Proposal
+
+timeline:
+  - at: 2026-01-15T09:00:00Z
+    command: agentic.workspace.CreateWorkspace
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input: {kind: Worktree, sharing: SharedReadWrite, base_revision: rev-1}
+    outcome: created
+    capture: {instance: ws, event: agentic.workspace.WorkspaceCreated, field: workspace_id}
+
+  - at: 2026-01-15T09:00:01Z
+    command: agentic.workspace.RequestLease
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input: {workspace_id: {$instance: ws}, expires_at: 2999-12-31T00:00:00Z}
+    outcome: requested
+    capture: {instance: lease, event: agentic.workspace.LeaseRequested, field: lease_id}
+
+  - at: 2026-01-15T09:00:02Z
+    command: agentic.workspace.GrantLease
+    actor: agentic.workspace.Keeper
+    input: {lease_id: {$instance: lease}}
+    outcome: granted-shared
+
+  - at: 2026-01-15T09:00:03Z
+    command: agentic.workspace.RecordWrite
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input: {lease_id: {$instance: lease}, path: src/a.rs}
+    outcome: written
+    events:
+      - event: agentic.workspace.PathWritten
+        payload: {lease_id: {$instance: lease}, workspace_id: {$instance: ws}, path: src/a.rs}
+
+  - at: 2026-01-15T09:00:04Z
+    command: agentic.workspace.Propose
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b2}
+    input:
+      lease_id: {$instance: lease}
+      holder: 00000000-0000-4000-8000-0000000000b1
+      base_revision: rev-1
+      change: {digest: sha256-change-0, length: 10, class: patch}
+    outcome: holder-not-the-caller
+    error:
+      name: agentic.workspace.NotTheHolder
+    no_events: [agentic.workspace.ChangeProposed]
+
+  - at: 2026-01-15T09:00:05Z
+    command: agentic.workspace.Propose
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input:
+      lease_id: {$instance: lease}
+      holder: 00000000-0000-4000-8000-0000000000b1
+      base_revision: rev-1
+      change: {digest: sha256-change-1, length: 10, class: patch}
+    outcome: proposed
+    capture: {instance: merged, event: agentic.workspace.ChangeProposed, field: proposal_id}
+
+  - at: 2026-01-15T09:00:06Z
+    command: agentic.workspace.Propose
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input:
+      lease_id: {$instance: lease}
+      holder: 00000000-0000-4000-8000-0000000000b1
+      base_revision: rev-1
+      change: {digest: sha256-change-2, length: 10, class: patch}
+    outcome: proposed
+    capture: {instance: rejected, event: agentic.workspace.ChangeProposed, field: proposal_id}
+
+  - at: 2026-01-15T09:00:07Z
+    command: agentic.workspace.Propose
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input:
+      lease_id: {$instance: lease}
+      holder: 00000000-0000-4000-8000-0000000000b1
+      base_revision: rev-1
+      change: {digest: sha256-change-3, length: 10, class: patch}
+    outcome: proposed
+    capture: {instance: replaced, event: agentic.workspace.ChangeProposed, field: proposal_id}
+
+  - at: 2026-01-15T09:00:08Z
+    command: agentic.workspace.Propose
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input:
+      lease_id: {$instance: lease}
+      holder: 00000000-0000-4000-8000-0000000000b1
+      base_revision: rev-1
+      change: {digest: sha256-change-4, length: 10, class: patch}
+    outcome: proposed
+    capture: {instance: successor, event: agentic.workspace.ChangeProposed, field: proposal_id}
+
+  - at: 2026-01-15T09:00:09Z
+    command: agentic.workspace.MergeProposal
+    actor: agentic.workspace.Keeper
+    input: {proposal_id: {$instance: merged}, merged_revision: rev-2}
+    outcome: merged
+
+  - at: 2026-01-15T09:00:10Z
+    command: agentic.workspace.RejectProposal
+    actor: agentic.workspace.Keeper
+    input: {proposal_id: {$instance: rejected}}
+    outcome: rejected
+
+  - at: 2026-01-15T09:00:11Z
+    command: agentic.workspace.SupersedeProposal
+    actor: agentic.workspace.Keeper
+    input: {proposal_id: {$instance: replaced}, superseded_by: {$instance: successor}}
+    outcome: superseded
+
+  - at: 2026-01-15T09:00:12Z
+    command: agentic.workspace.RejectProposal
+    actor: agentic.workspace.Keeper
+    input: {proposal_id: {$instance: merged}}
+    outcome: wrong-state
+    error:
+      name: agentic.workspace.ProposalStateConflict
+
+  - at: 2026-01-15T09:00:13Z
+    command: agentic.workspace.MergeProposal
+    actor: agentic.workspace.Keeper
+    input: {proposal_id: {$instance: rejected}, merged_revision: rev-3}
+    outcome: wrong-state
+    error:
+      name: agentic.workspace.ProposalStateConflict
+
+  - at: 2026-01-15T09:00:14Z
+    command: agentic.workspace.SupersedeProposal
+    actor: agentic.workspace.Keeper
+    input: {proposal_id: {$instance: replaced}, superseded_by: {$instance: successor}}
+    outcome: wrong-state
+    error:
+      name: agentic.workspace.ProposalStateConflict
+
+  - at: 2026-01-15T09:00:15Z
+    command: agentic.workspace.SupersedeProposal
+    actor: agentic.workspace.Keeper
+    input: {proposal_id: {$instance: successor}, superseded_by: 00000000-0000-4000-8000-00000000dead}
+    outcome: unknown-successor
+    error:
+      name: agentic.workspace.UnknownProposal
+
+  - at: 2026-01-15T09:00:16Z
+    command: agentic.workspace.ReleaseLease
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input: {lease_id: {$instance: lease}}
+    outcome: released
+
+  - at: 2026-01-15T09:00:17Z
+    command: agentic.workspace.Propose
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input:
+      lease_id: {$instance: lease}
+      holder: 00000000-0000-4000-8000-0000000000b1
+      base_revision: rev-1
+      change: {digest: sha256-change-5, length: 10, class: patch}
+    outcome: lease-not-live
+    error:
+      name: agentic.workspace.LeaseNotLive
+    no_events: [agentic.workspace.ChangeProposed]
+
+assert:
+  - view: agentic.workspace.Proposals
+    contains:
+      proposal_id: {$instance: merged}
+      merged_revision: rev-2
+      state: Merged
+  - view: agentic.workspace.Proposals
+    contains:
+      proposal_id: {$instance: rejected}
+      state: Rejected
+  - view: agentic.workspace.Proposals
+    contains:
+      proposal_id: {$instance: replaced}
+      superseded_by: {$instance: successor}
+      state: Superseded
+  - view: agentic.workspace.Proposals
+    contains:
+      proposal_id: {$instance: successor}
+      state: Proposed
+  - view: agentic.workspace.Leases
+    contains:
+      lease_id: {$instance: lease}
+      writes: 1
+      state: Released

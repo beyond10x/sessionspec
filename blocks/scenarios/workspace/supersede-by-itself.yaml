@@ -1,0 +1,64 @@
+type: ess-scenario/7
+domain: agentic.workspace
+scenario: supersede-by-itself
+summary: A newer proposal replaces a proposal; one named as its own successor is refused (SupersededByItself) and stays Proposed.
+
+arrange:
+  - instance: ws
+    entity: agentic.workspace.Workspace
+  - instance: lease
+    entity: agentic.workspace.Lease
+  - instance: prop
+    entity: agentic.workspace.Proposal
+
+timeline:
+  - at: 2026-11-27T09:00:00Z
+    command: agentic.workspace.CreateWorkspace
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input: {kind: Worktree, sharing: SharedReadWrite, base_revision: rev-1}
+    outcome: created
+    capture: {instance: ws, event: agentic.workspace.WorkspaceCreated, field: workspace_id}
+
+  - at: 2026-11-27T09:00:01Z
+    command: agentic.workspace.RequestLease
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input: {workspace_id: {$instance: ws}, expires_at: 2999-12-31T00:00:00Z}
+    outcome: requested
+    capture: {instance: lease, event: agentic.workspace.LeaseRequested, field: lease_id}
+
+  - at: 2026-11-27T09:00:02Z
+    command: agentic.workspace.GrantLease
+    actor: agentic.workspace.Keeper
+    input: {lease_id: {$instance: lease}}
+    outcome: granted-shared
+    events:
+      - event: agentic.workspace.LeaseGranted
+        payload: {lease_id: {$instance: lease}, workspace_id: {$instance: ws}}
+
+  - at: 2026-11-27T09:00:03Z
+    command: agentic.workspace.Propose
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input:
+      lease_id: {$instance: lease}
+      holder: 00000000-0000-4000-8000-0000000000b1
+      base_revision: rev-1
+      change: {digest: sha256-change-1, length: 10, class: patch}
+    outcome: proposed
+    capture: {instance: prop, event: agentic.workspace.ChangeProposed, field: proposal_id}
+
+  - at: 2026-11-27T09:00:04Z
+    command: agentic.workspace.SupersedeProposal
+    actor: agentic.workspace.Keeper
+    input: {proposal_id: {$instance: prop}, superseded_by: {$instance: prop}}
+    outcome: superseded-by-itself
+    error:
+      name: agentic.workspace.SupersededByItself
+    no_events: [agentic.workspace.ProposalSuperseded]
+
+assert:
+  - view: agentic.workspace.Proposals
+    excludes:
+      state: Superseded

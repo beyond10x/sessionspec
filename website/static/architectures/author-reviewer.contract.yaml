@@ -1,6 +1,6 @@
 format: agenticspec-contract/1
 architecture: author-reviewer
-ports_digest: fdab54454893cc2728ce53df0ea4e30341abf884c778d0944a865a39991cb23d
+ports_digest: cb3e90e933bd20046426247f4a060751e6f8774bd043c5eaf1c24ac82ba6a0e9
 ports:
   - port: sandbox.sandbox
     part: box

@@ -3346,6 +3346,9 @@
           "name": "lease_id"
         },
         {
+          "name": "holder"
+        },
+        {
           "name": "base_revision"
         },
         {

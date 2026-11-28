@@ -1,0 +1,65 @@
+type: ess-scenario/7
+domain: agentic.workspace
+scenario: propose-by-another-party
+summary: Only the holder of a live lease acts under it; another party that names itself holder is refused a proposal under that lease (NotTheHolder), as RecordWrite refuses it a write.
+
+arrange:
+  - instance: rw
+    entity: agentic.workspace.Workspace
+  - instance: rw-lease
+    entity: agentic.workspace.Lease
+
+timeline:
+  - at: 2026-11-27T09:00:05Z
+    command: agentic.workspace.CreateWorkspace
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input: {kind: Worktree, sharing: Exclusive, base_revision: rev-1}
+    outcome: created
+    capture: {instance: rw, event: agentic.workspace.WorkspaceCreated, field: workspace_id}
+
+  - at: 2026-11-27T09:00:06Z
+    command: agentic.workspace.RequestLease
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b1}
+    input: {workspace_id: {$instance: rw}, expires_at: 2999-12-31T00:00:00Z}
+    outcome: requested
+    capture: {instance: rw-lease, event: agentic.workspace.LeaseRequested, field: lease_id}
+
+  - at: 2026-11-27T09:00:07Z
+    command: agentic.workspace.GrantLease
+    actor: agentic.workspace.Keeper
+    input: {lease_id: {$instance: rw-lease}}
+    outcome: granted-exclusive
+    events:
+      - event: agentic.workspace.LeaseGranted
+        payload: {lease_id: {$instance: rw-lease}, workspace_id: {$instance: rw}}
+
+  - at: 2026-11-27T09:00:08Z
+    command: agentic.workspace.RecordWrite
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b2}
+    input: {lease_id: {$instance: rw-lease}, path: src/a.rs}
+    outcome: not-the-holder
+    error:
+      name: agentic.workspace.NotTheHolder
+    no_events: [agentic.workspace.PathWritten]
+
+  - at: 2026-11-27T09:00:09Z
+    command: agentic.workspace.Propose
+    actor: agentic.workspace.Worker
+    caller: {party: 00000000-0000-4000-8000-0000000000b2}
+    input:
+      lease_id: {$instance: rw-lease}
+      holder: 00000000-0000-4000-8000-0000000000b2
+      base_revision: rev-1
+      change: {digest: sha256-change-2, length: 10, class: patch}
+    outcome: not-the-holder
+    error:
+      name: agentic.workspace.NotTheHolder
+    no_events: [agentic.workspace.ChangeProposed]
+
+assert:
+  - view: agentic.workspace.Proposals
+    excludes:
+      proposed_by: 00000000-0000-4000-8000-0000000000b2
