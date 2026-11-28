@@ -46,6 +46,10 @@ change.
 - After a change of `spec/`: `task generate`, then fix what the compiler names.
 - Authored scenarios of `spec/` are in `spec/scenarios/`, listed in `spec/ess-inputs.yaml`;
   `task check:mutation` runs them against every mutant of `spec/`.
+- On `--target interpreted`, `now` is 2026-09-27T00:00:00Z for every step of every scenario (ess
+  0.99.2 to 0.99.14, `scenario_wall()` returns `earliest_run()`; confirmed by the ess maintainers
+  2026-11-28, docs fix filed). An authored instant a `now` guard reads is before that date when it
+  must be past (`2026-01-15T08:00:00Z`) and far ahead when it must be future (`2999-...`).
 - `ui/agenticspec.ui.yaml` is the UI as an `ess-ui/1` document over the views of
   `agenticspec.view`, which the `session-view` component serves; `task check:ui` checks it against
   `spec/` and runs `ui/tests/` on the fixtures in `ui/fixtures/` (format: `ui/README.md`).
