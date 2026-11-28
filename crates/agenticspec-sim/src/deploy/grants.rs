@@ -187,12 +187,45 @@ pub fn values(binding: &Value) -> Vec<Finding> {
         if let Some(env) = m.get("env") {
             env_secrets(env, &format!("parts: {part}"), &mut out);
         }
+        if let Some(files) = m.get(config::SECRET_FILES) {
+            file_secrets(files, &format!("parts: {part}"), &mut out);
+        }
     }
     for u in binding["packing"]["units"].as_array().into_iter().flatten() {
         let at = format!("packing: unit {}", text(&u["name"]));
         env_secrets(&u["env"], &at, &mut out);
+        file_secrets(&u[config::SECRET_FILES], &at, &mut out);
     }
     out
+}
+
+/// The `secret_value` findings of a `secret_files:` at `at` (a part's or a listed unit's, R120):
+/// an entry's `secret` that is no secret name, a key of [`VALUE_KEYS`] in an entry.
+fn file_secrets(files: &Value, at: &str, out: &mut Vec<Finding>) {
+    for (i, e) in files.as_array().into_iter().flatten().enumerate() {
+        let Some(m) = e.as_object() else { continue };
+        let at = format!("{at}: secret_files[{i}]");
+        value_keys(m, &at, out);
+        if let Some(s) = m.get(config::SECRET) {
+            secret_name(s, &format!("{at}: secret"), out);
+        }
+    }
+}
+
+/// The secret names the `secret_files:` of `entry` refers to, those that are names, by index.
+fn file_refs(entry: &Value) -> Vec<(usize, &str)> {
+    entry[config::SECRET_FILES]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .enumerate()
+        .filter_map(|(i, e)| {
+            e[config::SECRET]
+                .as_str()
+                .filter(|s| is_name(s))
+                .map(|s| (i, s))
+        })
+        .collect()
 }
 
 /// The `secret_value` findings of an `env:` at `at` (a part's or a listed unit's): a value
@@ -283,7 +316,8 @@ pub fn without_values(binding: &Value) -> Value {
 
 /// Every finding of secrets and egress for an architecture packed under a binding:
 /// `secret_value` ([`values`]); `secret_undeclared`, an egress entry's secret that no part of
-/// its unit declares, or that an `env:` value of the unit refers to; `egress_undeclared`, a link
+/// its unit declares, or that an `env:` value or a `secret_files:` entry of the unit refers to;
+/// `egress_undeclared`, a link
 /// from a part of a unit to an external part or a part of another unit whose destination that
 /// part does not declare.
 pub fn check(arch: &Value, binding: &Value, packing: &Packing) -> Vec<Finding> {
@@ -321,6 +355,17 @@ pub fn check(arch: &Value, binding: &Value, packing: &Packing) -> Vec<Finding> {
                     ));
                 }
             }
+            for (i, s) in file_refs(entry) {
+                if !held.contains(s) {
+                    out.push(finding(
+                        "secret_undeclared",
+                        format!(
+                            "{at}: secret_files[{i}] refers to secret {s}, and no part of unit {} declares it",
+                            u.name
+                        ),
+                    ));
+                }
+            }
         }
     }
     for l in arch["links"].as_array().into_iter().flatten() {
@@ -353,8 +398,9 @@ pub fn check(arch: &Value, binding: &Value, packing: &Packing) -> Vec<Finding> {
 /// The findings of secrets and egress in the units of a written bundle, against the binding it
 /// carries: a key of [`VALUE_KEYS`] in a unit or an egress entry, a unit's secret or an egress
 /// entry's secret that is no name (`secret_value`) or that no part of the unit declares
-/// (`secret_undeclared`), the same of a secret its `config.env` refers to, an egress entry from a
-/// part outside the unit or to a destination its part does not declare (`egress_undeclared`).
+/// (`secret_undeclared`), the same of a secret its `config.env` or `config.secret_files` refers
+/// to, an egress entry from a part outside the unit or to a destination its part does not declare
+/// (`egress_undeclared`).
 pub fn check_units(bundle: &Value) -> Vec<Finding> {
     let binding = &bundle["binding"]["document"];
     let mut out = Vec::new();
@@ -406,6 +452,20 @@ pub fn check_units(bundle: &Value) -> Vec<Finding> {
                     format!("unit {name}: config: env: {k}: secret"),
                     &mut out,
                 );
+            }
+        }
+        for (i, f) in u["config"][config::SECRET_FILES]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .enumerate()
+        {
+            let at = format!("unit {name}: config: secret_files[{i}]");
+            if let Some(m) = f.as_object() {
+                value_keys(m, &at, &mut out);
+            }
+            if !f[config::SECRET].is_null() {
+                secret(&f[config::SECRET], format!("{at}: secret"), &mut out);
             }
         }
         for (i, e) in u["egress"].as_array().into_iter().flatten().enumerate() {

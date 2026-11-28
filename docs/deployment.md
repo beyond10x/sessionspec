@@ -26,7 +26,7 @@ but `format` and `binding` is optional.
 | `architecture` | the name of the architecture it is for; any architecture when absent |
 | `refines` | a base binding file, relative to this one. The base's keys are read first and this file's keys go over them, mapping by mapping |
 | `target` | what the target gives each unit: `isolation`, one of `none`, `process`, `container`, `user_kernel`, `micro_vm` (`container` when absent); `images`, where it takes runtime images from, `registry` (the default) or `local` (its own image store); `network_policy`, `enforced` or `not_enforced` (unknown when absent) |
-| `parts` | per part: `agent` (the agent document that plays it, a path relative to the binding file), `digest` (that document's `sha256:`, checked), `state` (`memory`, the default, or `service`: where a part with shared state keeps it), `inside` (a sandbox that runs inside the unit), `secrets` (the secret names it needs, never values), `egress` (the destinations it reaches, below), `size` (of a workspace's volume, or of the durable state volume of a runtime part), `volumes` (where the part mounts a workspace's volume or a runtime part's durable state: `[{name: <workspace>, mount: <absolute path>}]`, or `name: <runtime part>-state`), `network: isolated` (the part may reach only what its unit's egress lists), `image` (the runtime image of its core or service unit,below), `env` and `args` (configuration of its unit, see [configuration of a unit](#configuration-of-a-unit)) |
+| `parts` | per part: `agent` (the agent document that plays it, a path relative to the binding file), `digest` (that document's `sha256:`, checked), `state` (`memory`, the default, or `service`: where a part with shared state keeps it), `inside` (a sandbox that runs inside the unit), `secrets` (the secret names it needs, never values), `egress` (the destinations it reaches, below), `size` (of a workspace's volume, or of the durable state volume of a runtime part), `volumes` (where the part mounts a workspace's volume or a runtime part's durable state: `[{name: <workspace>, mount: <absolute path>}]`, or `name: <runtime part>-state`), `network: isolated` (the part may reach only what its unit's egress lists), `image` (the runtime image of its core or service unit,below), `env`, `args` and `secret_files` (configuration of its unit, see [configuration of a unit](#configuration-of-a-unit)), `scratch` (writable directories of its unit that hold nothing after a restart, see [scratch directories of a unit](#scratch-directories-of-a-unit)) |
 | `transports` | per carried value (`model_call`, `order`, `question`, `claim`, ...), the transport a link that crosses units uses |
 | `runtimes` | runtime images: `core` for the core unit, `agent-runtime` for the agent units (the role it plays; without it the target binds the role, and the older name `agent` is refused). Each has `image`, the image name without tag or digest (`registry.example/agenticspec-core`). From a registry it is pinned by `digest` (`sha256:` and 64 hex digits, the repository digest), and a runtime without either, or with a `tag`, is refused. From the target's local store (`target: {images: local}`) it is pinned by `tag`, by `digest` (the image's config id) or both. A core or service unit may run an image of its own, in the same form: `image` of the unit as `packing.units` lists it, else `parts.<part>.image` of its parts, which must all name the same one (`unit_image_conflict`), else, for the core unit only, `runtimes.core`. A service unit with none names the role `core-runtime`; a core or service unit that holds a runtime part (block `runtime`) and has none is refused (`unit_image_missing`) |
 | `claims` | per unit name: `cpu_millis`, `memory_mib`, `accelerators` (500, 512 and 0 when absent; a model unit takes one accelerator). The operator UI's unit is `operator-ui`, the control-plane UI's `control-plane-ui` |
@@ -98,20 +98,78 @@ parts:
     args: [--log-format, json]
 ```
 
-The bundle carries each unit's configuration as `config: {env, args}`, merged from the unit's entry
-under `packing.units` first and then from its parts in name order. `env` keys are sorted. `args`
-are the unit's, then the args of the one part that gives any. An empty `env` or `args` is left
-out, and a unit with neither carries no `config`. Admission refuses:
+A secret can also reach the program as a read-only file: `secret_files`, a list of
+`{secret: <name>, key: <key>, path: <absolute path>}`. `secret` is the secret's name, which a part
+of the same unit must declare in `secrets`, as for an `env` reference. `key`, optional, is the one
+key of the secret the file holds (`[-._a-zA-Z0-9]+`); without it the target writes the secret as
+it keeps it. `path` is where the program reads the file: an absolute path in the same form as a
+[scratch directory](#scratch-directories-of-a-unit)'s `mount`. The bundle carries the name and the
+path, never a value.
+
+```yaml
+parts:
+  gateway:
+    secrets: [model-api-key, tls]
+    secret_files:
+      - {secret: model-api-key, path: /etc/gateway/key}
+      - {secret: tls, key: tls.crt, path: /etc/gateway/tls.crt}
+```
+
+The bundle carries each unit's configuration as `config: {env, args, secret_files}`, merged from
+the unit's entry under `packing.units` first and then from its parts in name order. `env` keys are
+sorted. `args` are the unit's, then the args of the one part that gives any. `secret_files` are
+every source's, sorted by `path`. An empty `env`, `args` or `secret_files` is left out, and a unit
+with none of them carries no `config`. Admission refuses:
 
 - as `unit_config_conflict`: two sources of one unit that give one variable two different values,
   and two parts of one unit that both give `args`;
 - as `unit_config_invalid`: a name that is not an environment variable name, a value that is
   neither text, a number, a boolean nor `{secret: <name>}`, an `env` that is not a mapping, `args`
-  that are not a list of strings, and `env` or `args` on a part that is in no unit;
-- as `secret_undeclared`, a `{secret: <name>}` that no part of the unit declares; as
-  `secret_value`, one whose name is not a secret name.
+  that are not a list of strings, a `secret_files` that is not a list of `{secret, key, path}`, an
+  entry without `secret` or `path`, a `path` that is relative or otherwise not such a path, a `key`
+  that is not a key, another key, and `env`, `args` or `secret_files` on a part that is in no unit;
+- as `secret_undeclared`, a `{secret: <name>}` or a secret file's `secret` that no part of the unit
+  declares; as `secret_value`, one whose name is not a secret name;
+- as `unit_mount_collision`, a secret file at the path of another secret file of the unit, or at,
+  around or inside a volume mount or a scratch directory of the unit (the secret file's path is a
+  mount of the unit, held like a [scratch directory](#scratch-directories-of-a-unit)'s).
 
-A finding names the unit, the part and the variable, never a value.
+A finding names the unit, the part and the variable or entry, never a value or a path.
+
+## Scratch directories of a unit
+
+A program may need a writable directory at a fixed path, for run files, sockets or a cache,
+while everything else it reads is mounted read-only. Such a directory lives as long as one
+instance of the unit: it starts empty and holds nothing after a restart. It is not a volume: the
+unit claims nothing for it, and nothing in it is kept. Give it with `scratch`, a list of
+`{mount, size}`, on a unit that `packing.units` lists or on a part under `parts:`:
+
+```yaml
+packing:
+  units:
+    - name: flow
+      kind: service
+      parts: [flow]
+      scratch: [{mount: /run/flow, size: 64Mi}]
+```
+
+`mount` is an absolute path: `/` and one or more segments, none of them empty, `.` or `..`, and no
+`/` at the end. `size`, optional, is the most the directory may hold, text in the form of a
+volume's size (`64Mi`). The bundle carries the directories of each unit as `scratch`, from its
+entry under `packing.units` and from its parts, sorted by `mount`; a unit without any carries no
+`scratch`. Admission refuses:
+
+- as `unit_mount_collision`: a scratch directory at the mount of another directory of its unit
+  (a volume a part of the unit mounts under `volumes:`, another scratch directory, or the path of
+  a [secret file](#configuration-of-a-unit)), or one that holds the other or lies inside it. A directory mounted inside another hides part of it, so part
+  of a scratch directory would keep its files, or part of a volume would lose them. Paths compare
+  by segment: `/var/lib` holds `/var/lib/flow`, and `/var/lib/flowx` is apart from both;
+- as `unit_scratch_invalid`: a `scratch` that is not a list of `{mount, size}`, a relative or
+  other `mount` that is not such a path, a missing `mount`, a `size` that is not text, another key,
+  and `scratch` on a part that is in no unit.
+
+A finding names the unit, the source (`scratch[0] of packing: unit flow`) and the volume, never a
+path.
 
 ## Packing
 
@@ -173,7 +231,7 @@ packing:
 ```
 
 In the resolved form, `units:` lists every unit (`name`, `kind`, `parts`, `replicas` for a unit
-that runs as copies, `schedule` for a scheduled unit with a cron rule, `image` for a core or service unit that runs an image of its own, `env` and `args` for its [configuration](#configuration-of-a-unit)) and `external:` the parts outside, each a part's name or `{part: <name>, reach:
+that runs as copies, `schedule` for a scheduled unit with a cron rule, `image` for a core or service unit that runs an image of its own, `env`, `args` and `secret_files` for its [configuration](#configuration-of-a-unit), `scratch` for its [scratch directories](#scratch-directories-of-a-unit)) and `external:` the parts outside, each a part's name or `{part: <name>, reach:
 {...}}`; `strategy`, `groups` and `parts` do not go with it. A section of the wrong form (an unknown key, strategy, kind or part, two units of one
 name) is refused with every problem as `binding_invalid`.
 
@@ -206,9 +264,11 @@ order of the table, and writes nothing.
 | `durable_state_unplaceable` | a runtime part with `durable_state: true` is in a `job`, `scheduled` or `model` unit, which runs until done or serves a model and holds no volume (place it in a core, service, agent or store unit), or a part of the document has the name of its state volume, `<part>-state` |
 | `volume_mount_missing` | a unit claims a workspace's volume or a runtime part's durable state volume and no part of the unit mounts it, or mounts it at a path that is not absolute; there is no default path |
 | `unit_config_conflict` | two sources of one unit (its entry under `packing.units`, its parts) give one environment variable two different values, or two parts of one unit both give `args` (see [configuration of a unit](#configuration-of-a-unit)) |
-| `unit_config_invalid` | an `env` or `args` of the wrong form: a name that is not `[A-Z_][A-Z0-9_]*`, a value that is neither text, a number, a boolean nor `{secret: <name>}`, `args` that are not a list of strings, `env` or `args` on a part in no unit; in a written bundle, also a unit's `config` of the wrong form or not the one its binding resolves |
+| `unit_config_invalid` | an `env`, `args` or `secret_files` of the wrong form: a name that is not `[A-Z_][A-Z0-9_]*`, a value that is neither text, a number, a boolean nor `{secret: <name>}`, `args` that are not a list of strings, a secret file that is not `{secret, key, path}` with an absolute `path` (a relative path among them), `env`, `args` or `secret_files` on a part in no unit; in a written bundle, also a unit's `config` of the wrong form or not the one its binding resolves |
+| `unit_scratch_invalid` | a `scratch` of the wrong form: not a list of `{mount, size}`, a `mount` that is missing or not an absolute path in normal form (a relative path among them), a `size` that is not text, another key, `scratch` on a part in no unit; in a written bundle, also a unit's `scratch` of the wrong form or not the one its binding resolves (see [scratch directories of a unit](#scratch-directories-of-a-unit)) |
+| `unit_mount_collision` | a scratch directory or a secret file of a unit is at the mount of another of the unit's mounts (a volume a part of it mounts, another scratch directory, another secret file), holds it or lies inside it; paths compare by segment |
 | `secret_value` | something that looks like a secret's value stands where a secret name belongs (see [secrets and egress](#secrets-and-egress)) |
-| `secret_undeclared` | an egress entry, or in a written bundle a unit, names a secret that no part of its unit declares |
+| `secret_undeclared` | an egress entry, an `env` reference or a secret file, or in a written bundle a unit, names a secret that no part of its unit declares |
 | `egress_undeclared` | a link leaves its unit, for an external part or a part of another unit, and the part it starts at does not declare that destination in its `egress` |
 | `address_in_architecture` | the architecture names an address: a key `address`, `host`, `hostname` or `url` anywhere in it (see [the bundle](#the-bundle)) |
 | `ui_upstream_unknown` | the UI the binding asks for reads the adapter of a unit (`ui.<ui>.upstream.unit`) the packing does not have |
@@ -263,7 +323,8 @@ Each unit:
 | `schedule` | a scheduled unit's cron rule: the one the binding gives (`packing.parts.<part>.schedule`), else the one that states its schedule's `every` exactly ([Packing](#packing)); absent when it has neither |
 | `clock` | a scheduled unit's clock in the architecture: the trigger and schedule that wake it, `every`, `next_fire_at`, and the trigger's `policy` and `max_parallel` as the rule for overlapping runs |
 | `upstream` | a UI unit only: the unit whose adapter the page reads (`unit`), its `port` when known, and `path`, the `api_base` of the UI's `config.json` (the binding's `ui.<ui>.upstream.path`, else `/api/`) |
-| `config` | the configuration the binding gives the unit, when it gives any: `env`, its environment variables with their keys sorted, each value text or `{secret: <name>}`, and `args`, a list of strings; merged from the unit's entry under `packing.units`, then its parts by name (see [configuration of a unit](#configuration-of-a-unit)) |
+| `config` | the configuration the binding gives the unit, when it gives any: `env`, its environment variables with their keys sorted, each value text or `{secret: <name>}`, `args`, a list of strings, and `secret_files`, the secrets it reads as read-only files, `{path, secret, key}` each by the secret's name, sorted by `path`; merged from the unit's entry under `packing.units`, then its parts by name (see [configuration of a unit](#configuration-of-a-unit)) |
+| `scratch` | the scratch directories the binding gives the unit, when it gives any: `{mount, size}` each, `size` when given, sorted by `mount`; writable, empty when an instance starts, and claimed as no volume (see [scratch directories of a unit](#scratch-directories-of-a-unit)) |
 | `secrets` | the secret names its parts declare, never a value |
 | `egress` | every destination its parts declare, each with the part it starts at (`from`), the secret it authenticates with, when declared (`secret`), and `name`, what the target resolves: a link to another unit, with its transport, named by that unit; a link to an external part (`external: true`), named by its reach (its name, or its address, which is then also `address`); or a destination outside the architecture (`named: true`, no link), named by its own name, with the `address` the binding gives it, else `unresolved: true`. Nothing that is not listed is granted |
 | `roles` | what the unit needs from its target, never a provider: `agent-runtime`, `core-runtime` (a core or service unit without an image), `start-jobs` (the core, when a job unit exists), `model-server`, `store`, `model-route:<route>` for each hosted model route it calls, `operator-ui` for the operator UI's unit, `control-plane-ui` for the control-plane UI's unit |
@@ -358,7 +419,11 @@ secret or an egress entry's secret that no part of the unit declares, an egress 
 does not declare its destination, and a secret value, each by its name. It also refuses what the
 target cannot be asked to serve: a volume without an absolute mount (in the binding or in a unit),
 a unit's `config` of the wrong form or not the configuration its binding resolves
-(`unit_config_invalid`; a `{secret: <name>}` in it is checked like any secret of the unit),
+(`unit_config_invalid`; a `{secret: <name>}` or a secret file's `secret` in it is checked like any
+secret of the unit), a unit's `scratch` of the wrong form or not the scratch directories its
+binding resolves (`unit_scratch_invalid`), a scratch directory or secret file at, around or inside
+a volume mount the unit carries or another of its scratch directories and secret files
+(`unit_mount_collision`),
 a local runtime image with neither tag nor digest, a core or service unit whose parts name different images or that holds a runtime part without an image (`unit_image_conflict`, `unit_image_missing`), a core or service unit whose `code.runtime` is not the image its binding resolves or is not carried in `runtimes` (`unit_runtime_mismatch`), a part isolated on the network of a target
 that enforces no network policy, and a scheduled unit whose `schedule` is not the rule of its
 binding or of its schedule's `every` (`schedule_not_cron`). Of a UI unit it hashes the archive the bundle carries and refuses
