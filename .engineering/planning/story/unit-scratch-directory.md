@@ -2,11 +2,15 @@
 format: aep.planning-md/3
 id: story:unit-scratch-directory
 kind: story
-status: draft
+status: implemented
 title: A unit's writable directory that lives as long as one instance (R118)
 relations:
 - decomposes: epic:architecture-deployment
-revision: 1
+revision: 4
+transitions:
+- {from: "draft", to: "proposed", at: "2026-11-28T20:14:18Z", actor: "human:operator", revision: 2, decided_on: {"recorded":{"test_result":1}}}
+- {from: "proposed", to: "active", at: "2026-11-28T20:14:18Z", actor: "human:operator", revision: 3, decided_on: {"recorded":{"test_result":1}}}
+- {from: "active", to: "implemented", at: "2026-11-28T20:14:18Z", actor: "human:operator", revision: 4, decided_on: {"recorded":{"test_result":1}}}
 ---
 ## Outcome
 

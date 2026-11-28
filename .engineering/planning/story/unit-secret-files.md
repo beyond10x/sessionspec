@@ -2,12 +2,16 @@
 format: aep.planning-md/3
 id: story:unit-secret-files
 kind: story
-status: draft
+status: implemented
 title: A secret as a read-only file of a unit (R120)
 relations:
 - decomposes: epic:architecture-deployment
 - informed_by: story:unit-scratch-directory
-revision: 1
+revision: 4
+transitions:
+- {from: "draft", to: "proposed", at: "2026-11-28T20:14:19Z", actor: "human:operator", revision: 2, decided_on: {"recorded":{"test_result":1}}}
+- {from: "proposed", to: "active", at: "2026-11-28T20:14:19Z", actor: "human:operator", revision: 3, decided_on: {"recorded":{"test_result":1}}}
+- {from: "active", to: "implemented", at: "2026-11-28T20:14:19Z", actor: "human:operator", revision: 4, decided_on: {"recorded":{"test_result":1}}}
 ---
 ## Outcome
 
